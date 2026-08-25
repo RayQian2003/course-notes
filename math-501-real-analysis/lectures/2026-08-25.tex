@@ -1,3 +1,279 @@
 \section{August 25, 2026}
 
-\emph{Lecture notes to be added.}
+Real analysis will be developed through measure theory, Lebesgue
+integration, and the study of function spaces such as $L^p$ spaces.
+
+\subsection{Measures}
+
+The goal of a measure is to assign a length, area, or volume to subsets of
+$\bb{R}$, $\bb{R}^2$, or, more generally, $\bb{R}^n$. Ideally, we would like
+a function
+\[
+  m\colon 2^{\bb{R}^n}\longrightarrow [0,\infty]
+\]
+with the following properties.
+\begin{enumerate}[label=(\roman*)]
+  \item \emph{Countable additivity:} if $E_1,E_2,\ldots\subseteq\bb{R}^n$
+    are pairwise disjoint, then
+    \[
+      m\left(\bigcup_{j=1}^{\infty}E_j\right)
+      =\sum_{j=1}^{\infty}m(E_j).
+    \]
+    A weaker requirement is finite additivity, in which the identity is
+    required only for finite pairwise disjoint families.
+  \item \emph{Invariance under rigid motions:} if
+    \[
+      \widetilde E=AE+b,
+      \qquad A\in O(n),\quad b\in\bb{R}^n,
+    \]
+    then $m(\widetilde E)=m(E)$. Here $A$ represents a rotation or
+    reflection, and $b$ a translation.
+  \item \emph{Normalization:}
+    \[
+      m([0,1]^n)=1.
+    \]
+\end{enumerate}
+
+Unfortunately, a measure with all these properties cannot be defined on
+every subset of $\bb{R}^n$.
+
+\begin{theorem}[Vitali]
+  Assuming the axiom of choice, there is no countably additive,
+  rigid-motion-invariant map
+  \[
+    m\colon 2^{\bb{R}^n}\longrightarrow[0,\infty]
+  \]
+  satisfying $m([0,1]^n)=1$.
+\end{theorem}
+
+\begin{proof}
+  It is enough to consider $n=1$: if such a map existed on $\bb{R}^n$, then
+  \[
+    \mu(E)=m\bigl(E\times[0,1]^{n-1}\bigr),
+    \qquad E\subseteq\bb{R},
+  \]
+  would have the required properties on $\bb{R}$. We therefore write $m$
+  for this one-dimensional map.
+
+  First, $m(\{x\})=0$ for every $x\in\bb{R}$. Otherwise, translation
+  invariance and countable additivity applied to a countably infinite set
+  in $[0,1]$ would contradict $m([0,1])=1$. Consequently,
+  $m([0,1))=1$.
+
+  Define an equivalence relation on
+  $[0,1)$ by
+  \[
+    x\sim y \quad\Longleftrightarrow\quad x-y\in\bb{Q}.
+  \]
+  Using the axiom of choice, select one representative from each
+  equivalence class and let $V$ be the set of representatives. Thus, for
+  every $x\in[0,1)$, there is a unique $y\in V$ such that $x-y\in\bb{Q}$.
+
+  For $t\in[0,1)$, define the translate of $V$ modulo $1$ by
+  \[
+    \begin{split}
+      V_t&=V+t\pmod 1\\
+         &=\{x+t:x\in V,\ x+t<1\}\\
+         &\phantom{={}}\cup\{x+t-1:x\in V,\ x+t\geq 1\}.
+    \end{split}
+  \]
+  Finite additivity and translation invariance give
+  \[
+    m(V_t)=m(V).
+  \]
+  The family indexed by $t\in[0,1)\cap\bb{Q}$ is a partition of $[0,1)$.
+  Indeed, if $x\in[0,1)$ and $y\in V$ represents the equivalence class of
+  $x$, then either $t=x-y$ or $t=x-y+1$ lies in $[0,1)\cap\bb{Q}$ and
+  $x\in V_t$. On the other hand, if $V_t\cap V_{t'}\neq\varnothing$, the
+  uniqueness of representatives implies $t=t'$.
+
+  Countable additivity now yields
+  \[
+    1=m([0,1))
+      =\sum_{t\in[0,1)\cap\bb{Q}}m(V_t)
+      =\sum_{t\in[0,1)\cap\bb{Q}}m(V).
+  \]
+  If $m(V)=0$, the last sum is $0$; if $m(V)>0$, it is infinite. Either
+  possibility is a contradiction.
+\end{proof}
+
+One might try to rescue the construction by requiring only finite
+additivity together with invariance and normalization. In dimensions at
+least three, even this is impossible.
+
+\begin{theorem}[Banach--Tarski]
+  If $n\geq 3$, there is no finitely additive,
+  rigid-motion-invariant map
+  \[
+    m\colon 2^{\bb{R}^n}\longrightarrow[0,\infty]
+  \]
+  satisfying $m([0,1]^n)=1$.
+\end{theorem}
+
+The resolution is to give up the requirement that a measure be defined on
+\emph{all} subsets of $\bb{R}^n$. In fact, measure theory can be developed
+on a general underlying set $X$ once an appropriate collection of
+measurable subsets has been chosen.
+
+\subsection{Algebras and \texorpdfstring{$\sigma$}{sigma}-algebras}
+
+\begin{definition}[Algebra]
+  An \emph{algebra} on a set $X$ is a nonempty collection
+  $\mathcal A\subseteq 2^X$ such that
+  \begin{enumerate}[label=(\alph*)]
+    \item if $E_1,\ldots,E_N\in\mathcal A$, then
+      $\bigcup_{j=1}^N E_j\in\mathcal A$;
+    \item if $E\in\mathcal A$, then $E^c=X\setminus E\in\mathcal A$.
+  \end{enumerate}
+\end{definition}
+
+\begin{definition}[$\sigma$-algebra]
+  A \emph{$\sigma$-algebra} on a set $X$ is a nonempty collection
+  $\mathcal A\subseteq 2^X$ such that
+  \begin{enumerate}[label=(\alph*)]
+    \item if $E_n\in\mathcal A$ for every $n\in\bb{N}$, then
+      $\bigcup_{n=1}^{\infty}E_n\in\mathcal A$;
+    \item if $E\in\mathcal A$, then $E^c\in\mathcal A$.
+  \end{enumerate}
+\end{definition}
+
+Because the collections in these definitions are nonempty and closed under
+complements, they contain both $X$ and $\varnothing$. By De Morgan's laws,
+an algebra is closed under finite intersections and a $\sigma$-algebra is
+closed under countable intersections. For example,
+\[
+  \bigcap_{n=1}^{\infty}E_n
+  =\left(\bigcup_{n=1}^{\infty}E_n^c\right)^c.
+\]
+
+When an algebra is already known to be closed under finite set operations,
+it is enough to check closure under countable \emph{disjoint} unions in
+order to prove that it is a $\sigma$-algebra. Given $E_n\in\mathcal A$, set
+\[
+  \widetilde E_1=E_1,
+  \qquad
+  \widetilde E_n=E_n\setminus\bigcup_{j=1}^{n-1}E_j
+  \quad(n\geq2).
+\]
+Then the sets $\widetilde E_n$ are pairwise disjoint and
+\[
+  \bigcup_{n=1}^{\infty}\widetilde E_n
+  =\bigcup_{n=1}^{\infty}E_n.
+\]
+
+\begin{example}
+  The collection $\{\varnothing,X\}$ is the smallest $\sigma$-algebra on
+  $X$.
+\end{example}
+
+\begin{example}
+  The power set $2^X$ is the largest $\sigma$-algebra on $X$.
+\end{example}
+
+\begin{example}[Countable--cocountable $\sigma$-algebra]
+  The collection
+  \[
+    \mathcal A
+    =\{E\subseteq X:E\text{ is countable or }E^c\text{ is countable}\}
+  \]
+  is a $\sigma$-algebra on $X$.
+\end{example}
+
+A convenient way to specify a $\sigma$-algebra is to give a family of
+generators.
+
+\begin{definition}[Generated $\sigma$-algebra]
+  Let $\mathcal E\subseteq 2^X$. The $\sigma$-algebra generated by
+  $\mathcal E$, denoted $\mathcal M(\mathcal E)$, is the smallest
+  $\sigma$-algebra containing $\mathcal E$.
+\end{definition}
+
+This object exists because $2^X$ is a $\sigma$-algebra containing
+$\mathcal E$, and an arbitrary intersection of $\sigma$-algebras is again
+a $\sigma$-algebra. Explicitly,
+\[
+  \mathcal M(\mathcal E)
+  =\bigcap\{\mathcal A:\mathcal A\text{ is a $\sigma$-algebra on $X$ and }
+    \mathcal E\subseteq\mathcal A\}.
+\]
+
+\subsection{Borel \texorpdfstring{$\sigma$}{sigma}-algebras}
+
+\begin{definition}[Borel $\sigma$-algebra]
+  Let $X$ be a metric space, or more generally a topological space. The
+  \emph{Borel $\sigma$-algebra} $\mathcal B_X$ is the $\sigma$-algebra
+  generated by the open subsets of $X$.
+\end{definition}
+
+For example, every open subset of $\bb{R}$ is a union of open intervals.
+The Borel $\sigma$-algebra contains every open and closed set, every
+$G_\delta$ set (a countable intersection of open sets), every $F_\sigma$
+set (a countable union of closed sets), and all sets obtained by continuing
+such countable operations. These classes form the Borel hierarchy.
+
+\begin{proposition}
+  The Borel $\sigma$-algebra $\mathcal B_{\bb{R}}$ is generated by any one
+  of the following collections:
+  \begin{enumerate}[label=(\alph*)]
+    \item $\{(a,b):a<b\}$;
+    \item $\{[a,b]:a<b\}$;
+    \item $\{(-\infty,a]:a\in\bb{R}\}$.
+  \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+  Let the three collections above be $\mathcal E_1$, $\mathcal E_2$, and
+  $\mathcal E_3$, respectively.
+
+  Every member of $\mathcal E_1$ is open, so
+  $\mathcal M(\mathcal E_1)\subseteq\mathcal B_{\bb{R}}$. For the reverse
+  inclusion, let $U\subseteq\bb{R}$ be open. For every $x\in U$, there is
+  an $\varepsilon>0$ such that
+  \[
+    (x-\varepsilon,x+\varepsilon)\subseteq U.
+  \]
+  By the density of $\bb{Q}$ in $\bb{R}$, we can choose $p,q\in\bb{Q}$
+  such that
+  \[
+    x-\varepsilon<p<x<q<x+\varepsilon.
+  \]
+  Thus every $x\in U$ lies in an interval $(p,q)$ with rational endpoints
+  that is contained in $U$. It follows that
+  \[
+    U=\bigcup\{(p,q):p,q\in\bb{Q},\ p<q,\ (p,q)\subseteq U\}.
+  \]
+  The indexing collection is a subset of $\bb{Q}^2$, so it is countable.
+  Therefore every open subset of $\bb{R}$ is a countable union of open
+  intervals. In particular, every open set belongs to
+  $\mathcal M(\mathcal E_1)$, proving
+  \[
+    \mathcal M(\mathcal E_1)=\mathcal B_{\bb{R}}.
+  \]
+
+  Every closed interval is Borel. In the other direction, for $a<b$,
+  \[
+    (a,b)=\bigcup_{\substack{n\in\bb{N}\\2/n<b-a}}
+      \left[a+\frac1n,b-\frac1n\right].
+  \]
+  Thus $\mathcal E_1\subseteq\mathcal M(\mathcal E_2)$, and consequently
+  $\mathcal M(\mathcal E_2)=\mathcal B_{\bb{R}}$. Equivalently, the reverse
+  containment can also be seen from
+  \[
+    [a,b]=\bigcap_{n=1}^{\infty}
+      \left(a-\frac1n,b+\frac1n\right).
+  \]
+
+  Finally, every left half-line in $\mathcal E_3$ is closed and hence
+  Borel. Conversely,
+  \[
+    (-\infty,b)=\bigcup_{n=1}^{\infty}
+      \left(-\infty,b-\frac1n\right]
+  \]
+  and therefore
+  \[
+    (a,b)=(-\infty,b)\cap(-\infty,a]^c
+      \in\mathcal M(\mathcal E_3).
+  \]
+  It follows that $\mathcal E_1\subseteq\mathcal M(\mathcal E_3)$, so
+  $\mathcal M(\mathcal E_3)=\mathcal B_{\bb{R}}$ as well.
+\end{proof}
