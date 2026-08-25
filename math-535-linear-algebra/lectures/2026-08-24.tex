@@ -1,3 +1,116 @@
 \section{August 24, 2026}
 
-\emph{Lecture notes to be added.}
+\subsection{Fields}
+
+\begin{definition}[Binary operation]
+  A \emph{binary operation} on a set $S$ is a function
+  \[
+    F\colon S\times S\longrightarrow S.
+  \]
+  Thus, for every $x,y\in S$, the value $F(x,y)$ is again an element of
+  $S$. We usually write $x\cdot y$ or $x+y$ in place of $F(x,y)$.
+\end{definition}
+
+\begin{example}
+  Addition on $\bb{Z}$ is a binary operation: the map
+  \[
+    \bb{Z}\times\bb{Z}\longrightarrow\bb{Z},
+    \qquad (m,n)\longmapsto m+n
+  \]
+  takes every pair of integers to an integer.
+\end{example}
+
+\begin{definition}
+  Let $F$ be a binary operation on $S$. A subset $T\subseteq S$ is
+  \emph{closed under $F$} if
+  \[
+    F(x,y)\in T
+  \]
+  whenever $x,y\in T$.
+\end{definition}
+
+\begin{example}
+  The positive integers $\bb{Z}_{>0}$ are closed under addition. The odd
+  integers are not closed under addition, but they are closed under
+  multiplication.
+\end{example}
+
+\begin{definition}[Field]
+  Let $\bb{F}$ be a set equipped with two binary operations, called
+  \emph{addition} and \emph{multiplication}. The sum and product of
+  $a,b\in\bb{F}$ are denoted by $a+b$ and $ab$, respectively. Suppose that
+  for every $a,b,c\in\bb{F}$,
+  \begin{enumerate}[label=(\roman*)]
+    \item $a+b=b+a$;
+    \item $(a+b)+c=a+(b+c)$;
+    \item $ab=ba$;
+    \item $a(bc)=(ab)c$;
+    \item $a(b+c)=ab+ac$.
+  \end{enumerate}
+  Suppose further that
+  \begin{enumerate}[label=(\roman*),resume]
+    \item $\bb{F}$ contains an additive identity $0$ and a multiplicative
+      identity $1$, so that
+      \[
+        a+0=a \qquad\text{and}\qquad 1a=a
+      \]
+      for every $a\in\bb{F}$;
+    \item $1\neq 0$;
+    \item every $a\in\bb{F}$ has an additive inverse $-a\in\bb{F}$ such
+      that $a+(-a)=0$;
+    \item every nonzero $a\in\bb{F}$ has a multiplicative inverse
+      $a^{-1}\in\bb{F}$ such that $aa^{-1}=1$.
+  \end{enumerate}
+  Then $\bb{F}$ is called a \emph{field}.
+\end{definition}
+
+\begin{example}
+  The integers $\bb{Z}$ do not form a field: for example, $2$ has no
+  multiplicative inverse in $\bb{Z}$. The sets $\bb{Q}$, $\bb{R}$, and
+  $\bb{C}$, with their usual operations, are fields.
+\end{example}
+
+There are also finite fields. For example,
+\[
+  \bb{F}_2=\{0,1\}
+  \qquad\text{and}\qquad
+  \bb{F}_3=\{0,1,2\},
+\]
+where the elements are the possible remainders upon division by $2$ and
+$3$, respectively. Addition and multiplication in $\bb{F}_3$ are given by
+the following tables:
+\[
+\begin{array}{c|ccc}
+  + & 0 & 1 & 2 \\
+  \hline
+  0 & 0 & 1 & 2 \\
+  1 & 1 & 2 & 0 \\
+  2 & 2 & 0 & 1
+\end{array}
+\qquad\qquad
+\begin{array}{c|ccc}
+  \cdot & 0 & 1 & 2 \\
+  \hline
+  0 & 0 & 0 & 0 \\
+  1 & 0 & 1 & 2 \\
+  2 & 0 & 2 & 1
+\end{array}.
+\]
+More generally, if $p$ is prime, then
+\[
+  \bb{F}_p=\{0,1,\ldots,p-1\},
+\]
+with addition and multiplication performed modulo $p$, is a field.
+
+\begin{lemma}
+  If $a$ is an element of a field $\bb{F}$, then $a\cdot 0=0$.
+\end{lemma}
+
+\begin{proof}
+  Since $0+0=0$, distributivity gives
+  \[
+    a\cdot 0=a(0+0)=a\cdot 0+a\cdot 0.
+  \]
+  Adding the additive inverse of $a\cdot 0$ to both sides yields
+  $0=a\cdot 0$.
+\end{proof}
