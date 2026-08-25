@@ -1,0 +1,56 @@
+\documentclass[12pt]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm,amsfonts,amscd}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{framed}
+\usepackage{hyperref}
+
+\hypersetup{
+  colorlinks=true,
+  citecolor=blue,
+  urlcolor=black,
+  linkcolor=red
+}
+
+\allowdisplaybreaks[1]
+
+\title{MATH 535: Linear Algebra}
+\author{Ruizhe Qian}
+\date{}
+
+\newcommand{\bb}[1]{\mathbb{#1}}
+\newcommand{\Var}[1]{\mathrm{Var}(#1)}
+\newcommand{\cal}[1]{\mathcal{#1}}
+\newcommand{\ip}[2]{\langle #1, #2 \rangle}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\newtheorem{example}{Example}
+\newtheorem{definition}{Definition}
+
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+\newtheorem{claim}{Claim}
+
+\newenvironment{statement}[1]
+{\smallskip\noindent\color[rgb]{0.20,0.20,0.20}\begin{framed}#1.}
+{\end{framed}}
+
+\begin{document}
+
+\onehalfspacing
+\maketitle
+
+\tableofcontents
+
+\input{lectures/2026-08-24}
+
+
+\end{document}
