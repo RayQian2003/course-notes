@@ -14,5 +14,3 @@
 # macOS
 .DS_Store
 
-# Generated PDFs
-*.pdf
