@@ -1,0 +1,217 @@
+\section{August 26, 2026}
+
+The main topics are properties of solutions, time discretization, and
+consistency error. We continue to consider the IVP
+\begin{equation}\label{eq:ivp-aug-26}
+  x'(t)=f(t,x(t)),
+  \qquad
+  x(t_0)=x_0,
+\end{equation}
+where $x\colon \bb{R}\to\bb{R}^n$.
+
+\subsection{Stability of solutions}
+
+The integral formulation of \eqref{eq:ivp-aug-26} is
+\[
+  x(t)=x_0+\int_{t_0}^t f(s,x(s))\,ds.
+\]
+If $y(t)$ is another solution with initial value $y_0$, then
+\[
+  y(t)=y_0+\int_{t_0}^t f(s,y(s))\,ds,
+\]
+and hence
+\[
+  y(t)-x(t)
+  =y_0-x_0
+   +\int_{t_0}^t\bigl(f(s,y(s))-f(s,x(s))\bigr)\,ds.
+\]
+Suppose $f$ is Lipschitz continuous in $x$ with Lipschitz constant $L$,
+so that
+\[
+  \lVert f(t,y)-f(t,x)\rVert\leq L\lVert y-x\rVert.
+\]
+Taking norms gives
+\begin{equation}\label{eq:solution-difference-aug-26}
+  \lVert y(t)-x(t)\rVert
+  \leq \lVert y_0-x_0\rVert
+  +\int_{t_0}^t L\lVert y(s)-x(s)\rVert\,ds.
+\end{equation}
+The following inequality controls this accumulation of error.
+
+\begin{lemma}[Gr\"onwall's inequality]\label{lem:gronwall}
+  Let $u,v\in C([t_0,t_1],\bb{R})$ be nonnegative functions and let
+  $\rho\geq 0$. If
+  \begin{equation}\label{eq:gronwall-hypothesis}
+    u(t)\leq \rho+\int_{t_0}^t v(s)u(s)\,ds,
+    \qquad t\in[t_0,t_1],
+  \end{equation}
+  then
+  \begin{equation}\label{eq:gronwall-conclusion}
+    u(t)\leq \rho
+    \exp\left(\int_{t_0}^t v(s)\,ds\right),
+    \qquad t\in[t_0,t_1].
+  \end{equation}
+  In particular, $u\equiv 0$ when $\rho=0$.
+\end{lemma}
+
+\begin{proof}
+  First suppose that $\rho>0$ and define
+  \[
+    U(t)=\rho+\int_{t_0}^t v(s)u(s)\,ds.
+  \]
+  Then $U\in C^1([t_0,t_1],\bb{R})$, and
+  \[
+    u(t)\leq U(t),
+    \qquad
+    U(t)\geq \rho>0.
+  \]
+  Since $u$ and $v$ are nonnegative,
+  \[
+    U'(t)=v(t)u(t)\leq v(t)U(t).
+  \]
+  Thus the logarithmic derivative of $U$ satisfies
+  \[
+    \bigl(\log U(t)\bigr)'=\frac{U'(t)}{U(t)}\leq v(t).
+  \]
+  Integrating from $t_0$ to $t$ yields
+  \[
+    \log U(t)-\log U(t_0)
+    \leq \int_{t_0}^t v(s)\,ds.
+  \]
+  Because $U(t_0)=\rho$ and $u(t)\leq U(t)$, applying the exponential
+  function proves \eqref{eq:gronwall-conclusion} when $\rho>0$.
+
+  Now suppose that $\rho=0$. For any $\varepsilon>0$,
+  \eqref{eq:gronwall-hypothesis} implies
+  \[
+    u(t)\leq \varepsilon+\int_{t_0}^t v(s)u(s)\,ds.
+  \]
+  The first part of the proof, with $\rho=\varepsilon$, gives
+  \[
+    0\leq u(t)
+    \leq \varepsilon
+    \exp\left(\int_{t_0}^t v(s)\,ds\right).
+  \]
+  Letting $\varepsilon\downarrow 0$ shows that $u(t)=0$ for every
+  $t\in[t_0,t_1]$.
+\end{proof}
+
+Apply Lemma~\ref{lem:gronwall} to
+\eqref{eq:solution-difference-aug-26} with
+\[
+  u(t)=\lVert y(t)-x(t)\rVert,
+  \qquad
+  v(t)=L,
+  \qquad
+  \rho=\lVert y_0-x_0\rVert.
+\]
+We obtain
+\begin{equation}\label{eq:gronwall-stability-aug-26}
+  \lVert y(t)-x(t)\rVert
+  \leq \lVert y_0-x_0\rVert e^{L(t-t_0)}.
+\end{equation}
+This estimate can be pessimistic, but it establishes continuous
+dependence on the initial data.
+
+\subsection{The solution map}
+
+The \emph{solution map}, or \emph{flow map}, is denoted by
+\[
+  x(t)=\varphi^{t,t_0}(x_0).
+\]
+For example, consider the scalar logistic equation
+\[
+  x'=x(1-x).
+\]
+For $x_0\neq 0$, its solution is
+\[
+  \varphi^{t,t_0}(x_0)
+  =\frac{1}{1+\dfrac{1-x_0}{x_0}e^{-(t-t_0)}}.
+\]
+When $x_0=0$, the solution is $x(t)\equiv0$.
+
+The solution map has the identity and composition properties
+\begin{align*}
+  \varphi^{t_0,t_0}(x_0)&=x_0,
+  &\varphi^{t_0,t_0}&=I,\\
+  \varphi^{t_2,t_1}\bigl(\varphi^{t_1,t_0}(x_0)\bigr)
+    &=\varphi^{t_2,t_0}(x_0).
+\end{align*}
+The second property is the basis of time marching.
+
+Differentiating the solution map with respect to time gives
+\begin{align*}
+  \frac{d}{dt}\varphi^{t,t_0}(x_0)
+    &=f(t,x(t)),\\
+  \frac{d^2}{dt^2}\varphi^{t,t_0}(x_0)
+    &=f_t(t,x(t))+f_x(t,x(t))x'(t)\\
+    &=\bigl(f_t+f_xf\bigr)(t,x(t)),
+\end{align*}
+where $f_x$ is the Jacobian matrix of $f$ with respect to $x$. Higher
+time derivatives can be found by repeated differentiation, for example
+with automatic differentiation; they can also be viewed through the
+Koopman operator.
+
+To measure sensitivity with respect to the initial value, define the
+Wronskian matrix
+\[
+  W(t)=\frac{\partial}{\partial x_0}\varphi^{t,t_0}(x_0)
+      =\frac{\partial x(t)}{\partial x_0}.
+\]
+Differentiating with respect to $t$ gives
+\begin{align*}
+  W'(t)
+  &=\frac{\partial}{\partial x_0}f(t,x(t))\\
+  &=f_x(t,x(t))\frac{\partial x(t)}{\partial x_0}.
+\end{align*}
+Thus, if
+\[
+  A(t)=f_x(t,x(t)),
+\]
+then $W$ satisfies the \emph{variational equation}
+\begin{equation}\label{eq:variational-equation}
+  W'(t)=A(t)W(t),
+  \qquad
+  W(t_0)=I.
+\end{equation}
+
+\subsection{One-step methods}
+
+Choose a time grid
+\[
+  t_0<t_1<\cdots<t_N=t,
+  \qquad
+  \tau_j=t_{j+1}-t_j,
+\]
+where the step sizes $\tau_j$ are small. Repeated use of the composition
+property gives
+\[
+  \varphi^{t_N,t_0}
+  =\varphi^{t_N,t_{N-1}}\circ\cdots\circ
+   \varphi^{t_2,t_1}\circ\varphi^{t_1,t_0}.
+\]
+It is therefore enough to approximate a single short-time solution map.
+Writing $t_j=t$ and $t_{j+1}=t+\tau$, Taylor expansion gives
+\begin{equation}\label{eq:flow-taylor-expansion}
+  \varphi^{t+\tau,t}(x)
+  =x+\tau f(t,x)
+   +\frac{\tau^2}{2}\bigl(f_t+f_xf\bigr)(t,x)
+   +O(\tau^3).
+\end{equation}
+
+Dropping the terms of order $\tau^2$ and higher defines the Euler
+one-step map
+\[
+  \Psi^{t+\tau,t}(x)=x+\tau f(t,x).
+\]
+Consequently, Euler's method is
+\begin{equation}\label{eq:euler-method}
+  x_{j+1}=x_j+\tau_j f(t_j,x_j).
+\end{equation}
+Its one-step consistency error follows from
+\eqref{eq:flow-taylor-expansion}:
+\[
+  \varphi^{t+\tau,t}(x)-\Psi^{t+\tau,t}(x)
+  =\frac{\tau^2}{2}\bigl(f_t+f_xf\bigr)(t,x)+O(\tau^3)
+  =O(\tau^2).
+\]
