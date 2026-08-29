@@ -1,0 +1,170 @@
+\section{August 26, 2026}
+
+\subsection{Further properties of fields}
+
+The preceding lecture showed that $a\cdot 0=0$ for every element $a$ of
+a field. We now obtain the zero-product property.
+
+\begin{proposition}[Zero-product property]
+  Let $a,b\in\bb{F}$. If $ab=0$, then either $a=0$ or $b=0$.
+\end{proposition}
+
+\begin{proof}
+  Suppose that $ab=0$ and $a\neq0$. Since $\bb{F}$ is a field,
+  $a^{-1}$ exists. Therefore
+  \[
+    0=a^{-1}0=a^{-1}(ab)=(a^{-1}a)b=1b=b.
+  \]
+  Thus $a=0$ or $b=0$.
+\end{proof}
+
+\subsection{Characteristic of a field}
+
+For a positive integer $n$ and $a\in\bb{F}$, write
+\[
+  na=\underbrace{a+a+\cdots+a}_{n\text{ terms}}.
+\]
+
+\begin{definition}[Characteristic]
+  Let $\bb{F}$ be a field. If $n1=0$ for some positive integer $n$, then
+  the least such $n$ is called the \emph{characteristic} of $\bb{F}$,
+  denoted $\operatorname{char}(\bb{F})$. If $n1\neq0$ for every positive
+  integer $n$, then $\bb{F}$ has characteristic zero.
+\end{definition}
+
+The fields $\bb{Q}$, $\bb{R}$, and $\bb{C}$ have characteristic zero.
+For every prime $p$, the field $\bb{F}_p$ has characteristic $p$. The
+rational function field $\bb{F}_p(t)$ is an infinite field of
+characteristic $p$.
+
+\begin{proposition}
+  If $\bb{F}$ has positive characteristic $r$, then $r$ is prime.
+\end{proposition}
+
+\begin{proof}
+  We have $r\neq1$, since $1\neq0$. Suppose that $r$ is composite, so
+  \[
+    r=st
+  \]
+  for integers $s,t$ satisfying $1<s,t<r$. Distributivity gives
+  \[
+    (s1)(t1)=(st)1=r1=0.
+  \]
+  By the zero-product property, either $s1=0$ or $t1=0$. Both
+  alternatives contradict the minimality of $r$. Hence $r$ is prime.
+\end{proof}
+
+\begin{proposition}
+  If $\operatorname{char}(\bb{F})=p>0$, then
+  \[
+    pa=0
+  \]
+  for every $a\in\bb{F}$.
+\end{proposition}
+
+\begin{proof}
+  Since $p1=0$, associativity and distributivity imply
+  \[
+    pa=p(1a)=(p1)a=0a=0.
+  \]
+\end{proof}
+
+\begin{proposition}
+  Every finite field has positive characteristic.
+\end{proposition}
+
+\begin{proof}
+  Let $\bb{F}$ be finite. The sequence
+  \[
+    1,\quad 2\cdot1,\quad 3\cdot1,\quad\ldots
+  \]
+  cannot consist of distinct elements. Hence there are positive integers
+  $m>n$ such that
+  \[
+    m1=n1.
+  \]
+  Adding the additive inverse of $n1$ to both sides gives
+  \[
+    (m-n)1=0.
+  \]
+  Thus $\bb{F}$ has positive characteristic.
+\end{proof}
+
+\subsection{Algebraically closed fields}
+
+\begin{definition}[Algebraically closed field]
+  A field $\bb{F}$ is \emph{algebraically closed} if every nonconstant
+  polynomial $f\in\bb{F}[x]$ has a root in $\bb{F}$.
+\end{definition}
+
+The field $\bb{Q}$ is not algebraically closed, because $x^2-2$ has no
+root in $\bb{Q}$. The field $\bb{R}$ is not algebraically closed, because
+$x^2+1$ has no real root. By the fundamental theorem of algebra,
+$\bb{C}$ is algebraically closed.
+
+\begin{proposition}
+  No finite field is algebraically closed.
+\end{proposition}
+
+\begin{proof}
+  Let
+  \[
+    \bb{F}=\{a_1,\ldots,a_q\}
+  \]
+  be finite. Consider the nonconstant polynomial
+  \[
+    f(x)=1+\prod_{i=1}^q(x-a_i).
+  \]
+  For each $i=1,\ldots,q$,
+  \[
+    f(a_i)=1\neq0.
+  \]
+  Thus $f$ has no root in $\bb{F}$, so $\bb{F}$ is not algebraically
+  closed.
+\end{proof}
+
+\subsection{Vectors and vector spaces}
+
+The spaces $\bb{R}^2$, $\bb{R}^3$, and, more generally,
+\[
+  \bb{R}^n
+  =\left\{
+    \begin{bmatrix}
+      x_1\\ \vdots\\ x_n
+    \end{bmatrix}
+    :x_1,\ldots,x_n\in\bb{R}
+  \right\}
+\]
+are the motivating examples of vector spaces.
+
+\begin{definition}[Vector space]
+  Let $\bb{F}$ be a field. A \emph{vector space over $\bb{F}$} is a set
+  $V$ equipped with two operations,
+  \[
+    V\times V\longrightarrow V,
+    \qquad
+    (u,v)\longmapsto u+v,
+  \]
+  and
+  \[
+    \bb{F}\times V\longrightarrow V,
+    \qquad
+    (\alpha,v)\longmapsto\alpha v,
+  \]
+  satisfying the following axioms for all $u,v,w\in V$ and
+  $\alpha,\beta\in\bb{F}$:
+  \begin{enumerate}[label=(V\arabic*)]
+    \item $u+(v+w)=(u+v)+w$;
+    \item $u+v=v+u$;
+    \item there is an element $0\in V$ such that $v+0=0+v=v$;
+    \item for every $v\in V$, there is an element $-v\in V$ such that
+      $v+(-v)=(-v)+v=0$;
+    \item $1v=v$;
+    \item $(\alpha\beta)v=\alpha(\beta v)$;
+    \item $\alpha(u+v)=\alpha u+\alpha v$;
+    \item $(\alpha+\beta)v=\alpha v+\beta v$.
+  \end{enumerate}
+\end{definition}
+
+The elements of $V$ are called \emph{vectors}, and the elements of
+$\bb{F}$ are called \emph{scalars}.

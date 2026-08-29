@@ -1,0 +1,204 @@
+\section{August 28, 2026}
+
+\subsection{Examples of vector spaces}
+
+\begin{example}[Coordinate spaces]
+  Let $\bb{F}$ be a field. The set
+  \[
+    \bb{F}^n
+    =\left\{
+      \begin{bmatrix}
+        x_1\\ \vdots\\ x_n
+      \end{bmatrix}
+      :x_1,\ldots,x_n\in\bb{F}
+    \right\}
+  \]
+  is a vector space over $\bb{F}$ under componentwise addition and scalar
+  multiplication:
+  \[
+    \begin{bmatrix}x_1\\ \vdots\\ x_n\end{bmatrix}
+    +\begin{bmatrix}y_1\\ \vdots\\ y_n\end{bmatrix}
+    =\begin{bmatrix}x_1+y_1\\ \vdots\\ x_n+y_n\end{bmatrix},
+    \qquad
+    \alpha\begin{bmatrix}x_1\\ \vdots\\ x_n\end{bmatrix}
+    =\begin{bmatrix}\alpha x_1\\ \vdots\\ \alpha x_n\end{bmatrix}.
+  \]
+  In particular, $\bb{R}^n$ is a vector space over $\bb{R}$ and
+  $\bb{C}^n$ is a vector space over $\bb{C}$.
+\end{example}
+
+\begin{example}[Matrix spaces]
+  The set $M_{m\times n}(\bb{F})$ of $m\times n$ matrices with entries in
+  $\bb{F}$ is a vector space over $\bb{F}$. Addition and scalar
+  multiplication are defined entrywise:
+  \[
+    [a_{ij}]+[b_{ij}]=[a_{ij}+b_{ij}],
+    \qquad
+    \alpha[a_{ij}]=[\alpha a_{ij}].
+  \]
+\end{example}
+
+\begin{example}[Polynomial spaces]
+  Let
+  \[
+    \mathcal P_n(\bb{F})
+    =\{a_0+a_1t+\cdots+a_nt^n:a_0,\ldots,a_n\in\bb{F}\}.
+  \]
+  This is the vector space over $\bb{F}$ of polynomials of degree at most
+  $n$. Its operations are
+  \begin{align*}
+    &(a_0+a_1t+\cdots+a_nt^n)
+      +(b_0+b_1t+\cdots+b_nt^n)\\
+    &\qquad=(a_0+b_0)+(a_1+b_1)t+\cdots+(a_n+b_n)t^n,
+  \end{align*}
+  and
+  \[
+    \alpha(a_0+a_1t+\cdots+a_nt^n)
+    =\alpha a_0+\alpha a_1t+\cdots+\alpha a_nt^n.
+  \]
+\end{example}
+
+\subsection{Linear combinations and spanning sets}
+
+\begin{definition}[Linear combination and span]
+  Let $V$ be a vector space over $\bb{F}$ and let
+  $v_1,\ldots,v_p\in V$. A \emph{linear combination} of these vectors is
+  a vector of the form
+  \[
+    \alpha_1v_1+\cdots+\alpha_pv_p,
+    \qquad
+    \alpha_1,\ldots,\alpha_p\in\bb{F}.
+  \]
+  The set of all their linear combinations is called their \emph{span}:
+  \[
+    \operatorname{span}\{v_1,\ldots,v_p\}
+    =\{\alpha_1v_1+\cdots+\alpha_pv_p:
+      \alpha_1,\ldots,\alpha_p\in\bb{F}\}.
+  \]
+  A linear combination is \emph{trivial} if all of its coefficients are
+  zero.
+\end{definition}
+
+In $\bb{R}^2$, let
+\[
+  e_1=\begin{bmatrix}1\\0\end{bmatrix},
+  \qquad
+  e_2=\begin{bmatrix}0\\1\end{bmatrix}.
+\]
+Then
+\[
+  \operatorname{span}\{e_1,e_2\}=\bb{R}^2,
+\]
+because
+\[
+  \begin{bmatrix}x\\y\end{bmatrix}=xe_1+ye_2.
+\]
+If
+\[
+  v=\begin{bmatrix}1\\1\end{bmatrix},
+\]
+then $\{e_1,e_2,v\}$ also spans $\bb{R}^2$, since
+\[
+  \begin{bmatrix}x\\y\end{bmatrix}=xe_1+ye_2+0v.
+\]
+The additional vector is unnecessary, which motivates the question of
+redundancy in a spanning set.
+
+\begin{definition}[Spanning set]
+  A collection $\{v_1,\ldots,v_p\}\subseteq V$ is a \emph{spanning set}
+  for $V$ if every $v\in V$ can be written as a linear combination
+  \[
+    v=\alpha_1v_1+\cdots+\alpha_pv_p.
+  \]
+  Equivalently,
+  \[
+    \operatorname{span}\{v_1,\ldots,v_p\}=V.
+  \]
+\end{definition}
+
+\subsection{Linear independence}
+
+\begin{definition}[Linear independence]
+  A collection $\{v_1,\ldots,v_p\}\subseteq V$ is \emph{linearly
+  independent} if
+  \[
+    \alpha_1v_1+\cdots+\alpha_pv_p=0
+  \]
+  implies
+  \[
+    \alpha_1=\cdots=\alpha_p=0.
+  \]
+  In other words, only the trivial linear combination of
+  $v_1,\ldots,v_p$ equals zero. A collection that is not linearly
+  independent is called \emph{linearly dependent}.
+\end{definition}
+
+\begin{example}
+  Consider the vectors
+  \[
+    v_1=\begin{bmatrix}1\\1\\0\end{bmatrix},
+    \qquad
+    v_2=\begin{bmatrix}2\\0\\1\end{bmatrix},
+    \qquad
+    v_3=\begin{bmatrix}3\\1\\1\end{bmatrix}
+  \]
+  in $\bb{R}^3$. To test linear independence, solve
+  \[
+    \alpha v_1+\beta v_2+\gamma v_3=0.
+  \]
+  This gives the system
+  \[
+    \begin{cases}
+      \alpha+2\beta+3\gamma=0,\\
+      \alpha+\gamma=0,\\
+      \beta+\gamma=0.
+    \end{cases}
+  \]
+  Taking $\gamma=1$ gives $\alpha=\beta=-1$, so
+  \[
+    -v_1-v_2+v_3=0.
+  \]
+  Thus the vectors are linearly dependent; equivalently,
+  $v_3=v_1+v_2$.
+\end{example}
+
+The following result precisely characterizes redundancy in a finite
+collection of vectors.
+
+\begin{proposition}\label{prop:dependence-redundancy}
+  Let $v_1,\ldots,v_p\in V$. The collection
+  $\{v_1,\ldots,v_p\}$ is linearly dependent if and only if one of its
+  vectors is a linear combination of the others. Equivalently, there is
+  an index $k$ and scalars $\beta_j\in\bb{F}$ such that
+  \[
+    v_k=\sum_{\substack{j=1\\j\neq k}}^p\beta_jv_j.
+  \]
+\end{proposition}
+
+\begin{proof}
+  Suppose first that $\{v_1,\ldots,v_p\}$ is linearly dependent. Then
+  there are scalars $\alpha_1,\ldots,\alpha_p$, not all zero, such that
+  \[
+    \alpha_1v_1+\cdots+\alpha_pv_p=0.
+  \]
+  Choose $k$ such that $\alpha_k\neq0$. Since $\bb{F}$ is a field,
+  $\alpha_k^{-1}$ exists, and we can solve for $v_k$:
+  \[
+    v_k
+    =-\sum_{\substack{j=1\\j\neq k}}^p
+      \alpha_k^{-1}\alpha_jv_j.
+  \]
+  Thus $v_k$ is a linear combination of the other vectors.
+
+  Conversely, suppose that for some $k$,
+  \[
+    v_k=\sum_{\substack{j=1\\j\neq k}}^p\beta_jv_j.
+  \]
+  Moving all terms to one side gives
+  \[
+    v_k-\sum_{\substack{j=1\\j\neq k}}^p\beta_jv_j=0.
+  \]
+  This is a nontrivial linear combination of $v_1,\ldots,v_p$, because
+  the coefficient of $v_k$ is $1\neq0$. Hence the collection is linearly
+  dependent.
+\end{proof}
