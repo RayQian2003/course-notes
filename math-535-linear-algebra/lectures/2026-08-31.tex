@@ -1,0 +1,167 @@
+\section{August 31, 2026}
+
+\subsection{Bases and coordinates}
+
+\begin{definition}[Basis]
+  A collection of vectors $\{v_1,\ldots,v_n\}$ in a vector space $V$ is
+  a \emph{basis} for $V$ if it is linearly independent and spans $V$.
+\end{definition}
+
+The two conditions in the definition can be combined into a statement
+about representing vectors uniquely.
+
+\begin{proposition}
+  A collection $\{v_1,\ldots,v_n\}$ is a basis for $V$ if and only if
+  every vector $v\in V$ has a unique representation of the form
+  \[
+    v=a_1v_1+\cdots+a_nv_n,
+    \qquad a_1,\ldots,a_n\in\bb{F}.
+  \]
+  When $\{v_1,\ldots,v_n\}$ is a basis, the scalars
+  $a_1,\ldots,a_n$ are called the \emph{coordinates} of $v$ with respect
+  to this basis.
+\end{proposition}
+
+\begin{proof}
+  Suppose first that $\{v_1,\ldots,v_n\}$ is a basis. Since the
+  collection spans $V$, every $v\in V$ has a representation
+  \[
+    v=a_1v_1+\cdots+a_nv_n.
+  \]
+  To prove uniqueness, suppose that
+  \[
+    v=\widetilde a_1v_1+\cdots+\widetilde a_nv_n
+  \]
+  is another such representation. Subtracting the two equations gives
+  \[
+    (a_1-\widetilde a_1)v_1+\cdots
+      +(a_n-\widetilde a_n)v_n=0.
+  \]
+  Because $\{v_1,\ldots,v_n\}$ is linearly independent,
+  \[
+    a_i-\widetilde a_i=0
+  \]
+  for each $i$. Thus $a_i=\widetilde a_i$ for every $i$, and the
+  representation is unique.
+
+  Conversely, suppose every $v\in V$ has a unique representation as a
+  linear combination of $v_1,\ldots,v_n$. The existence of such a
+  representation for every $v$ shows that the collection spans $V$.
+  Now suppose
+  \[
+    a_1v_1+\cdots+a_nv_n=0.
+  \]
+  The zero vector also has the representation
+  \[
+    0=0v_1+\cdots+0v_n.
+  \]
+  Uniqueness therefore gives $a_1=\cdots=a_n=0$. Hence the collection is
+  linearly independent, so it is a basis for $V$.
+\end{proof}
+
+\begin{example}[The standard basis of $\bb{F}^n$]
+  For $i=1,\ldots,n$, let $e_i\in\bb{F}^n$ be the vector whose $i$th
+  coordinate is $1$ and whose other coordinates are $0$. Thus
+  \[
+    e_1=\begin{bmatrix}1\\0\\\vdots\\0\end{bmatrix},
+    \qquad
+    e_2=\begin{bmatrix}0\\1\\\vdots\\0\end{bmatrix},
+    \qquad\ldots\qquad
+    e_n=\begin{bmatrix}0\\0\\\vdots\\1\end{bmatrix}.
+  \]
+  Every vector in $\bb{F}^n$ has the unique representation
+  \[
+    \begin{bmatrix}x_1\\x_2\\\vdots\\x_n\end{bmatrix}
+    =x_1e_1+x_2e_2+\cdots+x_ne_n.
+  \]
+  Consequently, $\{e_1,\ldots,e_n\}$ is a basis for $\bb{F}^n$, called
+  its \emph{standard basis}.
+\end{example}
+
+\begin{example}[The standard basis of $\mathcal P_n(\bb{F})$]
+  Recall that $\mathcal P_n(\bb{F})$ is the vector space of polynomials
+  over $\bb{F}$ of degree at most $n$. Each polynomial has a unique
+  expression
+  \[
+    p(t)=a_0+a_1t+\cdots+a_nt^n.
+  \]
+  Hence
+  \[
+    \{1,t,t^2,\ldots,t^n\}
+  \]
+  is a basis for $\mathcal P_n(\bb{F})$, called its standard basis.
+\end{example}
+
+\begin{proposition}
+  Every finite nonempty spanning set for a vector space contains a basis.
+\end{proposition}
+
+\begin{proof}
+  Let $\{v_1,\ldots,v_p\}$ span $V$. If this collection is linearly
+  independent, then it is already a basis. Otherwise, by
+  Proposition~\ref{prop:dependence-redundancy}, some $v_k$ is a linear
+  combination of the other vectors. It follows that removing $v_k$ does
+  not change the span:
+  \[
+    \operatorname{span}\{v_1,\ldots,v_p\}
+    =\operatorname{span}\{v_1,\ldots,v_{k-1},v_{k+1},\ldots,v_p\}.
+  \]
+  If the remaining collection is linearly independent, it is a basis.
+  If not, repeat the same argument. The original spanning set is finite,
+  so this process must terminate. The final collection still spans $V$
+  and is linearly independent, and is therefore a basis contained in the
+  original spanning set.
+\end{proof}
+
+\subsection{Linear transformations}
+
+A \emph{transformation}, also called a map or function, from a set $X$
+to a set $Y$ is a rule $T\colon X\to Y$ that assigns to every $x\in X$
+an element $T(x)\in Y$.
+
+\begin{definition}[Linear transformation]
+  Let $V$ and $W$ be vector spaces over the same field $\bb{F}$. A
+  transformation $T\colon V\to W$ is \emph{linear} if
+  \begin{enumerate}[label=(\roman*)]
+    \item $T(u+v)=T(u)+T(v)$ for all $u,v\in V$;
+    \item $T(\alpha u)=\alpha T(u)$ for all $u\in V$ and
+      $\alpha\in\bb{F}$.
+  \end{enumerate}
+\end{definition}
+
+Equivalently, $T\colon V\to W$ is linear if
+\[
+  T(\alpha u+\beta v)=\alpha T(u)+\beta T(v)
+\]
+for all $u,v\in V$ and $\alpha,\beta\in\bb{F}$.
+
+\begin{example}[Reflection]
+  Define $T\colon\bb{R}^2\to\bb{R}^2$ by
+  \[
+    T\begin{bmatrix}x_1\\x_2\end{bmatrix}
+    =\begin{bmatrix}x_1\\-x_2\end{bmatrix}.
+  \]
+  Geometrically, $T$ reflects each point across the first coordinate
+  axis. To check additivity, observe that
+  \begin{align*}
+    T\left(
+      \begin{bmatrix}x_1\\x_2\end{bmatrix}
+      +\begin{bmatrix}y_1\\y_2\end{bmatrix}
+    \right)
+    &=T\begin{bmatrix}x_1+y_1\\x_2+y_2\end{bmatrix} \\
+    &=\begin{bmatrix}x_1+y_1\\-x_2-y_2\end{bmatrix} \\
+    &=\begin{bmatrix}x_1\\-x_2\end{bmatrix}
+      +\begin{bmatrix}y_1\\-y_2\end{bmatrix} \\
+    &=T\begin{bmatrix}x_1\\x_2\end{bmatrix}
+      +T\begin{bmatrix}y_1\\y_2\end{bmatrix}.
+  \end{align*}
+  For $\alpha\in\bb{R}$,
+  \begin{align*}
+    T\left(\alpha\begin{bmatrix}x_1\\x_2\end{bmatrix}\right)
+    &=T\begin{bmatrix}\alpha x_1\\\alpha x_2\end{bmatrix} \\
+    &=\begin{bmatrix}\alpha x_1\\-\alpha x_2\end{bmatrix} \\
+    &=\alpha\begin{bmatrix}x_1\\-x_2\end{bmatrix}
+      =\alpha T\begin{bmatrix}x_1\\x_2\end{bmatrix}.
+  \end{align*}
+  Thus $T$ is linear.
+\end{example}
