@@ -1,0 +1,233 @@
+\section{September 2, 2026}
+
+We develop the coefficient representation of Runge--Kutta methods and
+derive their order conditions. Throughout, we retain the notation of
+the previous lectures: \(\tau_n=t_{n+1}-t_n\), \(x_n\) is the numerical
+approximation at \(t_n\), \(\Phi\) is the exact flow, and \(\Psi\) is
+the numerical one-step map.
+
+\subsection{Butcher tableaux}
+
+An \(s\)-stage Runge--Kutta method has the form
+\begin{align}
+  k_i
+  &=f\left(t_n+c_i\tau_n,
+    x_n+\tau_n\sum_{j=1}^s a_{ij}k_j\right),
+    \qquad i=1,\ldots,s,
+    \label{eq:rk-stages-sep-02}\\
+  x_{n+1}
+  &=x_n+\tau_n\sum_{i=1}^s b_i k_i.
+    \label{eq:rk-update-sep-02}
+\end{align}
+The coefficients are collected into
+\[
+  A=(a_{ij})_{i,j=1}^s,
+  \qquad
+  b=\begin{bmatrix}b_1&\cdots&b_s\end{bmatrix}^{\mathsf T},
+  \qquad
+  c=\begin{bmatrix}c_1&\cdots&c_s\end{bmatrix}^{\mathsf T}.
+\]
+They are conventionally displayed in a \emph{Butcher tableau}:
+\[
+  \begin{array}{c|cccc}
+    c_1&a_{11}&a_{12}&\cdots&a_{1s}\\
+    c_2&a_{21}&a_{22}&\cdots&a_{2s}\\
+    \vdots&\vdots&\vdots&\ddots&\vdots\\
+    c_s&a_{s1}&a_{s2}&\cdots&a_{ss}\\ \hline
+       &b_1&b_2&\cdots&b_s
+  \end{array}.
+\]
+The values \(t_n+c_i\tau_n\) are the intermediate stage times between
+\(t_n\) and \(t_{n+1}\). If \(A\) is strictly lower triangular, then
+each stage depends only on previously computed stages. The resulting
+method is an \emph{explicit Runge--Kutta method}.
+
+\subsection{The internal consistency relation}
+
+Any nonautonomous ODE can be converted into an autonomous system by
+augmenting its state. Set
+\[
+  z(t)=\begin{bmatrix}t\\x(t)\end{bmatrix},
+  \qquad
+  z'(t)=
+  \begin{bmatrix}1\\f(t,x(t))\end{bmatrix}
+  =F(z(t)).
+\]
+Apply a Runge--Kutta method to this autonomous system. Because the time
+component of every stage slope is one, the time component of stage
+\(i\) is
+\[
+  t_n+\tau_n\sum_{j=1}^s a_{ij}.
+\]
+For this to agree with the prescribed stage time
+\(t_n+c_i\tau_n\) in \eqref{eq:rk-stages-sep-02}, we require
+\[
+  c_i=\sum_{j=1}^s a_{ij},
+  \qquad i=1,\ldots,s.
+\]
+Thus the \emph{internal consistency relation} is
+\begin{equation}\label{eq:internal-consistency-sep-02}
+  c=A\mathbf{1},
+  \qquad
+  \mathbf{1}=\begin{bmatrix}1&\cdots&1\end{bmatrix}^{\mathsf T}.
+\end{equation}
+Under this relation, applying the Runge--Kutta scheme directly to the
+nonautonomous equation is equivalent to applying it to the augmented
+autonomous system.
+
+\subsection{One-step error and order}
+
+For an exact starting value \(x\) at time \(t\), define the one-step
+defect by
+\begin{equation}\label{eq:one-step-defect-sep-02}
+  \mathcal{E}(x,t,\tau)
+  =\Phi^{t+\tau,t}(x)-\Psi^{t+\tau,t}(x).
+\end{equation}
+A Runge--Kutta method has order \(p\) if
+\[
+  \mathcal{E}(x,t,\tau)=O(\tau^{p+1})
+  \qquad\text{as }\tau\to0.
+\]
+Assuming \eqref{eq:internal-consistency-sep-02}, it suffices to derive
+the conditions for an autonomous equation
+\[
+  x'=f(x).
+\]
+We write its exact and Runge--Kutta flows as \(\Phi^\tau\) and
+\(\Psi^\tau\), respectively.
+
+Let \(f'=Df(x)\) and \(f''=D^2f(x)\). Differentiation along an exact
+solution gives
+\begin{align*}
+  x'&=f,\\
+  x''&=f'f,\\
+  x'''&=f''(f,f)+f'f'f.
+\end{align*}
+Consequently,
+\begin{equation}\label{eq:exact-flow-third-order-sep-02}
+  \Phi^\tau(x)
+  =x+\tau f+\frac{\tau^2}{2}f'f
+   +\frac{\tau^3}{6}\bigl(f''(f,f)+f'f'f\bigr)
+   +O(\tau^4).
+\end{equation}
+
+For the numerical method, set
+\[
+  \Delta_i=\tau\sum_{j=1}^s a_{ij}k_j,
+  \qquad
+  k_i=f(x+\Delta_i).
+\]
+Since \(k_j=f+O(\tau)\) and \(c=A\mathbf{1}\),
+\[
+  \Delta_i=\tau c_i f+O(\tau^2).
+\]
+A more detailed Taylor expansion gives
+\[
+  k_i
+  =f+\tau c_i f'f
+   +\tau^2\left(
+     \sum_{j=1}^s a_{ij}c_j\,f'f'f
+     +\frac{c_i^2}{2}f''(f,f)
+   \right)
+   +O(\tau^3).
+\]
+Substitution into \(\Psi^\tau(x)=x+\tau\sum_i b_i k_i\) yields
+\begin{align}
+  \Psi^\tau(x)
+  ={}&x+\tau(b^{\mathsf T}\mathbf{1})f
+  +\tau^2(b^{\mathsf T}c)f'f\notag\\
+  &+\tau^3\left(
+    (b^{\mathsf T}Ac)f'f'f
+    +\frac12(b^{\mathsf T}c^{\circ2})f''(f,f)
+  \right)
+  +O(\tau^4),
+  \label{eq:rk-flow-third-order-sep-02}
+\end{align}
+where \(c^{\circ2}=(c_1^2,\ldots,c_s^2)^{\mathsf T}\).
+
+Comparing \eqref{eq:exact-flow-third-order-sep-02} and
+\eqref{eq:rk-flow-third-order-sep-02} gives the order conditions through
+order three:
+\begin{alignat}{3}
+  b^{\mathsf T}\mathbf{1}&=1,
+  &\qquad&\text{(order one)},
+  \label{eq:rk-oc1-sep-02}\\
+  b^{\mathsf T}c&=\frac12,
+  &&\text{(additional condition for order two)},
+  \label{eq:rk-oc2-sep-02}\\
+  b^{\mathsf T}c^{\circ2}&=\frac13,
+  &&\text{(additional condition for order three)},
+  \label{eq:rk-oc3-sep-02}\\
+  b^{\mathsf T}Ac&=\frac16,
+  &&\text{(additional condition for order three)}.
+  \label{eq:rk-oc4-sep-02}
+\end{alignat}
+Therefore \eqref{eq:rk-oc1-sep-02} gives a first-order method; the first
+two conditions give a second-order method; and all four give a
+third-order method. A fourth-order method must satisfy eight conditions
+in total. For nonautonomous equations, the relation
+\(c=A\mathbf{1}\) is also needed for these autonomous order conditions
+to apply directly.
+
+\subsection{Examples}
+
+\begin{example}[Forward Euler]
+  Forward Euler has the tableau
+  \[
+    \begin{array}{c|c}
+      0&0\\ \hline
+       &1
+    \end{array}.
+  \]
+  Thus \(s=1\), \(A=0\), \(b=1\), and \(c=0\). It satisfies
+  \(b^{\mathsf T}\mathbf{1}=1\), but not the second-order condition,
+  so it is first order.
+\end{example}
+
+\begin{example}[Explicit trapezoidal method]
+  The explicit trapezoidal method, or Heun's method, is
+  \begin{align*}
+    k_1&=f(t_n,x_n),\\
+    k_2&=f(t_n+\tau_n,x_n+\tau_n k_1),\\
+    x_{n+1}&=x_n+\frac{\tau_n}{2}(k_1+k_2).
+  \end{align*}
+  Its tableau is
+  \[
+    \begin{array}{c|cc}
+      0&0&0\\
+      1&1&0\\ \hline
+       &\tfrac12&\tfrac12
+    \end{array}.
+  \]
+  Here \(c=A\mathbf{1}\),
+  \(b^{\mathsf T}\mathbf{1}=1\), and
+  \(b^{\mathsf T}c=1/2\). However,
+  \(b^{\mathsf T}c^{\circ2}=1/2\neq1/3\), so the method is second
+  order but not third order.
+\end{example}
+
+\subsection{Explicit three-stage methods}
+
+A general explicit three-stage Runge--Kutta method has tableau
+\[
+  \begin{array}{c|ccc}
+    0   &0&0&0\\
+    c_2 &a_{21}&0&0\\
+    c_3 &a_{31}&a_{32}&0\\ \hline
+        &b_1&b_2&b_3
+  \end{array}.
+\]
+Internal consistency requires
+\[
+  c_2=a_{21},
+  \qquad
+  c_3=a_{31}+a_{32}.
+\]
+Before imposing the order conditions, the six free coefficients are
+\[
+  b_1,b_2,b_3,a_{21},a_{31},a_{32}.
+\]
+The four conditions
+\eqref{eq:rk-oc1-sep-02}--\eqref{eq:rk-oc4-sep-02} enforce third order,
+so one generically expects a two-parameter family of explicit
+three-stage schemes of order three.

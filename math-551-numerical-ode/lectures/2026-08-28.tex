@@ -41,8 +41,8 @@ A one-step method advances the numerical solution by a map
 Thus the exact and numerical solutions at $t_n$ can be written as
 \begin{align*}
   x(t_n)
-  &=\varphi^{t_n,t_{n-1}}\circ\cdots\circ
-    \varphi^{t_2,t_1}\circ\varphi^{t_1,t_0}(x_0),\\
+  &=\Phi^{t_n,t_{n-1}}\circ\cdots\circ
+    \Phi^{t_2,t_1}\circ\Phi^{t_1,t_0}(x_0),\\
   x_n
   &=\Psi^{t_n,t_{n-1}}\circ\cdots\circ
     \Psi^{t_2,t_1}\circ\Psi^{t_1,t_0}(x_0).
@@ -117,7 +117,7 @@ For a numerical one-step map $\Psi$, define its \emph{local error}, or
 \emph{consistency error}, at $(t_n,x)$ by
 \begin{equation}\label{eq:local-error-aug-28}
   \mathcal{E}_n(x)
-  =\varphi^{t_{n+1},t_n}(x)-\Psi^{t_{n+1},t_n}(x).
+  =\Phi^{t_{n+1},t_n}(x)-\Psi^{t_{n+1},t_n}(x).
 \end{equation}
 Here the exact and numerical steps start from the same value $x$ at
 time $t_n$.
@@ -126,7 +126,7 @@ time $t_n$.
   The Taylor expansion from \eqref{eq:flow-taylor-expansion} gives
   \begin{align*}
     \mathcal{E}_n^{\mathrm{FE}}(x)
-    &=\varphi^{t_n+\tau_n,t_n}(x)
+    &=\Phi^{t_n+\tau_n,t_n}(x)
       -\bigl(x+\tau_n f(t_n,x)\bigr)\\
     &=\frac{\tau_n^2}{2}
       \bigl(f_t+f_xf\bigr)(t_n,x)+O(\tau_n^3)\\

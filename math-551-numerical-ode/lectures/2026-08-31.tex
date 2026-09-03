@@ -1,0 +1,155 @@
+\section{August 31, 2026}
+
+We continue the analysis of one-step methods. The main goals are to pass
+from local consistency to global convergence and to introduce
+Runge--Kutta methods. Consider the IVP
+\[
+  x'(t)=f(t,x(t)),
+  \qquad
+  x(t_0)=x_0\in\bb{R}^n,
+\]
+on a grid
+\[
+  t_0<t_1<\cdots<t_N=T,
+  \qquad
+  \tau_j=t_{j+1}-t_j,
+  \qquad
+  h=\max_{0\leq j<N}\tau_j.
+\]
+
+\subsection{From local consistency to global convergence}
+
+Recall that \(\Phi^{t_{j+1},t_j}\) denotes the exact flow over one
+step, while \(\Psi^{t_{j+1},t_j}\) denotes the numerical one-step map.
+For a starting value \(x\), define the local consistency error by
+\begin{equation}\label{eq:local-error-aug-31}
+  \xi_j(x)
+  =\Phi^{t_{j+1},t_j}(x)
+   -\Psi^{t_{j+1},t_j}(x).
+\end{equation}
+
+\begin{definition}[Consistency order]
+  A one-step method has \emph{consistency order} \(p>0\) if, uniformly
+  for the relevant starting values,
+  \[
+    \lVert\xi_j(x)\rVert\leq C\tau_j^{p+1}
+  \]
+  as \(h\to0\). The order \(p\) need not be an integer when the data
+  have only H\"older regularity.
+\end{definition}
+
+Forward and backward Euler have consistency order one. The exact and
+numerical values at the final time can be written as compositions:
+\begin{align*}
+  x(T)
+  &=\Phi^{t_N,t_{N-1}}\circ\cdots\circ
+    \Phi^{t_2,t_1}\circ\Phi^{t_1,t_0}(x_0),\\
+  x_N
+  &=\Psi^{t_N,t_{N-1}}\circ\cdots\circ
+    \Psi^{t_2,t_1}\circ\Psi^{t_1,t_0}(x_0).
+\end{align*}
+Thus the local errors are propagated through all the subsequent steps.
+
+Let
+\[
+  e_j=x_j-x(t_j)
+\]
+be the global error. For brevity, set
+\(\Psi_j=\Psi^{t_{j+1},t_j}\) and
+\(\Phi_j=\Phi^{t_{j+1},t_j}\). Then
+\begin{align}
+  e_{j+1}
+  &=\Psi_j(x_j)-\Phi_j(x(t_j))\notag\\
+  &=\Psi_j(x_j)-\Psi_j(x(t_j))-\xi_j(x(t_j)).
+  \label{eq:error-recursion-aug-31}
+\end{align}
+Suppose the one-step map satisfies the stability estimate
+\begin{equation}\label{eq:step-stability-aug-31}
+  \lVert\Psi_j(y)-\Psi_j(z)\rVert
+  \leq e^{L\tau_j}\lVert y-z\rVert.
+\end{equation}
+Combining the consistency and stability estimates in
+\eqref{eq:error-recursion-aug-31} gives
+\begin{equation}\label{eq:error-bound-one-step-aug-31}
+  \lVert e_{j+1}\rVert
+  \leq e^{L\tau_j}\lVert e_j\rVert+C\tau_j^{p+1}.
+\end{equation}
+Since \(e_0=0\), iteration yields
+\begin{align*}
+  \lVert e_N\rVert
+  &\leq C\sum_{j=0}^{N-1}
+    \tau_j^{p+1}e^{L(T-t_{j+1})}\\
+  &\leq Ch^p\sum_{j=0}^{N-1}
+    \tau_j e^{L(T-t_{j+1})}.
+\end{align*}
+For \(L>0\), the sum is bounded by a geometric integral, and hence
+\begin{equation}\label{eq:global-error-bound-aug-31}
+  \lVert e_N\rVert
+  \leq \frac{C}{L}\bigl(e^{L(T-t_0)}-1\bigr)h^p.
+\end{equation}
+When \(L=0\), the corresponding bound is
+\[
+  \lVert e_N\rVert\leq C(T-t_0)h^p.
+\]
+In either case, \(h\to0\) implies \(e_N\to0\). Thus stability converts
+a local error of order \(p+1\) into a global error of order \(p\).
+
+\begin{remark}[Contractive problems]
+  In the favorable case
+  \[
+    \lVert\Psi_j(y)-\Psi_j(z)\rVert\leq\lVert y-z\rVert,
+  \]
+  no exponential amplification occurs. Direct summation gives
+  \[
+    \lVert e_N\rVert
+    \leq C\sum_{j=0}^{N-1}\tau_j^{p+1}
+    \leq C(T-t_0)h^p.
+  \]
+  Such contractivity is especially relevant for dissipative ODEs and
+  numerical methods that preserve their dissipative structure.
+\end{remark}
+
+\subsection{Runge--Kutta methods}
+
+Consider an explicit method with \(s\) stages and coefficients
+\(a_{ij}\), \(b_i\), and \(c_i\). Starting from \(x\) at time \(t\)
+with step size \(\tau\), its stages are computed successively from
+\begin{equation}\label{eq:rk-stages-aug-31}
+  k_i=f\left(t+c_i\tau,
+    x+\tau\sum_{j=1}^{i-1}a_{ij}k_j\right),
+  \qquad i=1,\ldots,s,
+\end{equation}
+and its one-step map is
+\begin{equation}\label{eq:rk-map-aug-31}
+  \Psi^{t+\tau,t}(x)
+  =x+\tau\sum_{i=1}^s b_i k_i.
+\end{equation}
+
+\begin{example}[Forward Euler]
+  Take \(s=1\), \(c_1=0\), \(a_{11}=0\), and \(b_1=1\). Then
+  \[
+    k_1=f(t,x),
+    \qquad
+    \Psi^{t+\tau,t}(x)=x+\tau k_1,
+  \]
+  which is forward Euler, a first-order method.
+\end{example}
+
+\begin{example}[Explicit trapezoidal method]
+  Take \(s=2\) and
+  \[
+    A=\begin{bmatrix}0&0\\1&0\end{bmatrix},
+    \qquad
+    b=\begin{bmatrix}\tfrac12\\[2pt]\tfrac12\end{bmatrix},
+    \qquad
+    c=\begin{bmatrix}0\\1\end{bmatrix}.
+  \]
+  The stages and update are
+  \begin{align*}
+    k_1&=f(t,x),\\
+    k_2&=f(t+\tau,x+\tau k_1),\\
+    \Psi^{t+\tau,t}(x)&=x+\frac{\tau}{2}(k_1+k_2).
+  \end{align*}
+  This is the predictor--corrector method from the previous lecture,
+  also called Heun's method. It has order two.
+\end{example}

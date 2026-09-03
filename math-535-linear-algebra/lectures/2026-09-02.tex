@@ -1,0 +1,162 @@
+\section{September 2, 2026}
+
+\subsection{Linear transformations determined by a basis}
+
+The following result shows that prescribing the values of a linear
+transformation on a basis completely determines the transformation.
+
+\begin{lemma}[Linear map lemma]\label{lem:linear-map}
+  Suppose that $\{v_1,\ldots,v_n\}$ is a basis for $V$, and let
+  $w_1,\ldots,w_n$ be arbitrary vectors in $W$. Then there exists a
+  unique linear transformation $T\colon V\to W$ such that
+  \[
+    T(v_k)=w_k
+  \]
+  for each $k=1,\ldots,n$.
+\end{lemma}
+
+\begin{proof}
+  Every $v\in V$ has a unique representation
+  \[
+    v=\sum_{i=1}^n c_iv_i.
+  \]
+  Define
+  \[
+    T(v)=\sum_{i=1}^n c_iw_i.
+  \]
+  The uniqueness of the coordinates $c_1,\ldots,c_n$ shows that this
+  definition is well-defined. In particular, taking $v=v_k$ gives
+  $T(v_k)=w_k$.
+
+  To prove that $T$ is linear, write
+  \[
+    u=\sum_{i=1}^n a_iv_i
+    \qquad\text{and}\qquad
+    v=\sum_{i=1}^n c_iv_i.
+  \]
+  Then
+  \begin{align*}
+    T(u+v)
+    &=T\left(\sum_{i=1}^n(a_i+c_i)v_i\right) \\
+    &=\sum_{i=1}^n(a_i+c_i)w_i \\
+    &=\sum_{i=1}^n a_iw_i+\sum_{i=1}^n c_iw_i \\
+    &=T(u)+T(v).
+  \end{align*}
+  Similarly, for every $\alpha\in\bb{F}$,
+  \begin{align*}
+    T(\alpha v)
+    &=T\left(\sum_{i=1}^n\alpha c_iv_i\right) \\
+    &=\sum_{i=1}^n\alpha c_iw_i
+      =\alpha\sum_{i=1}^n c_iw_i
+      =\alpha T(v).
+  \end{align*}
+  Thus $T$ is linear.
+
+  It remains to prove uniqueness. Suppose that $T'\colon V\to W$ is
+  another linear transformation satisfying $T'(v_k)=w_k$ for every
+  $k$. If $v=\sum_{i=1}^n c_iv_i$, then
+  \[
+    T'(v)
+    =\sum_{i=1}^n c_iT'(v_i)
+    =\sum_{i=1}^n c_iw_i
+    =T(v).
+  \]
+  Hence $T'=T$.
+\end{proof}
+
+\subsection{Matrix representations of linear transformations}
+
+An \emph{ordered basis} is a basis whose vectors are listed in a fixed
+order. Let
+\[
+  \mathcal B=(v_1,\ldots,v_n)
+  \qquad\text{and}\qquad
+  \mathcal C=(w_1,\ldots,w_m)
+\]
+be ordered bases for $V$ and $W$, respectively. For
+$v=x_1v_1+\cdots+x_nv_n$, write
+\[
+  [v]_{\mathcal B}
+  =\begin{bmatrix}x_1\\ \vdots\\ x_n\end{bmatrix}
+\]
+for the coordinate vector of $v$ with respect to $\mathcal B$.
+
+\begin{theorem}[Matrix representation theorem]
+  Let $V$ and $W$ be vector spaces over $\bb{F}$ with ordered bases
+  $\mathcal B=(v_1,\ldots,v_n)$ and
+  $\mathcal C=(w_1,\ldots,w_m)$. For every linear transformation
+  $T\colon V\to W$, there is a unique matrix
+  \[
+    A=[A_{ij}]
+    =\begin{bmatrix}
+      A_{11} & \cdots & A_{1n} \\
+      \vdots &        & \vdots \\
+      A_{m1} & \cdots & A_{mn}
+    \end{bmatrix}
+    \in M_{m\times n}(\bb{F})
+  \]
+  such that
+  \[
+    T(v_j)=\sum_{i=1}^m A_{ij}w_i
+  \]
+  for each $j=1,\ldots,n$. Conversely, every matrix
+  $A\in M_{m\times n}(\bb{F})$ determines a unique linear transformation
+  $T\colon V\to W$ through this formula.
+\end{theorem}
+
+\begin{proof}
+  Let $T\colon V\to W$ be linear. Because $\mathcal C$ is a basis for
+  $W$, each vector $T(v_j)$ has a unique representation
+  \[
+    T(v_j)=A_{1j}w_1+\cdots+A_{mj}w_m
+           =\sum_{i=1}^m A_{ij}w_i.
+  \]
+  Use these coordinate vectors as the columns of $A$:
+  \[
+    A
+    =\begin{bmatrix}
+      \vert &        & \vert \\
+      [T(v_1)]_{\mathcal C} & \cdots & [T(v_n)]_{\mathcal C} \\
+      \vert &        & \vert
+    \end{bmatrix}.
+  \]
+  This constructs the required matrix. If $B=[B_{ij}]$ were another
+  matrix with the same property, then for every $j$,
+  \[
+    \sum_{i=1}^m B_{ij}w_i
+    =T(v_j)
+    =\sum_{i=1}^m A_{ij}w_i.
+  \]
+  The uniqueness of coordinates with respect to $\mathcal C$ gives
+  $B_{ij}=A_{ij}$ for every $i$ and $j$. Hence $B=A$.
+
+  Conversely, let $A=[A_{ij}]$ be an arbitrary $m\times n$ matrix and
+  define
+  \[
+    \widetilde w_j=\sum_{i=1}^m A_{ij}w_i
+    \qquad (j=1,\ldots,n).
+  \]
+  By the linear map lemma, there is a unique linear transformation
+  $T\colon V\to W$ such that $T(v_j)=\widetilde w_j$ for every $j$.
+  Thus $A$ determines a unique linear transformation with the required
+  property.
+\end{proof}
+
+If
+\[
+  v=x_1v_1+\cdots+x_nv_n,
+\]
+then linearity gives
+\begin{align*}
+  T(v)
+  &=\sum_{j=1}^n x_jT(v_j) \\
+  &=\sum_{j=1}^n x_j\sum_{i=1}^m A_{ij}w_i \\
+  &=\sum_{i=1}^m\left(\sum_{j=1}^n A_{ij}x_j\right)w_i.
+\end{align*}
+Consequently,
+\[
+  [T(v)]_{\mathcal C}
+  =A[v]_{\mathcal B}.
+\]
+Thus multiplication by the matrix $A$ computes the coordinates of the
+image of a vector from the coordinates of the original vector.
