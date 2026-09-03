@@ -1,0 +1,294 @@
+\section{September 1, 2026}
+
+Recall that a measure on a $\sigma$-algebra $\mathcal M$ over a set $X$
+is a map
+\[
+  \mu\colon\mathcal M\longrightarrow[0,\infty]
+\]
+such that $\mu(\varnothing)=0$ and
+\[
+  \mu\left(\bigcup_{i=1}^{\infty}A_i\right)
+  =\sum_{i=1}^{\infty}\mu(A_i)
+\]
+whenever $A_1,A_2,\ldots\in\mathcal M$ are pairwise disjoint. For
+Lebesgue measure $m$ on $\bb{R}$, the normalization is $m([0,1])=1$.
+
+\subsection{Complete measure spaces}
+
+\begin{definition}[Complete measure]
+  A measure $\mu$ on a $\sigma$-algebra $\mathcal M$ over $X$ is
+  \emph{complete} if every subset of a null set is measurable. That is,
+  if $E\subseteq N$ for some $N\in\mathcal M$ with $\mu(N)=0$, then
+  $E\in\mathcal M$.
+\end{definition}
+
+By monotonicity, every such set $E$ also satisfies
+\[
+  0\leq\mu(E)\leq\mu(N)=0,
+\]
+so $\mu(E)=0$.
+
+Every measure space has a canonical completion obtained by adjoining all
+subsets of its null sets.
+
+\begin{proposition}[Completion of a measure]
+  Let $(X,\mathcal M,\mu)$ be a measure space, and let
+  \[
+    \mathcal N=\{N\in\mathcal M:\mu(N)=0\}.
+  \]
+  Define
+  \[
+    \overline{\mathcal M}
+    =\{E\cup F:E\in\mathcal M,\ F\subseteq N
+      \text{ for some }N\in\mathcal N\}.
+  \]
+  Then the following statements hold.
+  \begin{enumerate}[label=(\roman*)]
+    \item The collection $\overline{\mathcal M}$ is a $\sigma$-algebra
+      on $X$ containing $\mathcal M$.
+    \item There is a unique measure $\overline\mu$ on
+      $\overline{\mathcal M}$ extending $\mu$. It is given by
+      \[
+        \overline\mu(E\cup F)=\mu(E),
+      \]
+      where $E\in\mathcal M$ and $F$ is contained in a member of
+      $\mathcal N$. Moreover, $\overline\mu$ is complete.
+  \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+  The collections $\mathcal M$ and $\mathcal N$ are closed under
+  countable unions. For $\mathcal N$, this follows from countable
+  subadditivity: if $N_i\in\mathcal N$, then
+  \[
+    0\leq\mu\left(\bigcup_{i=1}^{\infty}N_i\right)
+    \leq\sum_{i=1}^{\infty}\mu(N_i)=0.
+  \]
+  Hence $\overline{\mathcal M}$ is closed under countable unions. Indeed,
+  if $E_i\in\mathcal M$ and $F_i\subseteq N_i\in\mathcal N$, then
+  \[
+    \bigcup_{i=1}^{\infty}(E_i\cup F_i)
+    =\left(\bigcup_{i=1}^{\infty}E_i\right)
+      \cup\left(\bigcup_{i=1}^{\infty}F_i\right),
+  \]
+  and $\bigcup_iF_i\subseteq\bigcup_iN_i\in\mathcal N$.
+
+  To check closure under complements, let $E\in\mathcal M$ and
+  $F\subseteq N\in\mathcal N$. Replacing $N$ by $N\setminus E$ and
+  $F$ by $F\setminus E$ does not change $E\cup F$, so we may assume that
+  $E\cap N=\varnothing$. In that case,
+  \[
+    (E\cup F)^c=(E\cup N)^c\cup(N\setminus F).
+  \]
+  The first set on the right belongs to $\mathcal M$, and the second is
+  contained in the null set $N$. Thus $(E\cup F)^c$ belongs to
+  $\overline{\mathcal M}$. Since $\varnothing\in\overline{\mathcal M}$,
+  this proves that $\overline{\mathcal M}$ is a $\sigma$-algebra. Taking
+  $F=\varnothing$ shows that $\mathcal M\subseteq\overline{\mathcal M}$.
+
+  We next show that the formula for $\overline\mu$ is well defined.
+  Suppose
+  \[
+    E_1\cup F_1=E_2\cup F_2,
+    \qquad
+    E_i\in\mathcal M,
+    \quad F_i\subseteq N_i\in\mathcal N.
+  \]
+  Then $E_1\subseteq E_2\cup N_2$, and therefore
+  \[
+    \mu(E_1)
+    \leq\mu(E_2\cup N_2)
+    \leq\mu(E_2)+\mu(N_2)
+    =\mu(E_2).
+  \]
+  By symmetry, $\mu(E_2)\leq\mu(E_1)$, so
+  $\mu(E_1)=\mu(E_2)$.
+
+  Clearly $\overline\mu(\varnothing)=0$. Suppose that
+  $A_i=E_i\cup F_i$ are pairwise disjoint members of
+  $\overline{\mathcal M}$, where $E_i\in\mathcal M$ and
+  $F_i\subseteq N_i\in\mathcal N$. The sets $E_i$ are pairwise disjoint,
+  so
+  \begin{align*}
+    \overline\mu\left(\bigcup_{i=1}^{\infty}A_i\right)
+    &=\mu\left(\bigcup_{i=1}^{\infty}E_i\right)\\
+    &=\sum_{i=1}^{\infty}\mu(E_i)\\
+    &=\sum_{i=1}^{\infty}\overline\mu(A_i).
+  \end{align*}
+  Thus $\overline\mu$ is a measure, and it extends $\mu$.
+
+  If $A=E\cup F\in\overline{\mathcal M}$ and
+  $\overline\mu(A)=0$, then $\mu(E)=0$. Since
+  $A\subseteq E\cup N$ and $E\cup N$ is a measurable null set, every
+  subset of $A$ belongs to $\overline{\mathcal M}$. Hence
+  $\overline\mu$ is complete.
+
+  Finally, let $\nu$ be any measure on $\overline{\mathcal M}$ that
+  extends $\mu$. If $A=E\cup F$, with $E\in\mathcal M$ and
+  $F\subseteq N\in\mathcal N$, then
+  \[
+    E\subseteq A\subseteq E\cup N.
+  \]
+  Monotonicity and the fact that $\nu$ extends $\mu$ give
+  \[
+    \mu(E)=\nu(E)\leq\nu(A)\leq\nu(E\cup N)
+    =\mu(E\cup N)=\mu(E).
+  \]
+  Thus $\nu(A)=\mu(E)=\overline\mu(A)$, which proves uniqueness.
+\end{proof}
+
+The measure $\overline\mu$ is called the \emph{completion} of $\mu$.
+
+\subsection{Outer measures}
+
+The goal is to construct measures from simple geometric pieces. For
+example, to estimate the area of a set $E\subseteq\bb{R}^2$, one can
+cover $E$ by squares of side length $s$ and consider
+\[
+  \inf_{s>0}\bigl(\text{number of squares in the cover}\bigr)s^2.
+\]
+More generally, one covers a set by countably many simple pieces and
+takes the infimum of the sums of their assigned sizes.
+
+A related guiding principle is that the ``reasonable'' subsets
+$E\subseteq[0,1]^2$ should be those for which outer and inner area agree.
+If the unit square has area $1$, its inner estimate for $E$ is
+\[
+  1-m^*\bigl([0,1]^2\setminus E\bigr).
+\]
+
+\begin{definition}[Outer measure]
+  An \emph{outer measure} on a set $X$ is a map
+  \[
+    \mu^*\colon 2^X\longrightarrow[0,\infty]
+  \]
+  satisfying the following properties.
+  \begin{enumerate}[label=(\roman*)]
+    \item $\mu^*(\varnothing)=0$.
+    \item If $A\subseteq B\subseteq X$, then
+      $\mu^*(A)\leq\mu^*(B)$.
+    \item For every sequence $A_1,A_2,\ldots\subseteq X$,
+      \[
+        \mu^*\left(\bigcup_{j=1}^{\infty}A_j\right)
+        \leq\sum_{j=1}^{\infty}\mu^*(A_j).
+      \]
+  \end{enumerate}
+\end{definition}
+
+Unlike a measure, an outer measure is defined on every subset of $X$;
+its countable subadditivity therefore applies without a measurability
+assumption.
+
+\begin{proposition}[Outer measure from coverings]
+  Let $\mathcal E\subseteq 2^X$ contain $\varnothing$ and $X$, and let
+  \[
+    \rho\colon\mathcal E\longrightarrow[0,\infty]
+  \]
+  satisfy $\rho(\varnothing)=0$. For $A\subseteq X$, define
+  \[
+    \mu^*(A)
+    =\inf\left\{
+      \sum_{j=1}^{\infty}\rho(E_j):
+      E_j\in\mathcal E,\quad
+      A\subseteq\bigcup_{j=1}^{\infty}E_j
+    \right\}.
+  \]
+  Then $\mu^*$ is an outer measure on $X$.
+\end{proposition}
+
+\begin{remark}
+  Even when $E\in\mathcal E$, it need not be true that
+  $\mu^*(E)=\rho(E)$. A more efficient countable cover may have smaller
+  total $\rho$-size than the single-set cover by $E$.
+\end{remark}
+
+\begin{example}
+  Let $X=\bb{R}$ and take
+  \[
+    \mathcal E
+    =\{\varnothing,\bb{R}\}
+      \cup\{[a,b]:a,b\in\bb{R},\ a\leq b\}.
+  \]
+  Define
+  \[
+    \rho(\varnothing)=0,
+    \qquad
+    \rho(\bb{R})=\infty,
+    \qquad
+    \rho([a,b])=(b-a)^2.
+  \]
+  Although $\rho([0,1])=1$, the induced outer measure satisfies
+  $\mu^*([0,1])=0$. Indeed, for every $n\in\bb{N}$,
+  \[
+    [0,1]
+    =\bigcup_{j=0}^{n-1}
+      \left[\frac{j}{n},\frac{j+1}{n}\right],
+  \]
+  and the total $\rho$-size of this cover is
+  \[
+    \sum_{j=0}^{n-1}\left(\frac1n\right)^2
+    =\frac1n.
+  \]
+  Hence $0\leq\mu^*([0,1])\leq 1/n$ for every $n$, which gives the
+  claim.
+\end{example}
+
+\begin{proof}[Proof of the proposition]
+  The defining collection of sums is nonempty because any set
+  $A\subseteq X$ is covered by the sequence $X,\varnothing,
+  \varnothing,\ldots$. Thus $\mu^*(A)$ is well defined as an element of
+  $[0,\infty]$.
+
+  The sequence $\varnothing,\varnothing,\ldots$ covers $\varnothing$,
+  so
+  \[
+    0\leq\mu^*(\varnothing)
+    \leq\sum_{j=1}^{\infty}\rho(\varnothing)=0.
+  \]
+
+  If $A\subseteq B$, then every countable cover of $B$ by members of
+  $\mathcal E$ is also a cover of $A$. Taking infima over the respective
+  collections of covers gives $\mu^*(A)\leq\mu^*(B)$.
+
+  It remains to prove countable subadditivity. Let $A_j\subseteq X$ for
+  $j\in\bb{N}$. If $\sum_j\mu^*(A_j)=\infty$, there is nothing to prove.
+  Otherwise, fix $\varepsilon>0$. For every $j$, choose
+  $E_{j,k}\in\mathcal E$, $k\in\bb{N}$, such that
+  \[
+    A_j\subseteq\bigcup_{k=1}^{\infty}E_{j,k}
+    \qquad\text{and}\qquad
+    \sum_{k=1}^{\infty}\rho(E_{j,k})
+    \leq\mu^*(A_j)+\varepsilon 2^{-j}.
+  \]
+  The doubly indexed collection $\{E_{j,k}:j,k\in\bb{N}\}$ is
+  countable and covers $\bigcup_jA_j$. Consequently,
+  \begin{align*}
+    \mu^*\left(\bigcup_{j=1}^{\infty}A_j\right)
+    &\leq\sum_{j=1}^{\infty}\sum_{k=1}^{\infty}\rho(E_{j,k})\\
+    &\leq\sum_{j=1}^{\infty}
+      \left(\mu^*(A_j)+\varepsilon 2^{-j}\right)\\
+    &=\sum_{j=1}^{\infty}\mu^*(A_j)+\varepsilon.
+  \end{align*}
+  Letting $\varepsilon\downarrow0$ proves the result.
+\end{proof}
+
+\begin{definition}[Measurability with respect to an outer measure]
+  Let $\mu^*$ be an outer measure on $X$. A set $A\subseteq X$ is
+  \emph{$\mu^*$-measurable} if, for every $E\subseteq X$,
+  \[
+    \mu^*(E)
+    =\mu^*(E\cap A)+\mu^*(E\cap A^c).
+  \]
+\end{definition}
+
+Countable subadditivity always gives
+\[
+  \mu^*(E)
+  \leq\mu^*(E\cap A)+\mu^*(E\cap A^c),
+\]
+so the content of the measurability criterion is the reverse inequality.
+When $\mu^*(E)<\infty$, the quantity
+\[
+  \mu^*(E)-\mu^*(E\cap A^c)
+\]
+can be viewed as the inner measure of $E\cap A$ relative to $E$.
