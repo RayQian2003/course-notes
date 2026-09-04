@@ -1,0 +1,255 @@
+\section{September 4, 2026}
+
+\subsection{Matrix--vector multiplication}
+
+Let $V$ and $W$ be vector spaces over $\bb{F}$ with ordered bases
+\[
+  \mathcal B=(v_1,\ldots,v_n)
+  \qquad\text{and}\qquad
+  \mathcal C=(w_1,\ldots,w_m),
+\]
+respectively, and let $T\colon V\to W$ be linear. Recall that the matrix
+representing $T$ with respect to these bases is
+\[
+  A=
+  \begin{bmatrix}
+    A_{11} & \cdots & A_{1n} \\
+    \vdots &        & \vdots \\
+    A_{m1} & \cdots & A_{mn}
+  \end{bmatrix},
+\]
+where
+\[
+  T(v_j)=A_{1j}w_1+\cdots+A_{mj}w_m.
+\]
+Thus the $j$th column of $A$ is the coordinate vector
+$[T(v_j)]_{\mathcal C}$.
+
+Suppose that
+\[
+  v=x_1v_1+\cdots+x_nv_n,
+  \qquad
+  [v]_{\mathcal B}
+  =\begin{bmatrix}x_1\\ \vdots\\ x_n\end{bmatrix}.
+\]
+By linearity,
+\begin{align*}
+  [T(v)]_{\mathcal C}
+  &=x_1[T(v_1)]_{\mathcal C}+\cdots
+    +x_n[T(v_n)]_{\mathcal C} \\
+  &=x_1
+    \begin{bmatrix}A_{11}\\ A_{21}\\ \vdots\\ A_{m1}\end{bmatrix}
+    +\cdots+x_n
+    \begin{bmatrix}A_{1n}\\ A_{2n}\\ \vdots\\ A_{mn}\end{bmatrix} \\
+  &=
+    \begin{bmatrix}
+      A_{11}x_1+\cdots+A_{1n}x_n \\
+      \vdots \\
+      A_{m1}x_1+\cdots+A_{mn}x_n
+    \end{bmatrix}.
+\end{align*}
+This motivates the following definition.
+
+\begin{definition}[Matrix--vector product]
+  Let $A=[A_{ij}]\in M_{m\times n}(\bb{F})$, and write its columns as
+  $A_1,\ldots,A_n$. For
+  \[
+    x=\begin{bmatrix}x_1\\ \vdots\\ x_n\end{bmatrix}\in\bb{F}^n,
+  \]
+  define
+  \[
+    Ax=x_1A_1+\cdots+x_nA_n.
+  \]
+  Equivalently, the $k$th coordinate of $Ax$ is
+  \[
+    (Ax)_k=\sum_{j=1}^n A_{kj}x_j,
+    \qquad k=1,\ldots,m.
+  \]
+\end{definition}
+
+With this notation, the coordinate formula for a linear transformation is
+\[
+  [T(v)]_{\mathcal C}=A[v]_{\mathcal B}.
+\]
+
+\begin{example}
+  Matrix--vector multiplication can be computed either as a linear
+  combination of the columns or one coordinate at a time. For instance,
+  \[
+    \begin{bmatrix}
+      1&2&3\\
+      3&2&1
+    \end{bmatrix}
+    \begin{bmatrix}1\\2\\3\end{bmatrix}
+    =1\begin{bmatrix}1\\3\end{bmatrix}
+      +2\begin{bmatrix}2\\2\end{bmatrix}
+      +3\begin{bmatrix}3\\1\end{bmatrix}
+    =\begin{bmatrix}14\\10\end{bmatrix},
+  \]
+  while
+  \[
+    \begin{bmatrix}
+      1&2&3\\
+      4&5&6
+    \end{bmatrix}
+    \begin{bmatrix}1\\2\\3\end{bmatrix}
+    =\begin{bmatrix}
+      1\cdot1+2\cdot2+3\cdot3\\
+      4\cdot1+5\cdot2+6\cdot3
+    \end{bmatrix}
+    =\begin{bmatrix}14\\32\end{bmatrix}.
+  \]
+\end{example}
+
+\subsection{Finding matrix representations}
+
+\begin{example}
+  Define $T\colon\bb{R}^2\to\bb{R}^3$ by
+  \[
+    T\begin{bmatrix}x\\y\end{bmatrix}
+    =\begin{bmatrix}x+2y\\2x-5y\\7y\end{bmatrix}.
+  \]
+  With respect to the standard bases, the columns of the representing
+  matrix are
+  \[
+    T(e_1)=\begin{bmatrix}1\\2\\0\end{bmatrix}
+    \qquad\text{and}\qquad
+    T(e_2)=\begin{bmatrix}2\\-5\\7\end{bmatrix}.
+  \]
+  Hence
+  \[
+    A=
+    \begin{bmatrix}
+      1&2\\
+      2&-5\\
+      0&7
+    \end{bmatrix}.
+  \]
+\end{example}
+
+\begin{example}[Differentiation]
+  Let $n\geq1$, and let
+  \[
+    T\colon\mathcal P_n(\bb{R})\longrightarrow\mathcal P_n(\bb{R}),
+    \qquad T(p)=p',
+  \]
+  and use the ordered basis
+  \[
+    \mathcal B=(1,t,t^2,\ldots,t^n)
+  \]
+  for both the domain and codomain. Since
+  \[
+    T(1)=0,
+    \qquad
+    T(t)=1,
+    \qquad
+    T(t^j)=jt^{j-1},
+  \]
+  the matrix representing $T$ is
+  \[
+    A=
+    \begin{bmatrix}
+      0&1&0&\cdots&0\\
+      0&0&2&\ddots&\vdots\\
+      \vdots&\ddots&\ddots&\ddots&0\\
+      0&\cdots&0&0&n\\
+      0&\cdots&\cdots&0&0
+    \end{bmatrix}.
+  \]
+\end{example}
+
+\subsection{The vector space of linear maps}
+
+Let $V$ and $W$ be vector spaces over $\bb{F}$. If
+$T\colon V\to W$ is linear and $\alpha\in\bb{F}$, define
+$\alpha T\colon V\to W$ pointwise by
+\[
+  (\alpha T)(v)=\alpha T(v).
+\]
+This map is again linear. Indeed, for $u,v\in V$,
+\begin{align*}
+  (\alpha T)(u+v)
+  &=\alpha T(u+v) \\
+  &=\alpha\bigl(T(u)+T(v)\bigr) \\
+  &=(\alpha T)(u)+(\alpha T)(v),
+\end{align*}
+and, for $\beta\in\bb{F}$,
+\begin{align*}
+  (\alpha T)(\beta u)
+  &=\alpha T(\beta u)
+    =\alpha\beta T(u)
+    =\beta(\alpha T)(u).
+\end{align*}
+
+Similarly, if $T_1,T_2\colon V\to W$ are linear, define their sum by
+\[
+  (T_1+T_2)(v)=T_1(v)+T_2(v).
+\]
+The map $T_1+T_2$ is linear because
+\begin{align*}
+  (T_1+T_2)(u+v)
+  &=T_1(u+v)+T_2(u+v) \\
+  &=(T_1+T_2)(u)+(T_1+T_2)(v)
+\end{align*}
+and
+\[
+  (T_1+T_2)(\alpha u)
+  =\alpha(T_1+T_2)(u).
+\]
+
+\begin{definition}[Space of linear maps]
+  The collection of all linear transformations from $V$ to $W$ is
+  denoted by
+  \[
+    \mathcal L(V,W)
+    =\{T\colon V\to W:T\text{ is linear}\}.
+  \]
+\end{definition}
+
+\begin{proposition}
+  The set $\mathcal L(V,W)$, equipped with pointwise addition and scalar
+  multiplication, is a vector space over $\bb{F}$.
+\end{proposition}
+
+\begin{proof}
+  The preceding calculations show that the two operations are closed in
+  $\mathcal L(V,W)$. All vector-space identities follow pointwise from
+  the corresponding identities in $W$. The additive identity is the
+  zero transformation $0\colon V\to W$, defined by $0(v)=0$, and the
+  additive inverse of $T$ is the map $-T$, defined by
+  $(-T)(v)=-T(v)$.
+\end{proof}
+
+\subsection{Composition of linear maps}
+
+Let $V$, $W$, and $Z$ be vector spaces over $\bb{F}$. Suppose that
+\[
+  T_2\colon V\longrightarrow W
+  \qquad\text{and}\qquad
+  T_1\colon W\longrightarrow Z
+\]
+are linear. Their \emph{composition} is the map
+\[
+  T_1\circ T_2\colon V\longrightarrow Z,
+  \qquad
+  (T_1\circ T_2)(v)=T_1\bigl(T_2(v)\bigr).
+\]
+
+\begin{proposition}
+  The composition $T_1\circ T_2$ is linear.
+\end{proposition}
+
+\begin{proof}
+  For $u,v\in V$ and $\alpha\in\bb{F}$,
+  \begin{align*}
+    (T_1\circ T_2)(u+v)
+    &=T_1\bigl(T_2(u)+T_2(v)\bigr) \\
+    &=T_1(T_2(u))+T_1(T_2(v)),
+  \end{align*}
+  and
+  \[
+    (T_1\circ T_2)(\alpha u)
+    =T_1\bigl(\alpha T_2(u)\bigr)
+    =\alpha T_1(T_2(u)).
+  \]
+\end{proof}
