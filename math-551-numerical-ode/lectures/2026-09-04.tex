@@ -1,0 +1,286 @@
+\section{September 4, 2026}
+
+We continue the study of Runge--Kutta methods, first constructing
+families of explicit methods and then introducing embedded methods and
+stability functions. We use the notation established in the previous
+lectures: \(\tau_n=t_{n+1}-t_n\), \(x_n\) is the numerical solution,
+and \(\Phi\) and \(\Psi\) denote the exact and numerical flows.
+
+\subsection{Runge--Kutta methods and order conditions}
+
+Recall that an \(s\)-stage Runge--Kutta method is
+\begin{align*}
+  k_i
+  &=f\left(t_n+c_i\tau_n,
+    x_n+\tau_n\sum_{j=1}^s a_{ij}k_j\right),
+    \qquad i=1,\ldots,s,\\
+  x_{n+1}
+  &=x_n+\tau_n\sum_{i=1}^s b_i k_i.
+\end{align*}
+Here \(s\) is the number of stages, \(A=(a_{ij})\) contains the stage
+coefficients, \(c_i\) is the \(i\)-th stage node, and \(b_i\) is the
+\(i\)-th quadrature weight. The internal consistency relation is
+\[
+  c=A\mathbf{1}.
+\]
+It makes the method agree on the original nonautonomous equation and
+its autonomous augmentation. The method is explicit precisely when
+\(A\) is strictly lower triangular.
+
+For the autonomous equation \(x'=f(x)\), a method has order \(p\) when
+\[
+  \bigl\lVert\Phi^\tau(x)-\Psi^\tau(x)\bigr\rVert
+  =O(\tau^{p+1})
+  \qquad\text{as }\tau\to0.
+\]
+The first four order conditions, derived in the previous lecture, are
+\begin{align*}
+  b^{\mathsf T}\mathbf{1}&=1,
+  &b^{\mathsf T}c&=\frac12,\\
+  b^{\mathsf T}c^{\circ2}&=\frac13,
+  &b^{\mathsf T}Ac&=\frac16.
+\end{align*}
+They are sufficient through order three. To obtain order four, four
+more conditions are needed:
+\begin{align*}
+  b^{\mathsf T}c^{\circ3}&=\frac14,
+  &b^{\mathsf T}\bigl(c\circ(Ac)\bigr)&=\frac18,\\
+  b^{\mathsf T}A(c^{\circ2})&=\frac1{12},
+  &b^{\mathsf T}A^2c&=\frac1{24},
+\end{align*}
+where \(\circ\) denotes componentwise multiplication. Thus one, two,
+four, and eight conditions must be satisfied for orders one, two,
+three, and four, respectively.
+
+Forward Euler uses one stage and has order one, while the explicit
+trapezoidal method uses two stages and has order two. We next continue
+the construction of higher-order explicit methods.
+
+\subsection{Explicit three-stage methods of order three}
+
+For an explicit three-stage method, internal consistency gives the
+tableau
+\[
+  \begin{array}{c|ccc}
+    0&0&0&0\\
+    c_2&a_{21}&0&0\\
+    c_3&a_{31}&a_{32}&0\\ \hline
+      &b_1&b_2&b_3
+  \end{array},
+  \qquad
+  c_2=a_{21},
+  \quad
+  c_3=a_{31}+a_{32}.
+\]
+There are six free coefficients and four order conditions, so the
+third-order methods generically form a two-parameter family. Let
+\[
+  c_2=\alpha,
+  \qquad
+  c_3=\beta.
+\]
+Solving the four order conditions gives
+\[
+  \begin{array}{c|ccc}
+    0&0&0&0\\[2pt]
+    \alpha&\alpha&0&0\\[4pt]
+    \beta
+      &\dfrac{\beta\bigl(3\alpha(1-\alpha)-\beta\bigr)}
+              {\alpha(2-3\alpha)}
+      &\dfrac{\beta(\beta-\alpha)}{\alpha(2-3\alpha)}
+      &0\\[8pt] \hline
+      &\dfrac{6\alpha\beta-3\alpha-3\beta+2}{6\alpha\beta}
+      &\dfrac{3\beta-2}{6\alpha(\beta-\alpha)}
+      &\dfrac{2-3\alpha}{6\beta(\beta-\alpha)}
+  \end{array},
+\]
+provided the displayed denominators are nonzero.
+
+A useful subfamily has \(\beta=1\). Its weights are
+\[
+  b_1=\frac{3\alpha-1}{6\alpha},
+  \qquad
+  b_2=\frac{1}{6\alpha(1-\alpha)},
+  \qquad
+  b_3=\frac{2-3\alpha}{6(1-\alpha)}.
+\]
+All three weights are nonnegative when
+\(\alpha\in[1/3,2/3)\), but positivity of the weights alone does not
+guarantee that one method is better than another.
+
+\begin{example}[Kutta's third-order method]
+  Taking \(\alpha=1/2\) and \(\beta=1\) gives
+  \[
+    \begin{array}{c|ccc}
+      0&0&0&0\\
+      \tfrac12&\tfrac12&0&0\\
+      1&-1&2&0\\ \hline
+       &\tfrac16&\tfrac23&\tfrac16
+    \end{array}.
+  \]
+  Thus
+  \begin{align*}
+    k_1&=f(t_n,x_n),\\
+    k_2&=f\left(t_n+\frac{\tau_n}{2},
+      x_n+\frac{\tau_n}{2}k_1\right),\\
+    k_3&=f\left(t_n+\tau_n,
+      x_n+\tau_n(-k_1+2k_2)\right),\\
+    x_{n+1}&=x_n+\frac{\tau_n}{6}(k_1+4k_2+k_3).
+  \end{align*}
+\end{example}
+
+\subsection{Explicit four-stage methods of order four}
+
+Before imposing internal consistency, a general explicit four-stage
+tableau contains thirteen coefficients: three nontrivial nodes, six
+strictly lower-triangular entries of \(A\), and four weights. Internal
+consistency removes three degrees of freedom, and the eight
+fourth-order conditions generically leave two free parameters.
+
+In the usual nonconfluent family one may take
+\[
+  c_1=0,
+  \qquad
+  c_2=\alpha,
+  \qquad
+  c_3=\beta,
+  \qquad
+  c_4=1,
+\]
+with distinct stage nodes. The generic formulas exclude degenerate
+parameter choices; one convenient nondegeneracy condition is
+\[
+  \alpha\beta(\alpha-1)(\beta-1)(\alpha-\beta)(2\alpha-1)
+  \bigl(6\alpha\beta-4\alpha-4\beta+3\bigr)\neq0.
+\]
+
+\begin{example}[The three-eighths rule]
+  Choosing \(\alpha=1/3\) and \(\beta=2/3\) produces the
+  fourth-order three-eighths rule
+  \[
+    \begin{array}{c|cccc}
+      0&0&0&0&0\\
+      \tfrac13&\tfrac13&0&0&0\\
+      \tfrac23&-\tfrac13&1&0&0\\
+      1&1&-1&1&0\\ \hline
+       &\tfrac18&\tfrac38&\tfrac38&\tfrac18
+    \end{array}.
+  \]
+  Its stages are
+  \begin{align*}
+    k_1&=f(t_n,x_n),\\
+    k_2&=f\left(t_n+\frac{\tau_n}{3},
+      x_n+\frac{\tau_n}{3}k_1\right),\\
+    k_3&=f\left(t_n+\frac{2\tau_n}{3},
+      x_n+\tau_n\left(-\frac13k_1+k_2\right)\right),\\
+    k_4&=f\left(t_n+\tau_n,
+      x_n+\tau_n(k_1-k_2+k_3)\right),\\
+    x_{n+1}&=x_n+\frac{\tau_n}{8}
+      (k_1+3k_2+3k_3+k_4).
+  \end{align*}
+\end{example}
+
+Repeated nodes give a separate, \emph{confluent} family. Setting
+\(c_2=c_3=1/2\) and letting \(\delta=a_{32}\neq0\) yields
+\begin{equation}\label{eq:confluent-rk4-family-sep-04}
+  \begin{array}{c|cccc}
+    0&0&0&0&0\\[2pt]
+    \tfrac12&\tfrac12&0&0&0\\[2pt]
+    \tfrac12&\tfrac12-\delta&\delta&0&0\\[4pt]
+    1&0&1-\dfrac{1}{2\delta}&\dfrac{1}{2\delta}&0\\[6pt] \hline
+     &\tfrac16&\dfrac{4\delta-1}{6\delta}
+       &\dfrac{1}{6\delta}&\tfrac16
+  \end{array}.
+\end{equation}
+
+\begin{example}[Classical RK4]
+  The choice \(\delta=1/2\) in
+  \eqref{eq:confluent-rk4-family-sep-04} gives the classical tableau
+  \[
+    \begin{array}{c|cccc}
+      0&0&0&0&0\\
+      \tfrac12&\tfrac12&0&0&0\\
+      \tfrac12&0&\tfrac12&0&0\\
+      1&0&0&1&0\\ \hline
+       &\tfrac16&\tfrac13&\tfrac13&\tfrac16
+    \end{array}.
+  \]
+  Equivalently,
+  \begin{align*}
+    k_1&=f(t_n,x_n),\\
+    k_2&=f\left(t_n+\frac{\tau_n}{2},
+      x_n+\frac{\tau_n}{2}k_1\right),\\
+    k_3&=f\left(t_n+\frac{\tau_n}{2},
+      x_n+\frac{\tau_n}{2}k_2\right),\\
+    k_4&=f(t_n+\tau_n,x_n+\tau_n k_3),\\
+    x_{n+1}&=x_n+\frac{\tau_n}{6}
+      (k_1+2k_2+2k_3+k_4).
+  \end{align*}
+\end{example}
+
+\subsection{Embedded pairs}
+
+Adaptive solvers need local error estimates. They obtain them by
+combining the same stages in two different ways. Given fixed \(A\) and \(c\), choose two
+weight vectors \(b\) and \(\widehat b\) and form
+\begin{align*}
+  x_{n+1}^{[p]}
+  &=x_n+\tau_n\sum_{i=1}^s b_i k_i,\\
+  x_{n+1}^{[p+1]}
+  &=x_n+\tau_n\sum_{i=1}^s \widehat b_i k_i.
+\end{align*}
+The two formulas share all evaluations \(k_i\), so
+\[
+  \operatorname{err}_n
+  =\bigl\lVert x_{n+1}^{[p+1]}-x_{n+1}^{[p]}\bigr\rVert
+\]
+is an inexpensive local error estimate. If this quantity is well below
+the requested tolerance, the next step size can be increased. If it is
+too large, the step size is decreased and the step may be rejected.
+
+MATLAB's \texttt{ode45} uses a seven-stage Dormand--Prince embedded
+pair of orders four and five. The minimal number of stages for an
+explicit Runge--Kutta method grows with its order; the low-order values
+discussed in class are
+\[
+  \begin{array}{c|cccccccc}
+    p&1&2&3&4&5&6&7&8\\ \hline
+    s_{\min}&1&2&3&4&6&7&9&11
+  \end{array}.
+\]
+
+\subsection{The stability function}
+
+Apply a Runge--Kutta method to the linear test equation
+\begin{equation}\label{eq:linear-test-equation-sep-04}
+  y'(t)=\lambda y(t).
+\end{equation}
+With \(z=\tau_n\lambda\), one numerical step has the form
+\begin{equation}\label{eq:stability-update-sep-04}
+  y_{n+1}=R(z)y_n,
+\end{equation}
+where \(R\) is the \emph{stability function}. The exact amplification
+factor is \(e^z\).
+
+For a Runge--Kutta method, the stage equations applied to
+\eqref{eq:linear-test-equation-sep-04} give
+\[
+  (I-zA)k=\lambda y_n\mathbf{1}.
+\]
+Substituting the resulting stages into the update gives
+\begin{equation}\label{eq:rk-stability-function-sep-04}
+  R(z)=1+z b^{\mathsf T}(I-zA)^{-1}\mathbf{1}.
+\end{equation}
+If the method has order \(p\), then necessarily
+\begin{equation}\label{eq:stability-order-condition-sep-04}
+  R(z)-e^z=O(z^{p+1})
+  \qquad\text{as }z\to0.
+\end{equation}
+For example, the eight fourth-order conditions imply
+\[
+  R(z)=1+z+\frac{z^2}{2!}+\frac{z^3}{3!}
+       +\frac{z^4}{4!}+O(z^5).
+\]
+Condition \eqref{eq:stability-order-condition-sep-04} is necessary for
+order \(p\), but it only tests a linear ODE and is not sufficient to
+establish order \(p\) for general nonlinear equations.
