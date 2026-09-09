@@ -1,0 +1,369 @@
+\section{September 8, 2026}
+
+We continue the construction of measures from premeasures. Recall that
+if $\mu_0$ is a premeasure on an algebra $\mathcal A$, then
+\[
+  \mu^*(E)
+  =\inf\left\{
+    \sum_{j=1}^{\infty}\mu_0(A_j):
+    A_j\in\mathcal A,\quad
+    E\subseteq\bigcup_{j=1}^{\infty}A_j
+  \right\}
+\]
+defines an outer measure. Every member of $\mathcal A$ is
+$\mu^*$-measurable, and
+\[
+  \mu=\left.\mu^*\right|_{\mathcal M(\mathcal A)}
+\]
+is a measure extending $\mu_0$.
+
+\subsection{Uniqueness of the extension}
+
+The extension is unique on sets of finite measure. Under a
+$\sigma$-finiteness assumption, it is unique everywhere.
+
+\begin{theorem}[Uniqueness of the premeasure extension]
+  \label{thm:uniqueness-premeasure-extension}
+  Let $\mu_0$ be a premeasure on an algebra $\mathcal A$, and let
+  $\mu$ be the measure on $\mathcal M(\mathcal A)$ obtained from the
+  induced outer measure. Suppose that $\nu$ is another measure on
+  $\mathcal M(\mathcal A)$ extending $\mu_0$.
+  \begin{enumerate}[label=(\alph*)]
+    \item If $E\in\mathcal M(\mathcal A)$ and $\mu(E)<\infty$, then
+      $\nu(E)=\mu(E)$.
+    \item If $\mu_0$ is $\sigma$-finite, then $\nu=\mu$ on
+      $\mathcal M(\mathcal A)$.
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  We divide the proof of part (a) into three steps.
+
+  First, let $E\in\mathcal M(\mathcal A)$ and suppose that
+  $E\subseteq\bigcup_{j=1}^{\infty}A_j$, where $A_j\in\mathcal A$.
+  Since $\nu$ extends $\mu_0$, countable subadditivity gives
+  \[
+    \nu(E)
+    \leq\nu\left(\bigcup_{j=1}^{\infty}A_j\right)
+    \leq\sum_{j=1}^{\infty}\nu(A_j)
+    =\sum_{j=1}^{\infty}\mu_0(A_j).
+  \]
+  Taking the infimum over all such covers yields
+  \begin{equation}\label{eq:nu-below-mu-sep-08}
+    \nu(E)\leq\mu^*(E)=\mu(E).
+  \end{equation}
+
+  Second, suppose that
+  \[
+    A=\bigcup_{j=1}^{\infty}A_j,
+    \qquad A_j\in\mathcal A.
+  \]
+  Set $B_n=\bigcup_{j=1}^nA_j$. Then $B_n\in\mathcal A$ and
+  $B_n\uparrow A$. Continuity from below, together with the fact that
+  $\mu$ and $\nu$ both extend $\mu_0$, gives
+  \[
+    \nu(A)
+    =\lim_{n\to\infty}\nu(B_n)
+    =\lim_{n\to\infty}\mu(B_n)
+    =\mu(A).
+  \]
+
+  Third, let $E\in\mathcal M(\mathcal A)$ satisfy $\mu(E)<\infty$,
+  and fix $\varepsilon>0$. By the definition of $\mu^*$, there are
+  $A_j\in\mathcal A$ such that, with
+  $A=\bigcup_{j=1}^{\infty}A_j$,
+  \[
+    E\subseteq A,
+    \qquad
+    \mu(A)\leq\sum_{j=1}^{\infty}\mu_0(A_j)
+      <\mu(E)+\varepsilon.
+  \]
+  In particular, $\mu(A\setminus E)<\varepsilon$. By the second step
+  and \eqref{eq:nu-below-mu-sep-08},
+  \begin{align*}
+    \mu(E)
+    &\leq\mu(A)
+     =\nu(A)\\
+    &=\nu(E)+\nu(A\setminus E)\\
+    &\leq\nu(E)+\mu(A\setminus E)
+     <\nu(E)+\varepsilon.
+  \end{align*}
+  Letting $\varepsilon\downarrow0$ shows that
+  $\mu(E)\leq\nu(E)$. Together with
+  \eqref{eq:nu-below-mu-sep-08}, this proves part (a).
+
+  For part (b), $\sigma$-finiteness provides sets
+  $A_j\in\mathcal A$ such that
+  \[
+    X=\bigcup_{j=1}^{\infty}A_j,
+    \qquad
+    \mu_0(A_j)<\infty.
+  \]
+  By replacing $A_j$ with
+  $A_j\setminus\bigcup_{i=1}^{j-1}A_i$, we may assume that the sets are
+  pairwise disjoint. If $E\in\mathcal M(\mathcal A)$, then
+  $\mu(E\cap A_j)\leq\mu_0(A_j)<\infty$, so part (a) applies to each
+  $E\cap A_j$. Therefore
+  \[
+    \mu(E)
+    =\sum_{j=1}^{\infty}\mu(E\cap A_j)
+    =\sum_{j=1}^{\infty}\nu(E\cap A_j)
+    =\nu(E).
+  \]
+\end{proof}
+
+\subsection{Lebesgue--Stieltjes measures on \texorpdfstring{$\bb{R}$}{R}}
+
+Let $\mu$ be a finite Borel measure on $\bb{R}$. Its
+\emph{distribution function} is
+\begin{equation}\label{eq:distribution-function-sep-08}
+  F(x)=\mu((-\infty,x]),
+  \qquad x\in\bb{R}.
+\end{equation}
+This function records the measure of every left half-line.
+
+\begin{proposition}\label{prop:distribution-function-properties-sep-08}
+  The distribution function $F$ has the following properties.
+  \begin{enumerate}[label=(\roman*)]
+    \item It is increasing.
+    \item It is right-continuous.
+    \item For every $a<b$,
+      \[
+        \mu((a,b])=F(b)-F(a).
+      \]
+  \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+  If $x\leq y$, then $(-\infty,x]\subseteq(-\infty,y]$, so
+  monotonicity of $\mu$ gives $F(x)\leq F(y)$.
+
+  If $x_n\downarrow x$, then
+  \[
+    (-\infty,x_n]\downarrow(-\infty,x].
+  \]
+  Since $\mu$ is finite, continuity from above gives
+  \[
+    \lim_{n\to\infty}F(x_n)
+    =\lim_{n\to\infty}\mu((-\infty,x_n])
+    =\mu((-\infty,x])
+    =F(x).
+  \]
+  Hence $F$ is right-continuous. Finally,
+  \[
+    (-\infty,b]=(-\infty,a]\mathbin{\dot\cup}(a,b],
+  \]
+  and finite additivity gives
+  \[
+    \mu((a,b])
+    =\mu((-\infty,b])-\mu((-\infty,a])
+    =F(b)-F(a).
+  \]
+\end{proof}
+
+\begin{example}[Distribution function of a Dirac measure]
+  Let $\mu=\delta_{x_0}$ be the Dirac measure at $x_0\in\bb{R}$.
+  Then
+  \[
+    F(x)=\delta_{x_0}((-\infty,x])
+    =\begin{cases}
+      0,&x<x_0,\\
+      1,&x\geq x_0.
+    \end{cases}
+  \]
+  Thus an atom of a measure appears as a jump in its distribution
+  function.
+\end{example}
+
+\begin{remark}[Measures finite on bounded sets]
+  A Borel measure need not be finite on all of $\bb{R}$. If $\mu$ is
+  finite on every bounded Borel set, define the normalized distribution
+  function
+  \[
+    \widetilde F(x)
+    =\begin{cases}
+      \mu((0,x]),&x>0,\\
+      0,&x=0,\\
+      -\mu((x,0]),&x<0.
+    \end{cases}
+  \]
+  Then $\widetilde F$ is increasing and right-continuous, and
+  \[
+    \mu((a,b])=\widetilde F(b)-\widetilde F(a)
+  \]
+  for all $a<b$. Adding a constant to $\widetilde F$ does not change
+  these interval increments.
+\end{remark}
+
+We now reverse the preceding construction at the level of the algebra of
+half-open intervals. Let $F\colon\bb{R}\to\bb{R}$ be increasing and
+right-continuous, and set
+\[
+  F(-\infty)=\lim_{x\to-\infty}F(x),
+  \qquad
+  F(\infty)=\lim_{x\to\infty}F(x),
+\]
+where these limits are allowed to be infinite. Let $\mathcal A$ be the
+algebra of finite unions of intervals of the forms
+\[
+  (a,b],\qquad (-\infty,b],\qquad (a,\infty),
+\]
+together with $\varnothing$. Equivalently, its members are finite unions
+of intervals $(a,b]\cap\bb{R}$ with
+$-\infty\leq a<b\leq\infty$.
+
+\begin{proposition}[The Lebesgue--Stieltjes premeasure]
+  \label{prop:lebesgue-stieltjes-premeasure-sep-08}
+  Suppose that
+  \[
+    E=\bigcup_{j=1}^N(a_j,b_j]
+  \]
+  is a representation of $E\in\mathcal A$ as a finite union of pairwise
+  disjoint half-open intervals, with extended endpoints allowed as
+  above. Define
+  \begin{equation}\label{eq:stieltjes-premeasure-sep-08}
+    \mu_0(E)
+    =\sum_{j=1}^N\bigl(F(b_j)-F(a_j)\bigr),
+    \qquad
+    \mu_0(\varnothing)=0.
+  \end{equation}
+  Then $\mu_0\colon\mathcal A\to[0,\infty]$ is well defined and is a
+  premeasure.
+\end{proposition}
+
+\begin{proof}
+  We first show that the value in
+  \eqref{eq:stieltjes-premeasure-sep-08} is independent of the chosen
+  representation. Suppose that a half-open interval is partitioned into
+  finitely many pairwise disjoint half-open intervals:
+  \[
+    (a,b]=\bigcup_{j=1}^N(a_j,b_j].
+  \]
+  After relabeling, their endpoints satisfy
+  \[
+    a=a_1<b_1=a_2<b_2=\cdots<b_{N-1}=a_N<b_N=b.
+  \]
+  Hence the sum telescopes:
+  \[
+    \sum_{j=1}^N\bigl(F(b_j)-F(a_j)\bigr)=F(b)-F(a).
+  \]
+  The same argument applies when an endpoint is infinite, using the
+  conventions for $F(-\infty)$ and $F(\infty)$.
+
+  Now suppose that
+  \[
+    \bigcup_{i=1}^N I_i=\bigcup_{j=1}^M J_j,
+  \]
+  where both families consist of pairwise disjoint half-open intervals.
+  The nonempty intersections $I_i\cap J_j$ partition both sides. By the
+  preceding telescoping identity,
+  \begin{align*}
+    \sum_{i=1}^N\mu_0(I_i)
+    &=\sum_{i=1}^N\sum_{j=1}^M\mu_0(I_i\cap J_j)\\
+    &=\sum_{j=1}^M\sum_{i=1}^N\mu_0(I_i\cap J_j)
+     =\sum_{j=1}^M\mu_0(J_j).
+  \end{align*}
+  Thus $\mu_0$ is well defined; the same calculation also gives finite
+  additivity.
+
+  It remains to prove countable additivity. After decomposing all sets
+  involved into their interval components and intersecting with each
+  component of the union, it is enough to consider pairwise disjoint
+  half-open intervals $I_j$ such that
+  \[
+    (a,b]=\bigcup_{j=1}^{\infty}I_j.
+  \]
+  Finite additivity and monotonicity give, for every $n$,
+  \[
+    \mu_0((a,b])
+    \geq\mu_0\left(\bigcup_{j=1}^n I_j\right)
+    =\sum_{j=1}^n\mu_0(I_j).
+  \]
+  Letting $n\to\infty$ yields
+  \begin{equation}\label{eq:stieltjes-first-inequality-sep-08}
+    \mu_0((a,b])\geq\sum_{j=1}^{\infty}\mu_0(I_j).
+  \end{equation}
+
+  For the reverse inequality, first suppose that $a,b\in\bb{R}$ and
+  write $I_j=(a_j,b_j]$. Fix $\varepsilon>0$. Right-continuity provides
+  $0<\delta<b-a$ and $\delta_j>0$ such that
+  \[
+    F(a+\delta)-F(a)<\varepsilon,
+    \qquad
+    F(b_j+\delta_j)-F(b_j)<\varepsilon 2^{-j}.
+  \]
+  The open intervals $(a_j,b_j+\delta_j)$ cover the compact interval
+  $[a+\delta,b]$, so finitely many of them suffice. After discarding
+  redundant intervals, relabel this finite subcover from left to right
+  with indices $1,\ldots,r$. Its total enlargement still satisfies
+  \[
+    \sum_{j=1}^r\bigl(F(b_j+\delta_j)-F(b_j)\bigr)<\varepsilon,
+  \]
+  and the ordering may be chosen so that
+  \[
+    a_1<a+\delta,\qquad
+    a_{j+1}<b_j+\delta_j\ (1\leq j<r),\qquad
+    b<b_r+\delta_r.
+  \]
+  Monotonicity of $F$ then gives
+  \begin{align*}
+    F(b)-F(a)
+    &<F(b)-F(a+\delta)+\varepsilon\\
+    &\leq F(b_r+\delta_r)-F(a_1)+\varepsilon\\
+    &=F(b_r+\delta_r)-F(a_r)
+      +\sum_{j=1}^{r-1}\bigl(F(a_{j+1})-F(a_j)\bigr)
+      +\varepsilon\\
+    &\leq\sum_{j=1}^r
+      \bigl(F(b_j+\delta_j)-F(a_j)\bigr)+\varepsilon\\
+    &<\sum_{j=1}^r\bigl(F(b_j)-F(a_j)\bigr)+2\varepsilon\\
+    &\leq\sum_{j=1}^{\infty}\mu_0(I_j)+2\varepsilon.
+  \end{align*}
+  Letting $\varepsilon\downarrow0$ proves the reverse of
+  \eqref{eq:stieltjes-first-inequality-sep-08} for bounded intervals.
+
+  If the interval on the left is unbounded, apply the bounded case to
+  its truncations. For example,
+  \[
+    (-m,b]\uparrow(-\infty,b],
+    \qquad
+    \mu_0((-m,b])=F(b)-F(-m)\uparrow F(b)-F(-\infty),
+  \]
+  while the bounded case gives
+  \[
+    \mu_0((-m,b])
+    =\sum_{j=1}^{\infty}\mu_0\bigl(I_j\cap(-m,b]\bigr)
+    \leq\sum_{j=1}^{\infty}\mu_0(I_j).
+  \]
+  Letting $m\to\infty$ proves the desired inequality for
+  $(-\infty,b]$. The same argument uses
+  $(a,m]\uparrow(a,\infty)$ or $(-m,m]\uparrow\bb{R}$ for the other
+  unbounded cases. Therefore
+  \[
+    \mu_0\left(\bigcup_{j=1}^{\infty}I_j\right)
+    =\sum_{j=1}^{\infty}\mu_0(I_j),
+  \]
+  whenever the union belongs to $\mathcal A$, so $\mu_0$ is a
+  premeasure.
+\end{proof}
+
+The premeasure extension theorem from the preceding lecture therefore
+applies to $\mu_0$ on $\mathcal A$.
+
+\begin{remark}[Two Lebesgue--Stieltjes examples]
+  The Borel measure determined by the increments
+  $F(b)-F(a)$ is denoted by $\mu_F$, and its completion is called the
+  \emph{Lebesgue--Stieltjes measure} associated with $F$.
+  \begin{enumerate}[label=(\roman*)]
+    \item For $F(x)=x$,
+      \[
+        \mu_F((a,b])=b-a.
+      \]
+      The completed measure is Lebesgue measure on $\bb{R}$.
+    \item For the right-continuous step function
+      \[
+        F(x)=\mathbf{1}_{[x_0,\infty)}(x),
+      \]
+      the associated measure is the Dirac measure
+      $\mu_F=\delta_{x_0}$.
+  \end{enumerate}
+\end{remark}
