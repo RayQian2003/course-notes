@@ -1,0 +1,312 @@
+\section{September 10, 2026}
+
+We finish the construction begun in the preceding lecture. Recall that
+an increasing, right-continuous function $F\colon\bb{R}\to\bb{R}$
+defines a premeasure on the algebra of finite unions of half-open
+intervals by
+\[
+  \mu_0((a,b])=F(b)-F(a).
+\]
+The extension theorem and its uniqueness statement give the following
+result.
+
+\begin{theorem}[Lebesgue--Stieltjes measure]
+  \label{thm:lebesgue-stieltjes-measure-sep-10}
+  Let $F\colon\bb{R}\to\bb{R}$ be increasing and right-continuous.
+  There is a unique Borel measure $\mu_F$ on $\bb{R}$, finite on bounded
+  sets, such that
+  \[
+    \mu_F((a,b])=F(b)-F(a)
+  \]
+  for every $a<b$. Its completion $\overline{\mu}_F$ is called the
+  \emph{Lebesgue--Stieltjes measure} associated with $F$.
+\end{theorem}
+
+\begin{proof}
+  Proposition~\ref{prop:lebesgue-stieltjes-premeasure-sep-08} shows that
+  the interval increments of $F$ define a premeasure on the algebra
+  $\mathcal A$ of finite unions of half-open intervals. The premeasure
+  extension theorem therefore produces a measure on
+  \[
+    \mathcal M(\mathcal A)=\mathcal B_{\bb R}.
+  \]
+  It is finite on bounded intervals because $F$ is real-valued. In
+  particular, the premeasure is $\sigma$-finite, so uniqueness follows
+  from Theorem~\ref{thm:uniqueness-premeasure-extension}.
+\end{proof}
+
+The measure depends only on the increments of $F$. Thus
+\[
+  \mu_F=\mu_G
+  \quad\Longleftrightarrow\quad
+  F-G\text{ is constant}.
+\]
+Conversely, every Borel measure $\mu$ on $\bb R$ that is finite on
+bounded sets arises in this way. One convenient normalization is
+\[
+  F(x)=
+  \begin{cases}
+    \mu((0,x]),&x>0,\\
+    0,&x=0,\\
+    -\mu((x,0]),&x<0.
+  \end{cases}
+\]
+Then $F$ is increasing and right-continuous, and uniqueness of the
+extension gives $\mu=\mu_F$ on $\mathcal B_{\bb R}$.
+
+One could instead work with an increasing, left-continuous function
+$G$. With that convention the natural intervals are left-closed and
+right-open, and
+\[
+  \mu_G([a,b))=G(b)-G(a).
+\]
+
+\begin{example}
+  If $F(x)=x$, then
+  \[
+    \mu_F((a,b])=b-a.
+  \]
+  The completion of $\mu_F$ is Lebesgue measure.
+\end{example}
+
+\begin{example}
+  If $F(x)=\mathbf 1_{[x_0,\infty)}(x)$, then
+  $\mu_F=\delta_{x_0}$.
+\end{example}
+
+\subsection{Regularity of Lebesgue--Stieltjes measures}
+
+Fix an increasing, right-continuous $F$, and write $\mu$ for the
+completed measure $\overline{\mu}_F$. Its domain will be denoted by
+$\mathcal M_F$. The outer-measure construction gives, for every
+$E\in\mathcal M_F$,
+\begin{equation}\label{eq:half-open-covering-sep-10}
+  \mu(E)=\inf\left\{
+    \sum_{j=1}^{\infty}\bigl(F(b_j)-F(a_j)\bigr):
+    E\subseteq\bigcup_{j=1}^{\infty}(a_j,b_j]
+  \right\}.
+\end{equation}
+There is an equivalent formula involving open intervals.
+
+\begin{lemma}[Open covering formula]
+  \label{lem:open-covering-sep-10}
+  For every $E\in\mathcal M_F$,
+  \[
+    \mu(E)=\inf\left\{
+      \sum_{j=1}^{\infty}\mu((a_j,b_j)):
+      E\subseteq\bigcup_{j=1}^{\infty}(a_j,b_j)
+    \right\}.
+  \]
+\end{lemma}
+
+\begin{proof}
+  Let $V(E)$ denote the infimum on the right. If
+  $E\subseteq\bigcup_j(a_j,b_j)$, then countable subadditivity gives
+  \[
+    \mu(E)
+    \leq\mu\left(\bigcup_{j=1}^{\infty}(a_j,b_j)\right)
+    \leq\sum_{j=1}^{\infty}\mu((a_j,b_j)).
+  \]
+  Taking the infimum shows that $\mu(E)\leq V(E)$.
+
+  For the reverse inequality, suppose first that $\mu(E)<\infty$, and
+  fix $\varepsilon>0$. By
+  \eqref{eq:half-open-covering-sep-10}, there are intervals
+  $(a_j,b_j]$ covering $E$ such that
+  \[
+    \sum_{j=1}^{\infty}\mu((a_j,b_j])
+    <\mu(E)+\varepsilon.
+  \]
+  Right-continuity of $F$ allows us to choose $\delta_j>0$ with
+  \[
+    F(b_j+\delta_j)-F(b_j)<\varepsilon 2^{-j}.
+  \]
+  The open intervals $(a_j,b_j+\delta_j)$ still cover $E$, and
+  \begin{align*}
+    \sum_{j=1}^{\infty}\mu((a_j,b_j+\delta_j))
+    &\leq\sum_{j=1}^{\infty}
+      \bigl(F(b_j+\delta_j)-F(a_j)\bigr)\\
+    &<\sum_{j=1}^{\infty}\mu((a_j,b_j])+\varepsilon\\
+    &<\mu(E)+2\varepsilon.
+  \end{align*}
+  Hence $V(E)\leq\mu(E)$. If $\mu(E)=\infty$, the already proved
+  inequality $\mu(E)\leq V(E)$ forces $V(E)=\infty$.
+\end{proof}
+
+\begin{theorem}[Regularity]
+  \label{thm:lebesgue-stieltjes-regularity-sep-10}
+  Let $E\in\mathcal M_F$.
+  \begin{enumerate}[label=(\roman*)]
+    \item \emph{Outer regularity:}
+      \[
+        \mu(E)=\inf\{\mu(U):U\supseteq E,\ U\text{ open}\}.
+      \]
+    \item \emph{Inner regularity:}
+      \[
+        \mu(E)=\sup\{\mu(K):K\subseteq E,\ K\text{ compact}\}.
+      \]
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  If $E\subseteq U$, then $\mu(E)\leq\mu(U)$. Conversely, the open
+  covering formula provides open intervals $(a_j,b_j)$ such that
+  $E\subseteq U=\bigcup_j(a_j,b_j)$ and
+  \[
+    \mu(U)
+    \leq\sum_{j=1}^{\infty}\mu((a_j,b_j))
+    <\mu(E)+\varepsilon
+  \]
+  whenever $\mu(E)<\infty$. The infinite-measure case is immediate.
+  This proves outer regularity.
+
+  We first prove inner regularity when $E$ is bounded. Then $\overline E$
+  has finite measure. By outer regularity, there is an open set $U$
+  containing $\overline E\setminus E$ such that
+  \[
+    \mu(U)<\mu(\overline E\setminus E)+\varepsilon.
+  \]
+  The set
+  \[
+    K=\overline E\setminus U
+  \]
+  is closed and bounded, hence compact, and $K\subseteq E$. Since all
+  relevant measures are finite,
+  \begin{align*}
+    \mu(K)
+    &=\mu(\overline E)-\mu(\overline E\cap U)\\
+    &\geq\mu(\overline E)-\mu(U)\\
+    &>\mu(\overline E)-\mu(\overline E\setminus E)-\varepsilon
+      =\mu(E)-\varepsilon.
+  \end{align*}
+
+  For arbitrary $E$, apply the bounded case to
+  $E\cap[-n,n]$. These sets increase to $E$, so continuity from below
+  gives
+  \[
+    \mu(E)=\lim_{n\to\infty}\mu(E\cap[-n,n]).
+  \]
+  Compact subsets approximating the bounded truncations therefore give
+  the desired supremum, whether $\mu(E)$ is finite or infinite.
+\end{proof}
+
+Regularity gives useful Borel representatives for every set in the
+completion.
+
+\begin{corollary}\label{cor:borel-null-representatives-sep-10}
+  If $E\in\mathcal M_F$, then there are a $G_\delta$ set $G$, an
+  $F_\sigma$ set $H$, and null sets $N_1,N_2$ such that
+  \[
+    H\subseteq E\subseteq G,
+    \qquad
+    E=G\setminus N_1=H\cup N_2.
+  \]
+  In particular, every Lebesgue--Stieltjes measurable set differs from
+  a Borel set by a null set.
+\end{corollary}
+
+\begin{proof}
+  Decompose $E$ into the bounded pieces
+  $E_k=E\cap[k,k+1)$, $k\in\bb Z$. For every $n$ and $k$, outer
+  regularity gives an open set $U_{n,k}\supseteq E_k$ for which
+  \[
+    \mu(U_{n,k}\setminus E_k)<2^{-n-|k|-2}.
+  \]
+  Set
+  \[
+    U_n=\bigcup_{k\in\bb Z}U_{n,k},
+    \qquad
+    G=\bigcap_{n=1}^{\infty}U_n.
+  \]
+  Then $G$ is a $G_\delta$ set containing $E$, and
+  $\mu(G\setminus E)=0$. Thus $E=G\setminus N_1$, where
+  $N_1=G\setminus E$ is null. Apply the same argument to $E^c$ and
+  take complements to find an $F_\sigma$ set $H\subseteq E$ such that
+  $E\setminus H$ is null. Taking $N_2=E\setminus H$ completes the
+  proof.
+\end{proof}
+
+\subsection{Lebesgue measure}
+
+Let $m$ denote Lebesgue measure on the Lebesgue $\sigma$-algebra
+$\mathcal L$. Thus $m$ is the completion of the Borel measure generated
+by $F(x)=x$.
+
+\begin{theorem}[Translation and dilation invariance]
+  \label{thm:lebesgue-invariance-sep-10}
+  If $E\in\mathcal L$ and $s\in\bb R$, then $E+s\in\mathcal L$ and
+  \[
+    m(E+s)=m(E).
+  \]
+  If $\lambda\in\bb R\setminus\{0\}$, then
+  $\lambda E\in\mathcal L$ and
+  \[
+    m(\lambda E)=|\lambda|m(E).
+  \]
+\end{theorem}
+
+For $\lambda=0$, the set $\lambda E$ is either empty or a singleton and
+therefore has measure zero. Thus the dilation formula also holds for
+$\lambda=0$ when $m(E)<\infty$ (or with the convention $0\cdot\infty=0$).
+
+\begin{proof}
+  Translation by $s$ is a homeomorphism, so it preserves Borel sets.
+  On $\mathcal B_{\bb R}$ define
+  \[
+    m_s(E)=m(E+s).
+  \]
+  This is a Borel measure, and for every half-open interval,
+  \[
+    m_s((a,b])=m((a+s,b+s])=b-a=m((a,b]).
+  \]
+  Uniqueness of the premeasure extension gives $m_s=m$ on
+  $\mathcal B_{\bb R}$.
+
+  If $N$ is a Borel null set, then $N+s$ is again a Borel null set.
+  Every $E\in\mathcal L$ has the form
+  \[
+    E=B\cup N,
+  \]
+  where $B$ is Borel and $N$ is contained in a Borel null set. It
+  follows that $E+s$ is Lebesgue measurable and
+  $m(E+s)=m(B+s)=m(B)=m(E)$.
+
+  Now fix $\lambda\neq0$. The map $x\mapsto\lambda x$ is also a
+  homeomorphism. Singletons have measure zero because
+  \[
+    m(\{x\})\leq m((x-\varepsilon,x])=\varepsilon
+  \]
+  for every $\varepsilon>0$. Consequently every interval with endpoints
+  $c<d$, regardless of the choice of open or closed endpoints, has
+  measure $d-c$. Hence
+  \[
+    m_\lambda(E)=\frac{1}{|\lambda|}m(\lambda E),
+    \qquad E\in\mathcal B_{\bb R},
+  \]
+  is a Borel measure satisfying
+  $m_\lambda((a,b])=b-a$. Uniqueness gives $m_\lambda=m$ on Borel
+  sets. As above, dilation carries Borel null sets to Borel null sets,
+  so the identity extends to every $E\in\mathcal L$.
+\end{proof}
+
+\begin{example}[Countable sets]
+  Every singleton is null, and therefore every countable set is null.
+  In particular,
+  \[
+    m(\bb Q)=0.
+  \]
+  More concretely, if
+  $\bb Q\cap(0,1)=\{q_1,q_2,\ldots\}$ and $\varepsilon>0$, then
+  \[
+    U_\varepsilon
+    =\bigcup_{j=1}^{\infty}
+      (q_j-\varepsilon2^{-j},q_j+\varepsilon2^{-j})
+  \]
+  is an open dense set containing $\bb Q\cap(0,1)$, while
+  \[
+    m(U_\varepsilon)
+    \leq\sum_{j=1}^{\infty}2\varepsilon2^{-j}
+    =2\varepsilon.
+  \]
+  Thus an open dense set can have arbitrarily small measure.
+\end{example}
