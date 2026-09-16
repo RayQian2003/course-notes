@@ -1,0 +1,139 @@
+\section{September 16, 2026}
+
+\subsection{Comparing independent and spanning collections}
+
+\begin{proposition}\label{prop:independent-versus-spanning}
+  Suppose that $u_1,\ldots,u_m$ is a linearly independent collection in
+  $V$ and that $w_1,\ldots,w_n$ spans $V$. Then
+  \[
+    m\leq n.
+  \]
+  Thus, in a finite-dimensional vector space, every linearly independent
+  collection has cardinality at most that of every finite spanning
+  collection.
+\end{proposition}
+
+\begin{proof}
+  We successively insert the vectors $u_1,u_2,\ldots$ into the spanning
+  list $w_1,\ldots,w_n$, removing one of the $w$'s after each insertion.
+
+  First adjoin $u_1$ to obtain
+  \[
+    u_1,w_1,\ldots,w_n.
+  \]
+  This collection is linearly dependent because $w_1,\ldots,w_n$ spans
+  $V$. Since $u_1\neq0$, one of the $w$'s is a linear combination of the
+  other vectors. Remove that vector. The resulting collection still
+  spans $V$ and has $n$ vectors.
+
+  Inductively, suppose that after $k-1$ steps we have a spanning
+  collection of $n$ vectors consisting of
+  $u_1,\ldots,u_{k-1}$ and $n-k+1$ of the original $w$'s. Adjoin $u_k$.
+  The resulting collection is dependent. In a nontrivial dependence
+  relation, some remaining $w$ must have a nonzero coefficient;
+  otherwise the relation would contradict the linear independence of
+  $u_1,\ldots,u_k$. We can therefore remove that $w$ without changing
+  the span.
+
+  If $m>n$, then after $n$ steps the collection
+  $u_1,\ldots,u_n$ would span $V$. In particular, $u_{n+1}$ would lie in
+  their span, contradicting the linear independence of
+  $u_1,\ldots,u_m$. Hence $m\leq n$.
+\end{proof}
+
+\begin{example}
+  No collection of four vectors in $\bb{R}^3$ is linearly independent,
+  because the three standard basis vectors span $\bb{R}^3$. Similarly,
+  no collection of three vectors can span $\bb{R}^4$, because the four
+  standard basis vectors are linearly independent in $\bb{R}^4$.
+\end{example}
+
+\subsection{Subspaces of finite-dimensional spaces}
+
+\begin{proposition}
+  Every subspace of a finite-dimensional vector space is
+  finite-dimensional.
+\end{proposition}
+
+\begin{proof}
+  Let $U$ be a subspace of a finite-dimensional vector space $V$. If
+  $U=\{0\}$, then the empty collection spans $U$, so $U$ is
+  finite-dimensional.
+
+  Otherwise choose a nonzero vector $u_1\in U$. If
+  $U=\operatorname{span}\{u_1\}$, we are done. If not, choose
+  \[
+    u_2\in U\setminus\operatorname{span}\{u_1\}.
+  \]
+  Continue in this fashion: once $u_1,\ldots,u_{k-1}$ have been chosen,
+  stop if they span $U$; otherwise choose
+  \[
+    u_k\in U\setminus\operatorname{span}\{u_1,\ldots,u_{k-1}\}.
+  \]
+  At every stage the chosen collection is linearly independent. Since
+  $V$ has a finite spanning collection, Proposition~
+  \ref{prop:independent-versus-spanning} bounds the number of vectors in
+  any linearly independent collection in $V$. The process must therefore
+  stop after finitely many steps, at which point the chosen vectors span
+  $U$.
+\end{proof}
+
+\begin{corollary}
+  Every finite-dimensional vector space has a basis.
+\end{corollary}
+
+\begin{proof}
+  By definition, a finite-dimensional vector space has a finite spanning
+  collection. Removing redundant vectors from that collection produces
+  a basis.
+\end{proof}
+
+\subsection{Extending a linearly independent collection}
+
+\begin{proposition}[Basis extension theorem]
+  Every finite linearly independent collection in a finite-dimensional
+  vector space can be extended to a basis of the space.
+\end{proposition}
+
+\begin{proof}
+  Let $u_1,\ldots,u_m$ be linearly independent in $V$, and choose a
+  finite spanning collection $w_1,\ldots,w_n$ for $V$. The combined
+  collection
+  \[
+    u_1,\ldots,u_m,w_1,\ldots,w_n
+  \]
+  spans $V$. Examine the $w$'s in order. Whenever a vector $w_j$ lies in
+  the span of the vectors preceding it, remove it. Removing such a
+  vector does not change the span, and none of the $u_i$ is removed.
+  After all the $w$'s have been considered, the remaining collection
+  spans $V$ and is linearly independent. It is therefore a basis
+  containing $u_1,\ldots,u_m$.
+\end{proof}
+
+\begin{example}
+  Consider the linearly independent vectors
+  \[
+    v_1=\begin{bmatrix}-2\\3\\4\end{bmatrix},
+    \qquad
+    v_2=\begin{bmatrix}-9\\6\\8\end{bmatrix}
+  \]
+  in $\bb{R}^3$. Adjoin the standard basis vectors
+  $e_1,e_2,e_3$. Since
+  \[
+    e_1=-\frac15(v_2-2v_1),
+  \]
+  the vector $e_1$ is redundant. On the other hand, $e_2$ is not in
+  $\operatorname{span}\{v_1,v_2\}$, so we retain it. Finally,
+  \[
+    e_3=-\frac1{10}\left(v_2-\frac92v_1+\frac{15}{2}e_2\right),
+  \]
+  so $e_3$ is redundant. Therefore
+  \[
+    \left\{
+      \begin{bmatrix}-2\\3\\4\end{bmatrix},
+      \begin{bmatrix}-9\\6\\8\end{bmatrix},
+      \begin{bmatrix}0\\1\\0\end{bmatrix}
+    \right\}
+  \]
+  is a basis of $\bb{R}^3$ extending the original collection.
+\end{example}

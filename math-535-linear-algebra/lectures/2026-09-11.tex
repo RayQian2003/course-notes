@@ -1,0 +1,240 @@
+\section{September 11, 2026}
+
+\subsection{The subspace criterion}
+
+\begin{proof}[Proof of Proposition~\ref{prop:subspace-criterion}]
+  If $U$ is a subspace of $V$, then $U$ is a vector space under the
+  operations inherited from $V$. It therefore contains the additive
+  identity and is closed under addition and scalar multiplication.
+
+  Conversely, suppose conditions (i)--(iii) hold. The additive identity
+  belongs to $U$ by (i). If $u\in U$, then condition (iii), applied with
+  the scalar $-1$, gives
+  \[
+    -u=(-1)u\in U.
+  \]
+  Hence $U$ contains the additive inverse of each of its elements. The
+  remaining vector-space axioms are identities already valid in $V$, so
+  they remain valid when the vectors are restricted to $U$. Thus $U$ is
+  a subspace of $V$.
+
+  Finally, if $U$ is nonempty and satisfies the two closure conditions,
+  choose $u\in U$. Closure under scalar multiplication gives
+  $0=0u\in U$, so condition (i) follows automatically.
+\end{proof}
+
+\subsection{Kernels and images}
+
+\begin{definition}[Kernel and image]
+  Let $T\in\mathcal L(V,W)$. The \emph{kernel} and \emph{image} of $T$
+  are
+  \[
+    \ker T=\{v\in V:T(v)=0\}
+  \]
+  and
+  \[
+    \operatorname{im}T=\{T(v):v\in V\},
+  \]
+  respectively. The image is also called the \emph{range} of $T$.
+\end{definition}
+
+\begin{proposition}
+  If $T\in\mathcal L(V,W)$, then $\ker T$ is a subspace of $V$ and
+  $\operatorname{im}T$ is a subspace of $W$.
+\end{proposition}
+
+\begin{proof}
+  Since $T(0)=0$, both sets contain the appropriate zero vector. If
+  $u,v\in\ker T$ and $\alpha\in\bb{F}$, then
+  \[
+    T(u+v)=T(u)+T(v)=0
+    \qquad\text{and}\qquad
+    T(\alpha u)=\alpha T(u)=0.
+  \]
+  Thus $\ker T$ is a subspace. If $y_1=T(v_1)$ and $y_2=T(v_2)$ are in
+  $\operatorname{im}T$, then
+  \[
+    y_1+y_2=T(v_1+v_2)
+    \qquad\text{and}\qquad
+    \alpha y_1=T(\alpha v_1),
+  \]
+  so the image is also a subspace.
+\end{proof}
+
+\begin{example}
+  The continuous real-valued functions on $[0,1]$ form a subspace
+  \[
+    C([0,1])\subseteq\{f:[0,1]\to\bb{R}\}
+  \]
+  of the vector space of all real-valued functions on $[0,1]$.
+\end{example}
+
+\begin{example}
+  Fix $b\in\bb{F}$ and let
+  \[
+    U_b=\left\{
+      \begin{bmatrix}x_1\\x_2\\x_3\\x_4\end{bmatrix}\in\bb{F}^4:
+      x_3=5x_4+b
+    \right\}.
+  \]
+  Then $U_b$ is a subspace of $\bb{F}^4$ if and only if $b=0$. Indeed,
+  the zero vector belongs to $U_b$ only when $b=0$, and when $b=0$ the
+  defining equation $x_3=5x_4$ is preserved by addition and scalar
+  multiplication.
+\end{example}
+
+\subsection{Sums of subspaces}
+
+\begin{definition}[Sum of subspaces]
+  If $V_1,\ldots,V_m$ are subspaces of $V$, their \emph{sum} is
+  \[
+    V_1+\cdots+V_m
+    =\{v_1+\cdots+v_m:v_i\in V_i\text{ for }i=1,\ldots,m\}.
+  \]
+\end{definition}
+
+\begin{example}
+  Let
+  \[
+    U=\left\{\begin{bmatrix}x\\0\\0\end{bmatrix}:x\in\bb{F}\right\},
+    \qquad
+    W=\left\{\begin{bmatrix}0\\y\\0\end{bmatrix}:y\in\bb{F}\right\}.
+  \]
+  Then
+  \[
+    U+W
+    =\left\{\begin{bmatrix}x\\y\\0\end{bmatrix}:x,y\in\bb{F}\right\}.
+  \]
+\end{example}
+
+\begin{proposition}
+  If $V_1,\ldots,V_m$ are subspaces of $V$, then
+  $V_1+\cdots+V_m$ is the smallest subspace of $V$ containing each
+  $V_i$.
+\end{proposition}
+
+\begin{proof}
+  The sum contains $0=0+\cdots+0$. Adding two elements of the sum, or
+  multiplying one by a scalar, can be done componentwise inside each
+  $V_i$, so the sum is a subspace. For each $i$, any $v_i\in V_i$ can be
+  written as
+  \[
+    v_i=0+\cdots+0+v_i+0+\cdots+0,
+  \]
+  and hence $V_i\subseteq V_1+\cdots+V_m$.
+
+  Conversely, let $W$ be any subspace of $V$ containing all the $V_i$.
+  If $v=v_1+\cdots+v_m$ with $v_i\in V_i$, then every $v_i$ belongs to
+  $W$. Since $W$ is closed under addition, $v\in W$. Therefore
+  $V_1+\cdots+V_m\subseteq W$.
+\end{proof}
+
+\subsection{Direct sums}
+
+\begin{definition}[Direct sum]
+  Let $V_1,\ldots,V_m$ be subspaces of $V$. Their sum is a
+  \emph{direct sum} if every element of $V_1+\cdots+V_m$ has a unique
+  representation
+  \[
+    v=v_1+\cdots+v_m,
+    \qquad v_i\in V_i.
+  \]
+  In this case we write
+  \[
+    V_1\oplus\cdots\oplus V_m.
+  \]
+\end{definition}
+
+\begin{proposition}[Zero-sum criterion]
+  The sum $V_1+\cdots+V_m$ is direct if and only if the equation
+  \[
+    0=v_1+\cdots+v_m,
+    \qquad v_i\in V_i,
+  \]
+  implies $v_1=\cdots=v_m=0$.
+\end{proposition}
+
+\begin{proof}
+  If the sum is direct, then $0=0+\cdots+0$ is one representation of
+  the zero vector, so uniqueness forces every other representation to
+  have all components equal to zero.
+
+  Conversely, suppose the zero vector has only the trivial
+  representation. If
+  \[
+    v_1+\cdots+v_m=u_1+\cdots+u_m,
+  \]
+  where $v_i,u_i\in V_i$, then
+  \[
+    0=(v_1-u_1)+\cdots+(v_m-u_m).
+  \]
+  The hypothesis gives $v_i-u_i=0$ for each $i$, so $v_i=u_i$. Thus
+  every representation is unique.
+\end{proof}
+
+\begin{proposition}
+  If $U$ and $W$ are subspaces of $V$, then
+  \[
+    U+W=U\oplus W
+    \quad\Longleftrightarrow\quad
+    U\cap W=\{0\}.
+  \]
+\end{proposition}
+
+\begin{proof}
+  Suppose first that $U+W$ is a direct sum, and let $v\in U\cap W$.
+  Then
+  \[
+    0=v+(-v)=0+0
+  \]
+  gives two representations with one term in $U$ and one term in $W$.
+  Uniqueness implies $v=0$.
+
+  Conversely, assume $U\cap W=\{0\}$. If
+  \[
+    u+w=u'+w',
+    \qquad u,u'\in U,\quad w,w'\in W,
+  \]
+  then
+  \[
+    u-u'=w'-w\in U\cap W.
+  \]
+  Hence $u=u'$ and $w=w'$, so the representation is unique.
+\end{proof}
+
+For the coordinate-axis subspaces in the preceding example,
+$U\cap W=\{0\}$, and hence their sum is $U\oplus W$.
+
+\subsection{Product vector spaces}
+
+\begin{definition}[Product vector space]
+  Let $V_1,\ldots,V_m$ be vector spaces over $\bb{F}$. Their Cartesian
+  product is
+  \[
+    V_1\times\cdots\times V_m
+    =\{(v_1,\ldots,v_m):v_i\in V_i\}.
+  \]
+  Addition and scalar multiplication are defined coordinatewise:
+  \begin{align*}
+    (v_1,\ldots,v_m)+(u_1,\ldots,u_m)
+      &=(v_1+u_1,\ldots,v_m+u_m), \\
+    \alpha(v_1,\ldots,v_m)
+      &=(\alpha v_1,\ldots,\alpha v_m).
+  \end{align*}
+\end{definition}
+
+With these operations, $V_1\times\cdots\times V_m$ is a vector space
+over $\bb{F}$; all vector-space axioms hold coordinatewise.
+
+\begin{example}
+  In $\mathcal P_5(\bb{R})\times\bb{R}^3$,
+  \begin{align*}
+    &\left(5-6t+4t^2,
+      \begin{bmatrix}3\\8\\7\end{bmatrix}\right)
+    +\left(t+9t^5,
+      \begin{bmatrix}2\\2\\2\end{bmatrix}\right) \\
+    &\qquad=
+    \left(5-5t+4t^2+9t^5,
+      \begin{bmatrix}5\\10\\9\end{bmatrix}\right).
+  \end{align*}
+\end{example}

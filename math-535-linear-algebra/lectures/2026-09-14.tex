@@ -1,0 +1,144 @@
+\section{September 14, 2026}
+
+\subsection{Direct sums and injectivity}
+
+Let $V_1,\ldots,V_m$ be subspaces of a vector space $V$. Define the
+summation map
+\[
+  \Sigma\colon V_1\times\cdots\times V_m
+  \longrightarrow V_1+\cdots+V_m
+\]
+by
+\[
+  \Sigma(v_1,\ldots,v_m)=v_1+\cdots+v_m.
+\]
+This map is linear and surjective.
+
+\begin{proposition}
+  The sum $V_1+\cdots+V_m$ is direct if and only if the summation map
+  $\Sigma$ is injective.
+\end{proposition}
+
+\begin{proof}
+  The map $\Sigma$ is injective precisely when
+  \[
+    \Sigma(v_1,\ldots,v_m)=\Sigma(u_1,\ldots,u_m)
+  \]
+  implies
+  \[
+    (v_1,\ldots,v_m)=(u_1,\ldots,u_m).
+  \]
+  Equivalently, every vector in $V_1+\cdots+V_m$ has only one
+  representation as a sum of vectors from the respective subspaces.
+  This is exactly the definition of a direct sum.
+\end{proof}
+
+\subsection{Quotient vector spaces}
+
+Let $U$ be a subset of $V$. For $v\in V$, define
+\[
+  v+U=\{v+u:u\in U\}.
+\]
+The set $v+U$ is called a \emph{translate} of $U$. When $U$ is a
+subspace, a translate is also called a \emph{coset} of $U$.
+
+\begin{example}
+  Let
+  \[
+    U=\left\{\begin{bmatrix}x\\2x\end{bmatrix}:x\in\bb{R}\right\}
+    \subseteq\bb{R}^2.
+  \]
+  Then
+  \[
+    \begin{bmatrix}2\\1\end{bmatrix}+U
+    =\left\{\begin{bmatrix}2+x\\1+2x\end{bmatrix}:x\in\bb{R}\right\}.
+  \]
+  The original subspace is the line $y=2x$, while this translate is the
+  parallel line $y=2x-3$.
+\end{example}
+
+\begin{definition}[Quotient space]
+  If $U$ is a subspace of $V$, the \emph{quotient space} of $V$ by $U$
+  is the set of all cosets of $U$:
+  \[
+    V/U=\{v+U:v\in V\}.
+  \]
+\end{definition}
+
+For the subspace $U\subseteq\bb{R}^2$ in the preceding example,
+$\bb{R}^2/U$ is the collection of all lines in $\bb{R}^2$ with slope
+$2$.
+
+\begin{proposition}\label{prop:coset-equivalence}
+  Let $U$ be a subspace of $V$ and let $v,w\in V$. The following are
+  equivalent:
+  \begin{enumerate}[label=(\roman*)]
+    \item $v-w\in U$;
+    \item $v+U=w+U$;
+    \item $(v+U)\cap(w+U)\neq\varnothing$.
+  \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+  Suppose first that $v-w\in U$. If $v+u\in v+U$, then
+  \[
+    v+u=w+(v-w+u)\in w+U,
+  \]
+  because $v-w+u\in U$. Thus $v+U\subseteq w+U$. Since
+  $w-v=-(v-w)\in U$, the reverse inclusion follows in the same way, so
+  $v+U=w+U$.
+
+  If $v+U=w+U$, then the two cosets plainly have nonempty intersection.
+
+  Finally, suppose $(v+U)\cap(w+U)\neq\varnothing$. There are
+  $u_1,u_2\in U$ such that
+  \[
+    v+u_1=w+u_2.
+  \]
+  Therefore
+  \[
+    v-w=u_2-u_1\in U.
+  \]
+\end{proof}
+
+Thus two cosets of a subspace are either equal or disjoint. We define
+addition and scalar multiplication on $V/U$ by
+\begin{align*}
+  (v+U)+(w+U)&=(v+w)+U, \\
+  \alpha(v+U)&=\alpha v+U.
+\end{align*}
+Proposition~\ref{prop:coset-equivalence} shows that these operations do
+not depend on the choice of representatives. With these operations,
+$V/U$ is a vector space over $\bb{F}$, whose zero vector is the coset
+$U=0+U$.
+
+\subsection{Finite-dimensional vector spaces}
+
+\begin{definition}[Finite-dimensional vector space]
+  A vector space $V$ is \emph{finite-dimensional} if some finite
+  collection of vectors spans $V$. It is \emph{infinite-dimensional}
+  if it is not finite-dimensional.
+\end{definition}
+
+\begin{example}
+  The coordinate space $\bb{F}^n$ is finite-dimensional because
+  \[
+    \bb{F}^n=\operatorname{span}\{e_1,\ldots,e_n\}.
+  \]
+
+  Likewise, the space of polynomials of degree at most $m$ is
+  finite-dimensional because
+  \[
+    \mathcal P_m(\bb{F})
+    =\operatorname{span}\{1,t,t^2,\ldots,t^m\}.
+  \]
+\end{example}
+
+\begin{example}
+  The vector space $\mathcal P(\bb{F})$ of all polynomials with
+  coefficients in $\bb{F}$ is infinite-dimensional. Indeed, suppose a
+  finite collection of polynomials spanned $\mathcal P(\bb{F})$, and let
+  $m$ be the largest degree among the nonzero polynomials in the
+  collection. Every polynomial in their span would have degree at most
+  $m$, so $t^{m+1}$ could not belong to the span, a contradiction.
+\end{example}
