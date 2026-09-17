@@ -1,0 +1,300 @@
+\section{September 11, 2026}
+
+We continue the discussion of stability from the previous lecture. The
+main goals are to linearize an autonomous ODE near an equilibrium, to
+study the resulting system using the matrix exponential, and to extend
+the solution formula to time-dependent linear systems by means of the
+Dyson series.
+
+\subsection{Linearization near an equilibrium}
+
+Consider the autonomous nonlinear equation
+\begin{equation}\label{eq:nonlinear-autonomous-sep-11}
+  x'=f(x)
+\end{equation}
+and let \(x_*\) be an equilibrium, so that \(f(x_*)=0\). Introduce the
+perturbation
+\[
+  y=x-x_*.
+\]
+Since \(x_*\) is constant, \(y'=x'\). If \(f\) is continuously
+differentiable, its expansion near \(x_*\) is
+\[
+  f(x_*+y)=f(x_*)+f_x(x_*)y+r(y)
+           =Ay+r(y),
+  \qquad
+  A=f_x(x_*),
+\]
+where
+\[
+  \frac{\lVert r(y)\rVert}{\lVert y\rVert}\longrightarrow0
+  \qquad\text{as }y\to0.
+\]
+Thus the exact perturbation equation is
+\begin{equation}\label{eq:perturbation-equation-sep-11}
+  y'=Ay+r(y),
+\end{equation}
+and its linearization is
+\begin{equation}\label{eq:linearized-equation-sep-11}
+  y'=Ay.
+\end{equation}
+The equilibrium \(x_*\) corresponds to the zero solution of the
+perturbation equation. Hence studying whether \(x(t)\) remains close to
+\(x_*\) begins with studying whether solutions of
+\eqref{eq:linearized-equation-sep-11} remain close to zero.
+
+\subsection{Autonomous linear systems and the matrix exponential}
+
+Consider the initial-value problem
+\begin{equation}\label{eq:linear-autonomous-sep-11}
+  y'=Ay,
+  \qquad
+  y(t_0)=y_0,
+\end{equation}
+where \(A\in\bb{R}^{n\times n}\) is constant. Repeated differentiation
+gives
+\[
+  y^{(k)}(t_0)=A^ky_0.
+\]
+The Taylor series about \(t_0\) therefore gives
+\begin{align*}
+  y(t)
+  &=y_0+(t-t_0)Ay_0
+    +\frac{(t-t_0)^2}{2!}A^2y_0+\cdots\\
+  &=\left(\sum_{k=0}^{\infty}
+    \frac{(t-t_0)^kA^k}{k!}\right)y_0.
+\end{align*}
+
+\begin{definition}[Matrix exponential]
+  For a square matrix \(B\), its exponential is
+  \begin{equation}\label{eq:matrix-exponential-definition-sep-11}
+    e^B=\sum_{k=0}^{\infty}\frac{B^k}{k!}.
+  \end{equation}
+\end{definition}
+
+The series converges in every matrix norm. With this notation, the
+solution of \eqref{eq:linear-autonomous-sep-11} is
+\begin{equation}\label{eq:linear-solution-sep-11}
+  y(t)=e^{(t-t_0)A}y_0.
+\end{equation}
+Indeed,
+\[
+  \frac{d}{dt}e^{(t-t_0)A}
+  =Ae^{(t-t_0)A}=e^{(t-t_0)A}A,
+  \qquad
+  e^{0A}=I.
+\]
+
+As observed in the previous lecture, the zero solution of
+\eqref{eq:linear-autonomous-sep-11} is stable exactly when
+\begin{equation}\label{eq:bounded-semigroup-sep-11}
+  \sup_{t\geq0}\lVert e^{tA}\rVert<\infty,
+\end{equation}
+and it is asymptotically stable exactly when
+\begin{equation}\label{eq:decaying-semigroup-sep-11}
+  \lVert e^{tA}\rVert\longrightarrow0
+  \qquad\text{as }t\to\infty.
+\end{equation}
+These statements follow directly from
+\[
+  y(t;t_0,y_0)-y(t;t_0,z_0)
+  =e^{(t-t_0)A}(y_0-z_0).
+\]
+Linearity also implies that stability of the zero solution is
+equivalent to stability of every solution.
+
+\subsection{Time-dependent linear systems and the Dyson series}
+
+Now consider the nonautonomous linear equation
+\begin{equation}\label{eq:nonautonomous-linear-sep-11}
+  y'=A(t)y,
+  \qquad
+  y(t_0)=y_0,
+\end{equation}
+where \(A(t)\) is continuous. Its integral equation is
+\begin{equation}\label{eq:linear-integral-equation-sep-11}
+  y(t)=y_0+\int_{t_0}^t A(t_1)y(t_1)\,dt_1.
+\end{equation}
+At an intermediate time \(t_1\), the same equation reads
+\[
+  y(t_1)=y_0+\int_{t_0}^{t_1}A(t_2)y(t_2)\,dt_2.
+\]
+Substituting this formula into
+\eqref{eq:linear-integral-equation-sep-11} gives
+\begin{align*}
+  y(t)
+  ={}&y_0+\left(\int_{t_0}^t A(t_1)\,dt_1\right)y_0\\
+  &+\int_{t_0}^t\int_{t_0}^{t_1}
+    A(t_1)A(t_2)y(t_2)\,dt_2\,dt_1.
+\end{align*}
+Continuing this substitution produces the \emph{Dyson series}
+\begin{equation}\label{eq:dyson-series-sep-11}
+  y(t)=U(t,t_0)y_0,
+\end{equation}
+where the evolution operator is
+\begin{align}
+  U(t,t_0)
+  ={}&I+\sum_{k=1}^{\infty}
+  \int_{t_0}^t\int_{t_0}^{t_1}\cdots
+  \int_{t_0}^{t_{k-1}}
+  A(t_1)A(t_2)\cdots A(t_k)
+  \,dt_k\cdots dt_2\,dt_1.
+  \label{eq:evolution-operator-dyson-sep-11}
+\end{align}
+If \(\lVert A(s)\rVert\leq M\) on \([t_0,t]\), the norm of the
+\(k\)-th term is at most
+\[
+  \frac{M^k(t-t_0)^k}{k!},
+\]
+which proves convergence of the series. Termwise differentiation shows
+that
+\[
+  \frac{\partial}{\partial t}U(t,t_0)=A(t)U(t,t_0),
+  \qquad
+  U(t_0,t_0)=I.
+\]
+
+Because matrices evaluated at different times need not commute, the
+order \(t_1\geq t_2\geq\cdots\geq t_k\) in
+\eqref{eq:evolution-operator-dyson-sep-11} is essential. A common
+shorthand is the \emph{time-ordered exponential}
+\begin{equation}\label{eq:time-ordered-exponential-sep-11}
+  U(t,t_0)
+  =\mathcal{T}\exp\left(\int_{t_0}^t A(s)\,ds\right).
+\end{equation}
+If \(A(s)A(r)=A(r)A(s)\) for every \(r,s\), time ordering is
+unnecessary and
+\[
+  U(t,t_0)=\exp\left(\int_{t_0}^t A(s)\,ds\right).
+\]
+In particular, when \(A(t)\equiv A\), the ordered integration region
+has volume \((t-t_0)^k/k!\), and the Dyson series reduces to
+\(e^{(t-t_0)A}\).
+
+\subsection{Properties of the matrix exponential}
+
+The power-series definition immediately gives several useful
+identities.
+
+\begin{proposition}\label{prop:matrix-exponential-properties-sep-11}
+  Let \(A\) and \(B\) be square matrices of the same size.
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item If \(M\) is invertible, then
+      \[
+        e^{MAM^{-1}}=Me^AM^{-1}.
+      \]
+    \item If \(AB=BA\), then
+      \[
+        e^{A+B}=e^Ae^B=e^Be^A.
+      \]
+    \item For a block-diagonal matrix,
+      \[
+        e^{\operatorname{diag}(A_1,\ldots,A_m)}
+        =\operatorname{diag}(e^{A_1},\ldots,e^{A_m}).
+      \]
+  \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+  For the first identity, observe that
+  \((MAM^{-1})^k=MA^kM^{-1}\) and apply
+  \eqref{eq:matrix-exponential-definition-sep-11}. The third identity
+  follows similarly because powers preserve block-diagonal structure.
+  When \(A\) and \(B\) commute, the binomial theorem is valid for
+  \((A+B)^k\). Substitution into the exponential series and collection
+  of like terms gives the second identity.
+\end{proof}
+
+\subsection{Jordan form and linear stability}
+
+The preceding identities reduce the stability analysis of \(y'=Ay\)
+to the analysis of individual Jordan blocks. Over \(\bb{C}\), write
+\begin{equation}\label{eq:jordan-decomposition-sep-11}
+  A=PJP^{-1},
+  \qquad
+  J=\operatorname{diag}(J_1,\ldots,J_m).
+\end{equation}
+If \(J_k\) is a Jordan block of size \(q_k\) associated with the
+eigenvalue \(\lambda_k\), then
+\[
+  J_k=\lambda_k I+N_k,
+  \qquad
+  N_k^{q_k}=0.
+\]
+Since \(\lambda_kI\) commutes with \(N_k\),
+\begin{equation}\label{eq:jordan-block-exponential-sep-11}
+  e^{tJ_k}
+  =e^{t\lambda_k}
+   \left(
+     I+tN_k+\frac{t^2N_k^2}{2!}+\cdots
+     +\frac{t^{q_k-1}N_k^{q_k-1}}{(q_k-1)!}
+   \right).
+\end{equation}
+Thus each Jordan block contributes an exponential factor multiplied by
+a polynomial in \(t\).
+
+\begin{theorem}[Stability criterion for a linear system]
+  For \(y'=Ay\), the following statements hold.
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item The zero solution is asymptotically stable if and only if
+      \[
+        \operatorname{Re}\lambda<0
+        \qquad\text{for every }\lambda\in\sigma(A).
+      \]
+    \item The zero solution is stable if and only if every eigenvalue
+      satisfies \(\operatorname{Re}\lambda\leq0\) and every eigenvalue
+      on the imaginary axis is semisimple, meaning that all of its
+      Jordan blocks have size one.
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  By Proposition~\ref{prop:matrix-exponential-properties-sep-11} and
+  \eqref{eq:jordan-decomposition-sep-11},
+  \[
+    e^{tA}=Pe^{tJ}P^{-1}
+    =P\operatorname{diag}(e^{tJ_1},\ldots,e^{tJ_m})P^{-1}.
+  \]
+  If \(\operatorname{Re}\lambda_k<0\), the exponential decay in
+  \eqref{eq:jordan-block-exponential-sep-11} dominates every
+  polynomial factor, so the block tends to zero. If
+  \(\operatorname{Re}\lambda_k>0\), the block has an exponentially
+  growing solution. When \(\operatorname{Re}\lambda_k=0\), the scalar
+  exponential has constant magnitude. The block is therefore bounded
+  precisely when its nilpotent part is zero, or equivalently when its
+  size is one. Combining the blocks with
+  \eqref{eq:bounded-semigroup-sep-11} and
+  \eqref{eq:decaying-semigroup-sep-11} proves both assertions.
+\end{proof}
+
+\begin{example}[A defective eigenvalue on the imaginary axis]
+  Let
+  \[
+    A=\begin{bmatrix}0&1\\0&0\end{bmatrix}.
+  \]
+  The only eigenvalue is zero, but its Jordan block has size two. Since
+  \(A^2=0\),
+  \[
+    e^{tA}=I+tA
+    =\begin{bmatrix}1&t\\0&1\end{bmatrix}.
+  \]
+  Hence
+  \[
+    y_2(t)=y_2(0),
+    \qquad
+    y_1(t)=y_1(0)+t\,y_2(0).
+  \]
+  Arbitrarily small initial data with \(y_2(0)\neq0\) lead to linear
+  growth, so the origin is not stable. This illustrates why
+  nonpositive real parts alone are insufficient for stability.
+\end{example}
+
+\enlargethispage{2\baselineskip}
+For the nonlinear perturbation equation
+\eqref{eq:perturbation-equation-sep-11}, the linearization principle
+gives two decisive cases. If the spectrum of \(f_x(x_*)\) lies in the
+open left half-plane, then \(x_*\) is locally asymptotically stable. If
+the spectrum contains an eigenvalue with positive real part, then
+\(x_*\) is unstable. If it meets the imaginary axis but not the open
+right half-plane, linearization alone may be inconclusive; the
+nonlinear remainder \(r(y)\) can determine the behavior.

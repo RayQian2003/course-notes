@@ -1,0 +1,345 @@
+\section{September 14, 2026}
+
+We develop two complementary approaches to stability. Linearization
+transfers spectral information from a Jacobian matrix to a nonlinear
+equilibrium, while Lyapunov functions establish stability without
+computing the solution explicitly. We then apply the same ideas to
+time-dependent linear equations and to the discrete evolution produced
+by Runge--Kutta methods.
+
+\subsection{From linear to nonlinear stability}
+
+Recall the autonomous equation
+\[
+  x'=f(x),
+\]
+an equilibrium \(x_*\) satisfying \(f(x_*)=0\), and its Jacobian
+\[
+  A=f_x(x_*).
+\]
+With \(y=x-x_*\), the perturbation equation derived in
+\eqref{eq:perturbation-equation-sep-11} is
+\[
+  y'=Ay+r(y),
+  \qquad
+  \frac{\lVert r(y)\rVert}{\lVert y\rVert}\longrightarrow0
+  \quad\text{as }y\to0.
+\]
+
+The matrix \(A\) is called \emph{Hurwitz} if all of its eigenvalues lie
+in the open left half-plane:
+\[
+  \operatorname{Re}\lambda<0
+  \qquad\text{for every }\lambda\in\sigma(A).
+\]
+The linearization theorem gives the following nonlinear conclusion.
+
+\begin{theorem}[Linearization criterion]
+  Suppose \(f\) is continuously differentiable near \(x_*\).
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item If \(f_x(x_*)\) is Hurwitz, then \(x_*\) is locally
+      asymptotically stable.
+    \item If \(f_x(x_*)\) has an eigenvalue with positive real part,
+      then \(x_*\) is unstable.
+  \end{enumerate}
+\end{theorem}
+
+If no eigenvalue of \(f_x(x_*)\) lies on the imaginary axis, the
+equilibrium is \emph{hyperbolic}. The Hartman--Grobman theorem says that
+the nonlinear flow near a hyperbolic equilibrium is locally
+topologically equivalent to its linearization \(y'=Ay\). If the
+spectrum meets the imaginary axis, the linearized system alone may not
+determine stability.
+
+\subsection{Lyapunov's direct method}
+
+Eigenvalue calculations or explicit solution formulas can be
+expensive. Lyapunov's method instead measures the size of a solution by
+a scalar energy-like function.
+
+\begin{definition}[Lyapunov function]
+  A continuously differentiable function \(V\), defined near an
+  equilibrium \(x_*\), is a \emph{Lyapunov function} if
+  \[
+    V(x_*)=0,
+    \qquad
+    V(x)>0\quad\text{for }x\neq x_*
+  \]
+  near \(x_*\), and its derivative along solutions,
+  \begin{equation}\label{eq:lyapunov-orbital-derivative-sep-14}
+    \dot V(x)
+    =\nabla V(x)^{\mathsf T}f(x),
+  \end{equation}
+  is nonpositive.
+\end{definition}
+
+\begin{theorem}[Lyapunov stability theorem]
+  If \(V\) is positive definite near \(x_*\) and
+  \(\dot V\leq0\), then \(x_*\) is stable. If, in addition,
+  \(\dot V(x)<0\) for every \(x\neq x_*\) sufficiently close to
+  \(x_*\), then \(x_*\) is locally asymptotically stable.
+\end{theorem}
+
+The idea is that a solution cannot cross outward through a sufficiently
+small level set of \(V\) when \(V(x(t))\) is nonincreasing. Strict
+decrease forces the solution toward the equilibrium.
+
+\subsection{Quadratic Lyapunov functions for linear systems}
+
+Consider again
+\begin{equation}\label{eq:linear-system-sep-14}
+  y'=Ay.
+\end{equation}
+Let \(Q\) be a real symmetric positive-definite matrix and define
+\begin{equation}\label{eq:quadratic-lyapunov-sep-14}
+  V(y)=y^{\mathsf T}Qy.
+\end{equation}
+If \(\lambda_{\min}(Q)\) and \(\lambda_{\max}(Q)\) denote the extreme
+eigenvalues of \(Q\), then
+\begin{equation}\label{eq:quadratic-norm-equivalence-sep-14}
+  \lambda_{\min}(Q)\lVert y\rVert^2
+  \leq V(y)
+  \leq \lambda_{\max}(Q)\lVert y\rVert^2.
+\end{equation}
+Consequently, \(V(y(t))\to0\) if and only if \(y(t)\to0\), and
+boundedness of \(V(y(t))\) is equivalent to boundedness of \(y(t)\).
+
+Along a solution of \eqref{eq:linear-system-sep-14},
+\begin{align}
+  \frac{d}{dt}V(y(t))
+  &=y'(t)^{\mathsf T}Qy(t)+y(t)^{\mathsf T}Qy'(t)\notag\\
+  &=y(t)^{\mathsf T}\bigl(A^{\mathsf T}Q+QA\bigr)y(t).
+  \label{eq:quadratic-lyapunov-derivative-sep-14}
+\end{align}
+If
+\[
+  A^{\mathsf T}Q+QA\preceq-\mu I
+  \qquad\text{for some }\mu>0,
+\]
+then
+\begin{align*}
+  \dot V(y(t))
+  &\leq-\mu\lVert y(t)\rVert^2\\
+  &\leq-\frac{\mu}{\lambda_{\max}(Q)}V(y(t)).
+\end{align*}
+Gr\"onwall's inequality therefore gives
+\begin{equation}\label{eq:quadratic-decay-sep-14}
+  V(y(t))
+  \leq
+  e^{-\mu(t-t_0)/\lambda_{\max}(Q)}V(y(t_0)),
+\end{equation}
+so the origin is exponentially stable.
+
+\subsubsection{Lyapunov equation}
+
+Choose a symmetric positive-definite matrix \(C\). The matrix equation
+\begin{equation}\label{eq:continuous-lyapunov-equation-sep-14}
+  A^{\mathsf T}Q+QA=-C
+\end{equation}
+is called the \emph{continuous Lyapunov equation}. Often one simply
+takes \(C=I\) and solves for \(Q\).
+
+\begin{theorem}[Lyapunov matrix theorem]
+  The matrix \(A\) is Hurwitz if and only if, for every symmetric
+  \(C\succ0\), equation
+  \eqref{eq:continuous-lyapunov-equation-sep-14} has a unique symmetric
+  solution \(Q\succ0\).
+\end{theorem}
+
+\begin{proof}
+  Suppose first that \(A\) is Hurwitz. By the stability criterion from
+  the previous lecture, \(e^{tA}\to0\) exponentially. Define
+  \begin{equation}\label{eq:lyapunov-integral-solution-sep-14}
+    Q=\int_0^\infty e^{tA^{\mathsf T}}Ce^{tA}\,dt.
+  \end{equation}
+  The integral converges, \(Q\) is symmetric, and for \(v\neq0\),
+  \[
+    v^{\mathsf T}Qv
+    =\int_0^\infty
+      \bigl(e^{tA}v\bigr)^{\mathsf T}C
+      \bigl(e^{tA}v\bigr)\,dt>0.
+  \]
+  Thus \(Q\succ0\). Moreover,
+  \begin{align*}
+    A^{\mathsf T}Q+QA
+    &=\int_0^\infty
+      \frac{d}{dt}
+      \left(e^{tA^{\mathsf T}}Ce^{tA}\right)\,dt\\
+    &=\left[e^{tA^{\mathsf T}}Ce^{tA}\right]_{t=0}^{t=\infty}
+      =-C.
+  \end{align*}
+  If \(Q_1\) and \(Q_2\) are two solutions, their difference \(D\)
+  satisfies \(A^{\mathsf T}D+DA=0\). Hence
+  \(e^{tA^{\mathsf T}}De^{tA}=D\) for all \(t\), while the left-hand
+  side tends to zero. Therefore \(D=0\), proving uniqueness.
+
+  Conversely, suppose \(Q\succ0\) and \(C\succ0\) satisfy
+  \eqref{eq:continuous-lyapunov-equation-sep-14}. For a possibly complex
+  eigenpair \(Av=\lambda v\), multiplication by the conjugate transpose
+  \(v^*\) gives
+  \[
+    2\operatorname{Re}(\lambda)v^*Qv=-v^*Cv<0.
+  \]
+  Since \(v^*Qv>0\), every eigenvalue has negative real part. Thus
+  \(A\) is Hurwitz.
+\end{proof}
+
+The integral formula shows the equivalence between the spectral and
+Lyapunov approaches to linear stability. It also proves the nonlinear
+stability conclusion locally. Indeed, choose \(C=I\) and use the same
+quadratic function for
+\(y'=Ay+r(y)\). Then
+\[
+  \dot V(y)
+  =-\lVert y\rVert^2+2y^{\mathsf T}Qr(y)
+  =-\lVert y\rVert^2+o(\lVert y\rVert^2),
+\]
+which is negative for all sufficiently small nonzero \(y\).
+
+\subsection{A time-dependent linear system}
+
+Consider
+\begin{equation}\label{eq:time-dependent-linear-sep-14}
+  y'=A(t)y.
+\end{equation}
+For the simple Lyapunov function
+\[
+  V(y)=\frac12y^{\mathsf T}y=\frac12\lVert y\rVert^2,
+\]
+we have
+\begin{equation}\label{eq:symmetric-part-derivative-sep-14}
+  \dot V(y(t))
+  =y(t)^{\mathsf T}S(t)y(t),
+  \qquad
+  S(t)=\frac12\bigl(A(t)+A(t)^{\mathsf T}\bigr).
+\end{equation}
+Thus \(S(t)\preceq0\) for all \(t\geq t_0\) is sufficient for
+stability, because the Euclidean norm cannot increase. The uniform
+condition
+\begin{equation}\label{eq:uniform-negative-symmetric-part-sep-14}
+  S(t)\preceq-\alpha I,
+  \qquad t\geq t_0,
+  \qquad \alpha>0,
+\end{equation}
+implies
+\[
+  \dot V\leq-2\alpha V,
+  \qquad
+  \lVert y(t)\rVert
+  \leq e^{-\alpha(t-t_0)}\lVert y(t_0)\rVert,
+\]
+and hence uniform exponential stability. Pointwise negative
+definiteness without a uniform bound does not by itself guarantee
+decay to zero.
+
+\subsection{Runge--Kutta methods on a linear system}
+
+We now examine the numerical evolution of the constant-coefficient
+system \(y'=Ay\) with a fixed step size \(\tau\).
+
+\subsubsection{Forward Euler and an explicit midpoint method}
+
+Forward Euler has one stage,
+\[
+  k_1=Ay_n,
+\]
+and therefore
+\begin{equation}\label{eq:forward-euler-matrix-update-sep-14}
+  y_{n+1}=y_n+\tau k_1=(I+\tau A)y_n.
+\end{equation}
+The two-stage explicit midpoint method is
+\begin{align*}
+  k_1&=Ay_n,\\
+  k_2&=A\left(y_n+\frac{\tau}{2}k_1\right),\\
+  y_{n+1}&=y_n+\tau k_2.
+\end{align*}
+Consequently,
+\begin{equation}\label{eq:rk2-matrix-update-sep-14}
+  y_{n+1}
+  =\left(I+\tau A+\frac{\tau^2}{2}A^2\right)y_n.
+\end{equation}
+Every explicit two-stage Runge--Kutta method of order two has the same
+update matrix on this linear equation, even though its internal stages
+may differ.
+
+More generally, recall the Runge--Kutta stability function
+\(R\) from \eqref{eq:rk-stability-function-sep-04}. Applied to
+\(y'=Ay\), a Runge--Kutta method gives
+\begin{equation}\label{eq:rk-matrix-amplification-sep-14}
+  y_{n+1}=G(\tau A)y_n,
+  \qquad
+  G(\tau A)=R(\tau A).
+\end{equation}
+For an explicit \(s\)-stage method, \(R\) is a polynomial of degree at
+most \(s\). If that method also has order \(s\), then
+\[
+  R(z)=\sum_{j=0}^s\frac{z^j}{j!},
+\]
+so \(G(\tau A)\) is the degree-\(s\) Taylor approximation of
+\(e^{\tau A}\).
+
+\subsection{Stability of a discrete linear evolution}
+
+Consider a general recurrence
+\begin{equation}\label{eq:discrete-linear-evolution-sep-14}
+  y_{n+1}=Gy_n,
+  \qquad
+  y_n=G^ny_0.
+\end{equation}
+The zero solution is stable precisely when \(\{G^n\}_{n\geq0}\) is
+bounded, and it is asymptotically stable precisely when
+\(G^n\to0\).
+
+As in the continuous case, write \(G=PJP^{-1}\) over \(\bb{C}\). For
+a Jordan block
+\[
+  J_k=\mu_kI+N_k,
+  \qquad
+  N_k^{q_k}=0,
+\]
+the binomial theorem gives
+\begin{equation}\label{eq:discrete-jordan-power-sep-14}
+  J_k^n
+  =\sum_{j=0}^{\min(n,q_k-1)}
+    \binom{n}{j}\mu_k^{n-j}N_k^j.
+\end{equation}
+The binomial coefficient grows polynomially in \(n\). It is dominated
+by \(\lvert\mu_k\rvert^n\) when \(\lvert\mu_k\rvert<1\), but produces
+growth on the unit circle when \(N_k\neq0\).
+
+\begin{theorem}[Stability criterion for a discrete linear system]
+  For the recurrence \eqref{eq:discrete-linear-evolution-sep-14}:
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item the zero solution is asymptotically stable if and only if
+      \[
+        \rho(G)=\max_{\mu\in\sigma(G)}\lvert\mu\rvert<1;
+      \]
+    \item the zero solution is stable if and only if
+      \(\rho(G)\leq1\) and every eigenvalue with
+      \(\lvert\mu\rvert=1\) is semisimple.
+  \end{enumerate}
+\end{theorem}
+
+For a Runge--Kutta method, the spectral mapping theorem applied to
+\eqref{eq:rk-matrix-amplification-sep-14} gives
+\[
+  \sigma\bigl(R(\tau A)\bigr)
+  =\bigl\{R(\tau\lambda):\lambda\in\sigma(A)\bigr\}.
+\]
+Therefore the numerical solution is asymptotically stable when
+\begin{equation}\label{eq:rk-eigenvalue-stability-sep-14}
+  \lvert R(\tau\lambda)\rvert<1
+  \qquad\text{for every }\lambda\in\sigma(A).
+\end{equation}
+This motivates the \emph{absolute stability region}
+\begin{equation}\label{eq:absolute-stability-region-sep-14}
+  \mathcal{S}=\{z\in\bb{C}:\lvert R(z)\rvert<1\}.
+\end{equation}
+For example, forward Euler has \(R(z)=1+z\). If \(\lambda<0\) is real,
+then \(\lvert1+\tau\lambda\rvert<1\) is equivalent to
+\[
+  0<\tau<\frac{2}{\lvert\lambda\rvert}.
+\]
+Thus even when the differential equation is asymptotically stable, the
+step size must place every scaled eigenvalue \(\tau\lambda\) inside the
+method's absolute stability region.

@@ -1,0 +1,261 @@
+\section{September 9, 2026}
+
+This lecture introduces extrapolation as a way to increase the order of
+an existing time-stepping method. We then begin the study of stability
+as a property of solutions of the differential equation itself.
+
+\subsection{Accuracy and computational cost}
+
+Consider a method of order \(p\) on the uniform grid
+\[
+  t_n=t_0+n\tau,
+  \qquad n=0,\ldots,N,
+  \qquad t_N=T,
+\]
+and let \(Y_\tau(T)=x_N\) denote the numerical approximation at the
+final time. Convergence of order \(p\) means that, for sufficiently
+small \(\tau\),
+\begin{equation}\label{eq:global-error-sep-09}
+  \bigl\lVert Y_\tau(T)-x(T)\bigr\rVert
+  \leq C(T)\tau^p.
+\end{equation}
+In particular, \(Y_\tau(T)\to x(T)\) as \(\tau\to0\). For a fixed step
+size, increasing the order generally decreases the error, provided that
+\(\tau\) is in the asymptotic regime in which
+\eqref{eq:global-error-sep-09} is valid.
+
+Suppose a tolerance \(\varepsilon>0\) is prescribed. Balancing the
+error estimate with the tolerance gives
+\[
+  C(T)\tau^p\approx\varepsilon,
+  \qquad
+  \tau\approx
+  \left(\frac{\varepsilon}{C(T)}\right)^{1/p}.
+\]
+Since \(N=(T-t_0)/\tau\), the resulting work, measured by the number of
+time steps, is approximately
+\begin{equation}\label{eq:cost-sep-09}
+  N\approx (T-t_0)
+  \left(\frac{C(T)}{\varepsilon}\right)^{1/p}.
+\end{equation}
+Thus a higher-order method has a more favorable dependence on the
+tolerance. Formula \eqref{eq:cost-sep-09} does not include the work per
+step or the size of the error constant, both of which also matter in
+practice.
+
+\subsection{Richardson extrapolation}
+
+Extrapolation requires more than an error bound. Assume the stronger
+asymptotic expansion
+\begin{equation}\label{eq:error-expansion-sep-09}
+  Y_\tau(T)
+  =x(T)+c_p(T)\tau^p+c_{p+1}(T)\tau^{p+1}
+   +c_{p+2}(T)\tau^{p+2}+\cdots.
+\end{equation}
+Rerunning the same method with half the step size gives
+\[
+  Y_{\tau/2}(T)
+  =x(T)+c_p(T)\frac{\tau^p}{2^p}
+   +c_{p+1}(T)\frac{\tau^{p+1}}{2^{p+1}}
+   +O(\tau^{p+2}).
+\]
+Multiplying this equation by \(2^p\) and subtracting
+\eqref{eq:error-expansion-sep-09} cancels the leading error term:
+\[
+  2^pY_{\tau/2}(T)-Y_\tau(T)
+  =(2^p-1)x(T)+O(\tau^{p+1}).
+\]
+Consequently, the \emph{Richardson extrapolate}
+\begin{equation}\label{eq:richardson-sep-09}
+  Y^{[1]}_\tau(T)
+  =\frac{2^pY_{\tau/2}(T)-Y_\tau(T)}{2^p-1}
+\end{equation}
+satisfies
+\[
+  Y^{[1]}_\tau(T)=x(T)+O(\tau^{p+1}).
+\]
+This gains one order. The underlying one-step method is unchanged; the
+additional accuracy comes from combining two complete runs.
+
+\subsubsection{Symmetric methods}
+
+For an autonomous problem, a one-step method is \emph{symmetric} if a
+step of length \(-\tau\) exactly reverses a step of length \(\tau\):
+\[
+  \Psi^{-\tau}=\bigl(\Psi^\tau\bigr)^{-1}.
+\]
+Symmetric methods have even order. Under the usual smoothness
+assumptions, their fixed-time global error expansion contains powers
+of one parity. If the method has order \(p\), the expansion takes the
+form
+\begin{equation}\label{eq:symmetric-expansion-sep-09}
+  Y_\tau(T)
+  =x(T)+d_p(T)\tau^p+d_{p+2}(T)\tau^{p+2}
+   +d_{p+4}(T)\tau^{p+4}+\cdots.
+\end{equation}
+Applying the same combination as in \eqref{eq:richardson-sep-09}
+cancels the \(\tau^p\) term, but now there is no
+\(\tau^{p+1}\) term. Hence
+\[
+  \frac{2^pY_{\tau/2}(T)-Y_\tau(T)}{2^p-1}
+  =x(T)+O(\tau^{p+2}),
+\]
+so one extrapolation raises the order by two.
+
+\subsection{Extrapolation from several step sizes}
+
+The preceding cancellation can be repeated using several numerical
+solutions. Choose distinct positive integers \(n_1,\ldots,n_m\), set
+\[
+  \tau_i=\frac{\bar\tau}{n_i},
+  \qquad i=1,\ldots,m,
+\]
+and compute \(Y_{\tau_i}(T)\) for every \(i\). Motivated by
+\eqref{eq:error-expansion-sep-09}, fit the generalized polynomial
+\begin{equation}\label{eq:extrapolation-polynomial-sep-09}
+  P(h)=a_0+\sum_{j=0}^{m-2}a_{p+j}h^{p+j}
+\end{equation}
+to these values:
+\begin{equation}\label{eq:extrapolation-interpolation-sep-09}
+  P(\tau_i)=Y_{\tau_i}(T),
+  \qquad i=1,\ldots,m.
+\end{equation}
+The unknowns \(a_0,a_p,\ldots,a_{p+m-2}\) are determined by the linear
+system
+\[
+  \begin{bmatrix}
+    1&\tau_1^p&\tau_1^{p+1}&\cdots&\tau_1^{p+m-2}\\
+    1&\tau_2^p&\tau_2^{p+1}&\cdots&\tau_2^{p+m-2}\\
+    \vdots&\vdots&\vdots&&\vdots\\
+    1&\tau_m^p&\tau_m^{p+1}&\cdots&\tau_m^{p+m-2}
+  \end{bmatrix}
+  \begin{bmatrix}
+    a_0\\a_p\\a_{p+1}\\\vdots\\a_{p+m-2}
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    Y_{\tau_1}(T)\\Y_{\tau_2}(T)\\\vdots\\Y_{\tau_m}(T)
+  \end{bmatrix}.
+\]
+For a vector-valued ODE, the same coefficient matrix is used for every
+component. Extrapolating to zero step size gives
+\begin{equation}\label{eq:general-extrapolate-sep-09}
+  \overline{x}(T)=P(0)=a_0.
+\end{equation}
+The first \(m-1\) error terms have been removed, so, under the assumed
+full expansion,
+\[
+  \overline{x}(T)=x(T)+O(\bar\tau^{p+m-1}).
+\]
+
+Equivalently, \(a_0\) is a linear combination of the computed values,
+\[
+  a_0=\sum_{i=1}^m\gamma_iY_{\tau_i}(T),
+\]
+where the weights are chosen so that
+\[
+  \sum_{i=1}^m\gamma_i=1,
+  \qquad
+  \sum_{i=1}^m\gamma_i\tau_i^{p+j}=0,
+  \quad j=0,\ldots,m-2.
+\]
+For \(m=2\), \(n_1=1\), and \(n_2=2\), these conditions recover
+\eqref{eq:richardson-sep-09}. For a symmetric error expansion, one
+instead uses the powers \(p,p+2,p+4,\ldots\) in
+\eqref{eq:extrapolation-polynomial-sep-09}.
+
+\begin{center}
+  \begin{tikzpicture}[x=1.35cm,y=1.05cm]
+    \draw[->] (0,0) -- (5.3,0) node[right] {$h$};
+    \draw[->] (0,0) -- (0,3.1) node[above] {$Y_h(T)$};
+    \draw[blue,thick,smooth]
+      plot coordinates {(0,1.05) (0.7,1.22) (1.4,1.48)
+        (2.2,1.78) (3.0,2.15) (4.0,2.7)};
+    \foreach \x/\y/\lab in {1.0/1.34/m,1.8/1.63/3,
+                              2.7/2.02/2,3.7/2.53/1} {
+      \fill[blue] (\x,\y) circle (1.7pt);
+      \draw (\x,0.08) -- (\x,-0.08) node[below] {$\tau_{\lab}$};
+    }
+    \fill[red] (0,1.05) circle (1.7pt)
+      node[left] {$P(0)\approx x(T)$};
+    \node[blue,above] at (3.6,2.55) {$P(h)$};
+  \end{tikzpicture}
+\end{center}
+
+\subsection{Stability of solutions}
+
+Return to the IVP
+\begin{equation}\label{eq:ivp-stability-sep-09}
+  x'(t)=f(t,x(t)),
+  \qquad x(t_0)=x_0,
+\end{equation}
+and write its solution as \(x(t;t_0,x_0)\) to display its dependence on
+the initial data.
+
+\begin{definition}[Stability of a solution]
+  The solution through \(x_0\) is \emph{stable} if, for every
+  \(\varepsilon>0\), there exists \(\delta>0\) such that
+  \[
+    \lVert x_0-y_0\rVert<\delta
+    \quad\Longrightarrow\quad
+    \bigl\lVert x(t;t_0,x_0)-x(t;t_0,y_0)\bigr\rVert<\varepsilon
+  \]
+  for every \(t\geq t_0\).
+\end{definition}
+
+The estimate from Gr\"onwall's inequality in
+\eqref{eq:gronwall-stability-aug-26} gives continuous dependence over
+every fixed finite interval. Stability is stronger: the same
+\(\delta\) must control the separation for all future times.
+
+\begin{definition}[Asymptotic stability]
+  A stable solution through \(x_0\) is \emph{asymptotically stable} if
+  all sufficiently close initial values \(y_0\) also satisfy
+  \[
+    \bigl\lVert x(t;t_0,x_0)-x(t;t_0,y_0)\bigr\rVert
+    \longrightarrow0
+    \qquad\text{as }t\to\infty.
+  \]
+\end{definition}
+
+For an autonomous equation \(x'=f(x)\), a point \(x_*\) satisfying
+\[
+  f(x_*)=0
+\]
+is an \emph{equilibrium}. The solution starting at the equilibrium is
+constant: if \(x_0=x_*\), then \(x(t;t_0,x_*)=x_*\) for all
+\(t\geq t_0\). Stability of this equilibrium is obtained from the
+preceding definitions by comparing this constant solution with
+solutions starting at nearby points.
+
+\begin{example}[Linear autonomous system]
+  Consider
+  \[
+    x'=Ax.
+  \]
+  The origin is an equilibrium, and
+  \[
+    x(t;t_0,x_0)=e^{(t-t_0)A}x_0.
+  \]
+  Thus the difference of two solutions is
+  \[
+    x(t;t_0,x_0)-x(t;t_0,y_0)
+    =e^{(t-t_0)A}(x_0-y_0).
+  \]
+  The system is stable precisely when \(e^{tA}\) remains bounded for
+  \(t\geq0\), and it is asymptotically stable precisely when
+  \(e^{tA}\to0\). In spectral terms, stability requires every
+  eigenvalue to have nonpositive real part and every eigenvalue on the
+  imaginary axis to be semisimple. Asymptotic stability holds exactly
+  when every eigenvalue has strictly negative real part.
+
+  In the scalar case \(x'=\lambda x\), the solution is
+  \(x(t)=e^{\lambda(t-t_0)}x_0\). Hence the equilibrium at the origin
+  is stable when \(\operatorname{Re}\lambda\leq0\), and it is
+  asymptotically stable when \(\operatorname{Re}\lambda<0\).
+\end{example}
+
+These notions describe the behavior of the exact differential
+equation. They are distinct from numerical absolute stability, which
+asks whether a time-stepping method reproduces the decay of a stable
+test equation.
