@@ -1,0 +1,191 @@
+\section{September 18, 2026}
+
+\subsection{Complements of subspaces}
+
+\begin{proposition}
+  Suppose that $V$ is finite-dimensional and that $U$ is a subspace of
+  $V$. Then there is a subspace $W$ of $V$ such that
+  \[
+    V=U\oplus W.
+  \]
+\end{proposition}
+
+\begin{proof}
+  Because $V$ is finite-dimensional, so is $U$. Let
+  $u_1,\ldots,u_m$ be a basis of $U$. This collection is linearly
+  independent in $V$, so the basis extension theorem gives a basis
+  \[
+    u_1,\ldots,u_m,w_1,\ldots,w_n
+  \]
+  of $V$. Let
+  \[
+    W=\operatorname{span}\{w_1,\ldots,w_n\}.
+  \]
+
+  Certainly $U+W\subseteq V$. Conversely, if $v\in V$, then there are
+  scalars $a_1,\ldots,a_m,b_1,\ldots,b_n$ such that
+  \[
+    v=\underbrace{a_1u_1+\cdots+a_mu_m}_{\in U}
+      +\underbrace{b_1w_1+\cdots+b_nw_n}_{\in W}.
+  \]
+  Hence $v\in U+W$, and therefore $V=U+W$.
+
+  It remains to show that $U\cap W=\{0\}$. Let $v\in U\cap W$. Then
+  \[
+    v=a_1u_1+\cdots+a_mu_m=b_1w_1+\cdots+b_nw_n
+  \]
+  for some scalars $a_i$ and $b_j$. Thus
+  \[
+    a_1u_1+\cdots+a_mu_m-b_1w_1-\cdots-b_nw_n=0.
+  \]
+  Because the combined collection is a basis of $V$, all the
+  coefficients are zero. In particular, $v=0$, so $U\cap W=\{0\}$.
+  Thus $V=U\oplus W$.
+\end{proof}
+
+\subsection{Dimension}
+
+\begin{proposition}
+  Any two bases of a finite-dimensional vector space have the same
+  cardinality.
+\end{proposition}
+
+\begin{proof}
+  Let $\mathcal B_1$ and $\mathcal B_2$ be bases of a finite-dimensional
+  vector space $V$. Because $\mathcal B_1$ is linearly independent and
+  $\mathcal B_2$ spans $V$, Proposition~
+  \ref{prop:independent-versus-spanning} gives
+  \[
+    \lvert\mathcal B_1\rvert\leq\lvert\mathcal B_2\rvert.
+  \]
+  Interchanging the roles of the two bases gives
+  \[
+    \lvert\mathcal B_2\rvert\leq\lvert\mathcal B_1\rvert.
+  \]
+  Therefore $\lvert\mathcal B_1\rvert=\lvert\mathcal B_2\rvert$.
+\end{proof}
+
+\begin{definition}[Dimension]
+  The \emph{dimension} of a finite-dimensional vector space $V$ is the
+  cardinality of any basis of $V$. It is denoted by $\dim V$.
+\end{definition}
+
+\begin{example}
+  The standard basis $\{e_1,\ldots,e_n\}$ of $\bb{F}^n$ has $n$
+  elements, so
+  \[
+    \dim\bb{F}^n=n.
+  \]
+\end{example}
+
+\begin{example}
+  The standard basis $\{1,x,\ldots,x^m\}$ of
+  $\mathcal P_m(\bb{F})$ has $m+1$ elements, so
+  \[
+    \dim\mathcal P_m(\bb{F})=m+1.
+  \]
+\end{example}
+
+\begin{example}
+  Let
+  \[
+    U=\left\{
+      \begin{bmatrix}x\\0\\y\end{bmatrix}:x,y\in\bb{F}
+    \right\}.
+  \]
+  Because
+  \[
+    U=\operatorname{span}\left\{
+      \begin{bmatrix}1\\0\\0\end{bmatrix},
+      \begin{bmatrix}0\\0\\1\end{bmatrix}
+    \right\}
+  \]
+  and the two displayed vectors are linearly independent, they form a
+  basis of $U$. Hence $\dim U=2$.
+\end{example}
+
+\begin{example}
+  As a vector space over $\bb{R}$, the space $\bb{R}^2$ has dimension
+  $2$. As a vector space over $\bb{C}$, the space $\bb{C}$ has dimension
+  $1$. Although $\bb{R}^2$ and $\bb{C}$ are often identified as sets,
+  the choice of scalar field is essential when determining dimension.
+\end{example}
+
+\subsection{Consequences of dimension}
+
+\begin{proposition}
+  If $V$ is finite-dimensional and $U$ is a subspace of $V$, then
+  \[
+    \dim U\leq\dim V.
+  \]
+\end{proposition}
+
+\begin{proof}
+  A basis of $U$ is linearly independent in $V$, while a basis of $V$
+  spans $V$. The result follows from Proposition~
+  \ref{prop:independent-versus-spanning}.
+\end{proof}
+
+\begin{proposition}\label{prop:independent-dim-is-basis}
+  Suppose that $V$ is finite-dimensional. Every linearly independent
+  collection of $\dim V$ vectors in $V$ is a basis of $V$.
+\end{proposition}
+
+\begin{proof}
+  Write $\dim V=n$, and suppose that $v_1,\ldots,v_n$ is linearly
+  independent in $V$. By the basis extension theorem, this collection
+  can be extended to a basis of $V$. Every basis of $V$ has exactly $n$
+  vectors, however, so no vectors need to be adjoined. Thus
+  $v_1,\ldots,v_n$ is already a basis of $V$.
+\end{proof}
+
+\begin{corollary}
+  Suppose that $V$ is finite-dimensional and that $U$ is a subspace of
+  $V$. If $\dim U=\dim V$, then $U=V$.
+\end{corollary}
+
+\begin{proof}
+  Let $u_1,\ldots,u_n$ be a basis of $U$. Then
+  $n=\dim U=\dim V$, and $u_1,\ldots,u_n$ is linearly independent in
+  $V$. By Proposition~\ref{prop:independent-dim-is-basis}, it is a basis
+  of $V$. Hence every vector in $V$ is a linear combination of vectors
+  in $U$, so $V\subseteq U$. The reverse inclusion holds because $U$ is
+  a subspace of $V$. Therefore $U=V$.
+\end{proof}
+
+\begin{example}
+  Let
+  \[
+    U=\{p\in\mathcal P_3(\bb{R}):p'(5)=0\}.
+  \]
+  We find a basis of $U$. Write
+  \[
+    p(x)=a_0+a_1x+a_2x^2+a_3x^3.
+  \]
+  Because
+  \[
+    p'(x)=a_1+2a_2x+3a_3x^2,
+  \]
+  the condition $p'(5)=0$ is equivalent to
+  \[
+    a_1+10a_2+75a_3=0,
+    \qquad\text{or equivalently}\qquad
+    a_1=-10a_2-75a_3.
+  \]
+  Therefore every $p\in U$ has the form
+  \begin{align*}
+    p(x)
+      &=a_0+(-10a_2-75a_3)x+a_2x^2+a_3x^3 \\
+      &=a_0+a_2(x^2-10x)+a_3(x^3-75x).
+  \end{align*}
+  Thus the collection
+  \[
+    \{1,x^2-10x,x^3-75x\}
+  \]
+  spans $U$. It is linearly independent because its members have
+  distinct degrees. Consequently,
+  \[
+    \boxed{\{1,x^2-10x,x^3-75x\}}
+  \]
+  is a basis of $U$, and $\dim U=3$.
+\end{example}
