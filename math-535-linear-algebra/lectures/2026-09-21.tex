@@ -1,0 +1,149 @@
+\section{September 21, 2026}
+
+\subsection{Spanning collections and dimension}
+
+\begin{proposition}\label{prop:spanning-dim-is-basis}
+  Suppose that $V$ is finite-dimensional. Every collection of
+  $\dim V$ vectors that spans $V$ is a basis of $V$.
+\end{proposition}
+
+\begin{proof}
+  Write $\dim V=n$, and suppose that $v_1,\ldots,v_n$ spans $V$.
+  This collection can be reduced to a basis by removing redundant
+  vectors. However, every basis of $V$ has exactly $n$ vectors, so no
+  vectors can be removed. Thus $v_1,\ldots,v_n$ is already a basis of
+  $V$.
+\end{proof}
+
+\subsection{Dimension of a sum of subspaces}
+
+\begin{proposition}\label{prop:dimension-of-sum}
+  If $V_1$ and $V_2$ are subspaces of a finite-dimensional vector space,
+  then
+  \[
+    \dim(V_1+V_2)=\dim V_1+\dim V_2-\dim(V_1\cap V_2).
+  \]
+\end{proposition}
+
+\begin{proof}
+  Let $v_1,\ldots,v_m$ be a basis of $V_1\cap V_2$, so that
+  $\dim(V_1\cap V_2)=m$. This collection is linearly independent in
+  $V_1$, so the basis extension theorem gives a basis
+  \[
+    v_1,\ldots,v_m,u_1,\ldots,u_j
+  \]
+  of $V_1$. Similarly, extend $v_1,\ldots,v_m$ to a basis
+  \[
+    v_1,\ldots,v_m,w_1,\ldots,w_k
+  \]
+  of $V_2$. Hence
+  \[
+    \dim V_1=m+j
+    \qquad\text{and}\qquad
+    \dim V_2=m+k.
+  \]
+  We will show that
+  \[
+    v_1,\ldots,v_m,u_1,\ldots,u_j,w_1,\ldots,w_k
+  \]
+  is a basis of $V_1+V_2$.
+
+  All the displayed vectors belong to $V_1+V_2$, so their span is
+  contained in $V_1+V_2$. Conversely, every vector in $V_1+V_2$ is a
+  sum of a vector in $V_1$ and a vector in $V_2$. Expressing each
+  summand in the corresponding basis shows that the combined
+  collection spans $V_1+V_2$.
+
+  To prove linear independence, suppose that
+  \begin{equation}\label{eq:dimension-sum-dependence}
+    a_1v_1+\cdots+a_mv_m
+    +b_1u_1+\cdots+b_ju_j
+    +c_1w_1+\cdots+c_kw_k=0.
+  \end{equation}
+  Rearranging gives
+  \[
+    c_1w_1+\cdots+c_kw_k
+    =-a_1v_1-\cdots-a_mv_m-b_1u_1-\cdots-b_ju_j.
+  \]
+  The right-hand side belongs to $V_1$, while the left-hand side
+  belongs to $V_2$. Therefore
+  \[
+    c_1w_1+\cdots+c_kw_k\in V_1\cap V_2.
+  \]
+  Since $v_1,\ldots,v_m$ is a basis of the intersection, there are
+  scalars $d_1,\ldots,d_m$ such that
+  \[
+    c_1w_1+\cdots+c_kw_k=d_1v_1+\cdots+d_mv_m.
+  \]
+  Thus
+  \[
+    c_1w_1+\cdots+c_kw_k-d_1v_1-\cdots-d_mv_m=0.
+  \]
+  The collection $v_1,\ldots,v_m,w_1,\ldots,w_k$ is a basis of $V_2$
+  and hence linearly independent. Consequently, all the $c$'s and
+  $d$'s are zero. Equation~\eqref{eq:dimension-sum-dependence} now
+  becomes
+  \[
+    a_1v_1+\cdots+a_mv_m+b_1u_1+\cdots+b_ju_j=0.
+  \]
+  Because $v_1,\ldots,v_m,u_1,\ldots,u_j$ is a basis of $V_1$, all
+  the $a$'s and $b$'s are also zero. This proves linear independence.
+
+  The combined collection is therefore a basis of $V_1+V_2$, and
+  \begin{align*}
+    \dim(V_1+V_2)
+      &=m+j+k \\
+      &=(m+j)+(m+k)-m \\
+      &=\dim V_1+\dim V_2-\dim(V_1\cap V_2).
+  \end{align*}
+\end{proof}
+
+\subsection{Linear maps on finite-dimensional spaces}
+
+\begin{theorem}[Fundamental theorem of linear maps]
+  \label{thm:fundamental-linear-maps}
+  Suppose that $V$ is finite-dimensional and that
+  $T\in\mathcal L(V,W)$. Then $\operatorname{im}T$ is
+  finite-dimensional and
+  \[
+    \dim V=\dim\ker T+\dim\operatorname{im}T.
+  \]
+\end{theorem}
+
+Recall that
+\[
+  \ker T=\{v\in V:T(v)=0\}
+  \qquad\text{and}\qquad
+  \operatorname{im}T=\{T(v):v\in V\}.
+\]
+Before proving the theorem, we connect the kernel and image with
+injectivity and surjectivity, beginning with injectivity.
+
+\begin{proposition}\label{prop:injective-kernel}
+  Let $T\in\mathcal L(V,W)$. Then $T$ is injective if and only if
+  $\ker T=\{0\}$.
+\end{proposition}
+
+\begin{proof}
+  First note that every linear map sends zero to zero, since
+  \[
+    T(0)=T(0+0)=T(0)+T(0)
+  \]
+  implies $T(0)=0$. This does not require injectivity. In particular,
+  $\{0\}\subseteq\ker T$.
+
+  Suppose that $T$ is injective. If $v\in\ker T$, then
+  \[
+    T(v)=0=T(0).
+  \]
+  Injectivity gives $v=0$, so $\ker T\subseteq\{0\}$. Therefore
+  $\ker T=\{0\}$.
+
+  Conversely, suppose that $\ker T=\{0\}$. Let $v_1,v_2\in V$ satisfy
+  $T(v_1)=T(v_2)$. By linearity,
+  \[
+    T(v_1-v_2)=T(v_1)-T(v_2)=0.
+  \]
+  Hence $v_1-v_2\in\ker T=\{0\}$, so $v_1=v_2$. Thus $T$ is
+  injective.
+\end{proof}
