@@ -1,0 +1,472 @@
+\section{September 24, 2026}
+
+We extend integration to complex-valued functions, explain why
+integrable functions are identified almost everywhere, and introduce
+the dominated convergence theorem. Throughout, $(X,\mathcal M,\mu)$ is
+a measure space.
+
+\subsection{Complex-valued integrable functions}
+
+\begin{definition}
+  A measurable function $f\colon X\to\bb C$ is \emph{integrable} if
+  $\operatorname{Re}f$ and $\operatorname{Im}f$ are integrable. Define
+  \[
+    \int_X f\,d\mu
+      =\int_X\operatorname{Re}f\,d\mu
+       +i\int_X\operatorname{Im}f\,d\mu.
+  \]
+  Denote the space of these functions by
+  $\mathcal L^1(X,\mu;\bb C)$, or simply $\mathcal L^1(X,\mu)$.
+\end{definition}
+
+The inequalities
+\[
+  |\operatorname{Re}f|,\ |\operatorname{Im}f|\leq|f|
+  \leq|\operatorname{Re}f|+|\operatorname{Im}f|
+\]
+show that, just as for real-valued functions,
+\[
+  f\in\mathcal L^1(X,\mu)
+  \quad\Longleftrightarrow\quad\int_X|f|\,d\mu<\infty.
+\]
+The space $\mathcal L^1(X,\mu)$ is a complex vector space, and its
+integral is complex linear. To see explicitly why complex scalars are
+allowed, write $f=u+iv$ and $c=a+ib$. Then
+\[
+  cf=(au-bv)+i(bu+av),
+\]
+and real linearity applied to both components gives
+$\int cf\,d\mu=c\int f\,d\mu$. Additivity follows componentwise.
+Also, $|af+bg|\leq|a||f|+|b||g|$ proves closure under complex linear
+combinations.
+
+\begin{example}[Lebesgue and Riemann integrability]
+  \leavevmode
+  \begin{enumerate}[label=(\roman*)]
+    \item The characteristic functions $\mathbf 1_{\bb Q}$ and
+      $\mathbf 1_C$ belong to $\mathcal L^1(\bb R,m)$ and have integral
+      zero, where $C$ is the Cantor set. On $[0,1]$,
+      $\mathbf 1_{\bb Q}$ is not Riemann integrable because every
+      lower sum is zero and every upper sum is one.
+    \item Define $f(x)=\sin x/x$ for $x\neq0$ and $f(0)=1$.
+      Its improper Riemann integral over $\bb R$ converges, but
+      $f\notin\mathcal L^1(\bb R,m)$. For convergence of the positive
+      tail, integration by parts gives, for $B>A\geq1$,
+      \[
+        \int_A^B\frac{\sin x}{x}\,dx
+          =\left[-\frac{\cos x}{x}\right]_A^B
+             -\int_A^B\frac{\cos x}{x^2}\,dx.
+      \]
+      The boundary term has a limit and the remaining integral
+      converges absolutely. The negative tail is the same by symmetry.
+      On the other hand, for every integer $k\geq1$,
+      \[
+        \int_{k\pi}^{(k+1)\pi}\frac{|\sin x|}{x}\,dx
+          \geq\frac1{(k+1)\pi}
+            \int_{k\pi}^{(k+1)\pi}|\sin x|\,dx
+          =\frac2{(k+1)\pi}.
+      \]
+      Summing and using divergence of the harmonic series proves
+      $\int_{\bb R}|f|\,dm=+\infty$. In fact the positive and negative
+      parts both have infinite integral, so the signed Lebesgue
+      integral is undefined.
+    \item The function $x^{-1/2}$ is Lebesgue integrable on $(0,1)$,
+      with
+      \[
+        \int_{(0,1)}x^{-1/2}\,dm
+          =\lim_{n\to\infty}\int_{1/n}^1x^{-1/2}\,dx=2.
+      \]
+      Here monotone convergence justifies the limit of the truncated
+      integrals. The function is unbounded near zero, so it has no
+      proper Riemann integral on $[0,1]$, although its improper
+      Riemann integral converges.
+    \item The Gaussian $e^{-x^2}$ is Lebesgue integrable on $\bb R$.
+      For $|x|\geq1$, $e^{-x^2}\leq e^{-|x|}$, while on $[-1,1]$
+      it is bounded by $1$. These bounds give a finite integral.
+      It is also improperly Riemann integrable.
+  \end{enumerate}
+  In the elementary computations above, we use agreement of the
+  Riemann and Lebesgue integrals for continuous functions on compact
+  intervals, which follows by squeezing between their lower and
+  upper step functions.
+\end{example}
+
+\Needspace{7\baselineskip}
+\subsection{The integral triangle inequality}
+
+\begin{proposition}[Triangle inequality and its equality case]
+  \label{prop:integral-triangle-sep-24}
+  If $f\in\mathcal L^1(X,\mu)$, then
+  \[
+    \left|\int_X f\,d\mu\right|\leq\int_X|f|\,d\mu.
+  \]
+  Equality holds if and only if there is a constant $c\in\bb C$ with
+  $|c|=1$ such that $f=c|f|$ a.e.
+\end{proposition}
+
+\begin{proof}
+  Put $z=\int_X f\,d\mu$. If $z=0$, the inequality is immediate.
+  In this case equality holds precisely when $\int|f|\,d\mu=0$,
+  or equivalently $f=0$ a.e. by Lemma~\ref{lem:zero-integral-sep-22}.
+  Such a function satisfies $f=c|f|$ a.e. for any $|c|=1$.
+
+  Suppose now that $z\neq0$, and choose
+  $\alpha=\overline z/|z|$. Then $|\alpha|=1$ and
+  $\alpha z=|z|$. Complex linearity and the pointwise inequality
+  $\operatorname{Re}(\alpha f)\leq|\alpha f|=|f|$ give
+  \[
+    |z|=\operatorname{Re}\left(\alpha\int_X f\,d\mu\right)
+       =\int_X\operatorname{Re}(\alpha f)\,d\mu
+       \leq\int_X|f|\,d\mu.
+  \]
+  Equality holds precisely when the nonnegative integrable function
+  $|f|-\operatorname{Re}(\alpha f)$ has integral zero, hence when
+  $\operatorname{Re}(\alpha f)=|f|$ a.e. A complex number $w$ satisfies
+  $\operatorname{Re}w=|w|$ exactly when it is a nonnegative real
+  number. Thus equality forces $\alpha f=|f|$ a.e., or
+  $f=\overline\alpha|f|$ a.e.
+
+  Conversely, if $f=c|f|$ a.e. for some $|c|=1$, then
+  $\int f=c\int|f|$, so taking absolute values gives equality.
+  Here invariance of complex integrals under a.e. equality follows
+  by applying Corollary~\ref{cor:ae-integrals-sep-22} to the positive
+  and negative parts of their real and imaginary components.
+\end{proof}
+
+For real-valued functions, equality means that $f\geq0$ a.e. or
+$f\leq0$ a.e. For complex-valued functions, all nonzero values must
+have the same phase, outside a null set.
+
+\begin{example}
+  Take $X=\{0,1\}$ with counting measure, and set $f(0)=a$, $f(1)=b$.
+  The integral triangle inequality becomes
+  \[
+    |a+b|\leq|a|+|b|.
+  \]
+  Its equality case says that the two nonzero vectors point in the
+  same direction.
+\end{example}
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[>=Latex,font=\small,scale=0.95]
+    \begin{scope}
+      \draw[->,gray] (-0.2,0)--(4.1,0);
+      \draw[->,gray] (0,-0.2)--(0,2.5);
+      \draw[->,very thick,blue!75!black] (0,0)--(2.5,0.5)
+        node[midway,below] {$a$};
+      \draw[->,very thick,orange!80!black] (2.5,0.5)--(3,2)
+        node[midway,right] {$b$};
+      \draw[->,thick] (0,0)--(3,2) node[midway,above left] {$a+b$};
+      \node at (2,-0.65) {$|a+b|<|a|+|b|$};
+    \end{scope}
+    \begin{scope}[shift={(6,0)}]
+      \draw[->,gray] (-0.2,0)--(4.1,0);
+      \draw[->,gray] (0,-0.2)--(0,2.5);
+      \draw[->,very thick,blue!75!black] (0,0)--(2,1)
+        node[midway,above left] {$a$};
+      \draw[->,very thick,orange!80!black] (2,1)--(3.5,1.75)
+        node[midway,above left] {$b$};
+      \node at (2,-0.65) {$|a+b|=|a|+|b|$};
+    \end{scope}
+  \end{tikzpicture}
+  \caption{Different complex phases cause cancellation. Equality in
+    the integral triangle inequality requires a common phase almost
+    everywhere, as in the aligned vectors on the right.}
+  \label{fig:complex-triangle-sep-24}
+\end{figure}
+
+\subsection{What integrals determine about a function}
+
+A single integral cannot determine a function, since positive and
+negative contributions can cancel. Knowing the integral over every
+measurable set determines an integrable function up to a.e. equality.
+
+\begin{proposition}\label{prop:ae-characterization-sep-24}
+  For $f,g\in\mathcal L^1(X,\mu)$, the following are equivalent:
+  \begin{enumerate}[label=(\roman*)]
+    \item $f=g$ a.e.;
+    \item $\displaystyle\int_E f\,d\mu=\int_E g\,d\mu$ for every
+      $E\in\mathcal M$;
+    \item $\displaystyle\int_X|f-g|\,d\mu=0$.
+  \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+  The equivalence of (i) and (iii) is
+  Lemma~\ref{lem:zero-integral-sep-22} applied to $|f-g|$. If (iii)
+  holds, then for every $E\in\mathcal M$,
+  \[
+    \left|\int_E f\,d\mu-\int_E g\,d\mu\right|
+      \leq\int_E|f-g|\,d\mu
+      \leq\int_X|f-g|\,d\mu=0,
+  \]
+  proving (ii).
+
+  Finally, suppose (ii) holds, and write $f-g=u+iv$. Taking real and
+  imaginary parts shows that $\int_E u=\int_E v=0$ for every $E$.
+  For $A_n=\{u>1/n\}$,
+  \[
+    0=\int_{A_n}u\,d\mu\geq\frac1n\mu(A_n),
+  \]
+  so $\mu(A_n)=0$. Taking the union over $n$ proves
+  $\mu(\{u>0\})=0$. Apply the same argument to $-u$, $v$, and $-v$.
+  Thus $u=v=0$ a.e., giving (i).
+\end{proof}
+
+\begin{remark}[Measurability after a null modification]
+  A measurable modification on a null set leaves every integral
+  unchanged. If the measure space is complete, arbitrary changes on
+  a measurable null set preserve measurability. Without completeness,
+  an arbitrary change need not be measurable; one can instead use a
+  measurable extension, such as assigning zero on the exceptional
+  set, or work with the completion of the measure.
+\end{remark}
+
+\subsection{The space \texorpdfstring{$L^1$}{L1}}
+
+If $E\in\mathcal M$, $\mu(X\setminus E)=0$, and $f\colon E\to\bb C$
+is measurable for the restricted $\sigma$-algebra, define its extension
+\[
+  \widetilde f(x)=
+  \begin{cases}
+    f(x),&x\in E,\\
+    0,&x\notin E.
+  \end{cases}
+\]
+This extension is measurable. Define integrability and the integral of
+$f$ using $\widetilde f$. Any other measurable extension gives the
+same integral, by Proposition~\ref{prop:ae-characterization-sep-24}.
+Thus a function need only be defined on a measurable set of full
+measure. Similarly, an extended-real-valued measurable function that
+is finite a.e. can be changed to zero where it is infinite. It is
+integrable precisely when the integral of its absolute value is finite.
+
+\begin{definition}
+  For $f,g\in\mathcal L^1(X,\mu)$, write $f\sim g$ if $f=g$ a.e.
+  Define
+  \[
+    L^1(X,\mu)=\mathcal L^1(X,\mu)/{\sim}.
+  \]
+  An element $[f]\in L^1(X,\mu)$ is an equivalence class of integrable
+  functions. Equivalently, one can allow representatives defined only
+  on measurable sets of full measure, comparing them on their common
+  domain. Set
+  \[
+    \int_X[f]\,d\mu:=\int_X f\,d\mu.
+  \]
+  This is well defined by Proposition~\ref{prop:ae-characterization-sep-24}.
+\end{definition}
+
+The relation $\sim$ is transitive because a finite union of null sets
+is null; reflexivity and symmetry are immediate. Vector operations
+$[f]+[g]=[f+g]$ and $c[f]=[cf]$ are independent of representatives for
+the same reason. We usually write $f\in L^1$ instead of $[f]\in L^1$,
+with the equivalence class understood.
+
+\begin{example}[Point evaluation is not generally well defined]
+  For Lebesgue measure,
+  \[
+    [\mathbf 1_{\bb Q}]=[0]\quad\text{in }L^1(\bb R,m),
+  \]
+  although $\mathbf 1_{\bb Q}(0)=1$ and the zero function takes value
+  zero there. Thus an $L^1(\bb R,m)$ element has no intrinsic value
+  at an individual point. This depends on the measure: with counting
+  measure there are no nonempty null sets, so a.e. equality is
+  pointwise equality.
+\end{example}
+
+\begin{proposition}[Completion does not change the quotient space]
+  If $(X,\overline{\mathcal M},\overline\mu)$ is the completion of
+  $(X,\mathcal M,\mu)$, then the natural map
+  \[
+    L^1(X,\mu)\longrightarrow L^1(X,\overline\mu),
+    \qquad [f]\longmapsto[f],
+  \]
+  is a bijection preserving integrals and integrals of absolute values.
+\end{proposition}
+
+\begin{proof}
+  An $\mathcal M$-measurable nonnegative function has the same integral
+  for $\mu$ and $\overline\mu$: approximate it increasingly by
+  $\mathcal M$-simple functions and apply monotone convergence to
+  both measures. The corresponding assertion for integrable
+  functions follows componentwise. Also, an $\mathcal M$-measurable
+  set is $\overline\mu$-null exactly when it is $\mu$-null, proving
+  injectivity of the displayed map.
+
+  For surjectivity, let $f$ be a complex-valued
+  $\overline{\mathcal M}$-measurable integrable function. Choose
+  $\overline{\mathcal M}$-simple functions $\phi_n\to f$ pointwise.
+  By the description of the completion, each measurable set appearing
+  in each $\phi_n$ differs from an $\mathcal M$-measurable set by a
+  subset of an $\mathcal M$-measurable null set. Replace those sets to
+  obtain $\mathcal M$-simple functions $\psi_n$ agreeing with $\phi_n$
+  outside such null sets. There is one $N\in\mathcal M$, $\mu(N)=0$,
+  containing all these exceptions, since only countably many sets
+  were used. The functions $\psi_n\mathbf 1_{X\setminus N}$ converge
+  everywhere: to $f$ outside $N$ and to zero on $N$. Their limit $g$
+  is $\mathcal M$-measurable and equals $f$ $\overline\mu$-a.e.
+  Thus $g$ is integrable and represents the same class as $f$.
+\end{proof}
+
+\begin{remark}
+  The spaces of actual measurable functions can differ before taking
+  the quotient. For example, a non-Borel subset $A$ of the Cantor set
+  is Lebesgue measurable and null, so $\mathbf 1_A$ is Lebesgue
+  measurable but not Borel measurable. Such subsets exist because
+  the Cantor set has continuum cardinality, whereas there are only
+  continuum many Borel sets. Nevertheless $\mathbf 1_A$ represents
+  the zero class in $L^1$.
+\end{remark}
+
+\begin{proposition}[The metric on \texorpdfstring{$L^1$}{L1}]
+  \label{prop:l1-metric-sep-24}
+  The formula
+  \[
+    d([f],[g])=\int_X|f-g|\,d\mu
+  \]
+  defines a metric on $L^1(X,\mu)$. It is induced by the norm
+  \[
+    \|[f]\|_1=\int_X|f|\,d\mu.
+  \]
+\end{proposition}
+
+\begin{proof}
+  Replacing either representative changes $|f-g|$ only on a null set,
+  so $d$ is well defined. It is finite because
+  $|f-g|\leq|f|+|g|$, and it is nonnegative and symmetric. Moreover,
+  \[
+    d([f],[g])=0\quad\Longleftrightarrow\quad f=g\text{ a.e.}
+      \quad\Longleftrightarrow\quad[f]=[g].
+  \]
+  The pointwise inequality $|f-h|\leq|f-g|+|g-h|$ gives
+  \[
+    d([f],[h])\leq d([f],[g])+d([g],[h]).
+  \]
+  Finally, $\|c[f]\|_1=|c|\|[f]\|_1$, and the remaining norm axioms
+  follow from the same arguments.
+\end{proof}
+
+On actual functions, the same formula is only a pseudometric: distinct
+functions can have distance zero. Passing to equivalence classes is
+exactly what makes the separation axiom valid.
+
+\FloatBarrier
+
+\subsection{The dominated convergence theorem}
+
+Monotone convergence requires an increasing nonnegative sequence.
+Fatou's lemma removes monotonicity but gives only one inequality.
+An integrable bound permits passage to the limit even for complex
+functions and gives convergence in the $L^1$ metric.
+
+\begin{theorem}[Dominated convergence theorem]
+  \label{thm:dct-sep-24}
+  Let $f_n\colon X\to\bb C$ be measurable, and suppose $f_n\to f$
+  a.e., where $f$ is measurable. Suppose there is a nonnegative
+  $g\in\mathcal L^1(X,\mu)$ such that $|f_n|\leq g$ a.e. for every
+  $n$. Then $f_n,f\in\mathcal L^1(X,\mu)$ and
+  \[
+    \lim_{n\to\infty}\int_X|f_n-f|\,d\mu=0.
+  \]
+  Consequently,
+  \[
+    \lim_{n\to\infty}\int_X f_n\,d\mu=\int_X f\,d\mu.
+  \]
+\end{theorem}
+
+\begin{proof}
+  Take a common measurable null set outside which convergence and
+  all the bounds hold, and redefine the functions to be zero there.
+  This does not change their integrals. Thus we may assume
+  $f_n\to f$ and $|f_n|\leq g$ everywhere. Taking limits gives
+  $|f|\leq g$, so $f$ and all $f_n$ are integrable.
+
+  Put $h_n=|f_n-f|$. Then $h_n\to0$ and $0\leq h_n\leq2g$.
+  Apply Fatou's lemma to the nonnegative functions $2g-h_n$:
+  \begin{align*}
+    2\int_X g\,d\mu
+      &=\int_X\liminf_n(2g-h_n)\,d\mu\\
+      &\leq\liminf_n\int_X(2g-h_n)\,d\mu\\
+      &=2\int_X g\,d\mu-\limsup_n\int_X h_n\,d\mu.
+  \end{align*}
+  All integrals here are finite, and
+  $0\leq\int h_n\leq2\int g$. Subtracting the finite quantity
+  $2\int g$ yields $\limsup_n\int h_n\leq0$. Nonnegativity now
+  implies $\int h_n\to0$. Finally,
+  \[
+    \left|\int_X f_n\,d\mu-\int_X f\,d\mu\right|
+      \leq\int_X|f_n-f|\,d\mu\longrightarrow0.
+  \]
+\end{proof}
+
+\begin{remark}
+  If the pointwise limit is initially defined only on a measurable
+  set of full measure, extend it by zero on the complement. It is
+  then measurable as a pointwise limit of the similarly modified
+  $f_n$. Thus the theorem also applies naturally to a.e. defined
+  representatives of $L^1$ elements.
+\end{remark}
+
+\begin{example}[Why the dominating function must be integrable]
+  \label{ex:dominating-envelope-sep-24}
+  The smallest pointwise nonnegative bound for a sequence is
+  $g_0=\sup_n|f_n|$. Consider the following sequences on $\bb R$.
+  \begin{enumerate}[label=(\roman*)]
+    \item For $f_n=\mathbf 1_{(n,n+1]}$, $n\geq1$, we have
+      $f_n\to0$ pointwise and $\int f_n\,dm=1$. But
+      \[
+        g_0=\mathbf 1_{(1,+\infty)},\qquad\int g_0\,dm=+\infty.
+      \]
+      Thus there is no integrable dominating function.
+    \item Let $f_n=n^{-1}\mathbf 1_{(0,n]}$. Then
+      $\sup_x|f_n(x)|=1/n\to0$, so the convergence to zero is even
+      uniform, while $\int f_n\,dm=1$ for every $n$. Here
+      \[
+        g_0(x)=
+        \begin{cases}
+          0,&x\leq0,\\
+          1/k,&k-1<x\leq k,\quad k\in\bb N.
+        \end{cases}
+      \]
+      Indeed, for $k-1<x\leq k$, the nonzero terms are those with
+      $n\geq k$, and their largest value is $1/k$. Therefore
+      \[
+        \int_{\bb R}g_0\,dm=\sum_{k=1}^{\infty}\frac1k=+\infty.
+      \]
+      Uniform convergence on a space of infinite measure does not
+      by itself imply convergence of integrals.
+  \end{enumerate}
+  The same obstruction holds for a.e. domination: after taking the
+  union of countably many exceptional null sets, any common bound
+  dominates $g_0$ a.e., and hence also has infinite integral.
+\end{example}
+
+\begin{figure}[!htbp]
+  \centering
+  \begin{tikzpicture}[x=1.3cm,y=2.6cm,>=Latex,font=\small]
+    \foreach \k in {1,...,6} {
+      \fill[blue!12] (\k-1,0) rectangle (\k,1/\k);
+      \draw[blue!75!black,very thick] (\k-1,1/\k)--(\k,1/\k);
+      \draw[blue!40,dotted] (\k,0)--(\k,1/\k);
+    }
+    \draw[->] (-0.1,0)--(6.65,0) node[right] {$x$};
+    \draw[->] (0,-0.04)--(0,1.2) node[above] {value};
+    \draw[orange!85!black,thick,dashed] (0,0.333333)--(3,0.333333)
+      --(3,0) node[below=15pt] {$f_3=\frac13\mathbf 1_{(0,3]}$};
+    \foreach \k in {1,...,6} {
+      \draw (\k,0.015)--(\k,-0.015) node[below] {$\k$};
+    }
+    \node[left] at (0,1) {$1$};
+    \node[blue!75!black,right] at (1.1,0.92) {$g_0=\sup_n f_n$};
+    \node[blue!75!black] at (4.5,0.75)
+      {$\displaystyle\int g_0\,dm=\sum_{k=1}^{\infty}\frac1k=+\infty$};
+  \end{tikzpicture}
+  \caption{The envelope of $f_n=n^{-1}\mathbf 1_{(0,n]}$ has a
+    divergent harmonic tail. Every $f_n$ is integrable, but no single
+    integrable function dominates the sequence.}
+  \label{fig:dominating-envelope-sep-24}
+\end{figure}
+
+\FloatBarrier

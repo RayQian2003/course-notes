@@ -1,0 +1,401 @@
+\section{September 22, 2026}
+
+Throughout, $(X,\mathcal M,\mu)$ is a measure space, and
+\[
+  L^+=\{f\colon X\to[0,+\infty]:f\text{ is measurable}\}.
+\]
+We continue to use $\mathbf 1_E$ for the characteristic function of a
+measurable set $E$ and the convention $0\cdot\infty=0$.
+
+\subsection{Nonnegative integrals and infinite values}
+
+Recall that, for a nonnegative simple function in standard form,
+\[
+  \phi=\sum_{j=1}^N a_j\mathbf 1_{E_j},
+  \qquad
+  \int_X\phi\,d\mu=\sum_{j=1}^N a_j\mu(E_j).
+\]
+Moreover, $A\mapsto\int_A\phi\,d\mu$ is a measure. For $f\in L^+$,
+\[
+  \int_X f\,d\mu
+  =\sup\left\{\int_X\phi\,d\mu:
+    \phi\text{ is simple},\ 0\leq\phi\leq f\right\}.
+\]
+In particular, $f\leq g$ implies $\int_X f\,d\mu\leq\int_X g\,d\mu$:
+every simple function admissible for $f$ is also admissible for $g$.
+For $c\geq0$, the same definition gives
+$\int_X cf\,d\mu=c\int_X f\,d\mu$. For $c>0$, use the correspondence
+$\phi\mapsto c\phi$ between the two classes of simple functions; the
+case $c=0$ follows from our convention.
+
+\begin{example}[Infinite values and integrals]
+  Let $m$ be Lebesgue measure on $\bb R$, and let $C$ be the
+  middle-thirds Cantor set.
+  \begin{enumerate}[label=(\roman*)]
+    \item The function $f=+\infty\,\mathbf 1_C$ has integral zero.
+      Indeed, if $0\leq\phi\leq f$ is simple, all its positive level
+      sets are contained in the null set $C$, so $\int\phi\,dm=0$.
+    \item For $f=+\infty\,\mathbf 1_{[0,1]}$, the simple function
+      $N\mathbf 1_{[0,1]}$ lies below $f$ for every $N\in\bb N$.
+      Consequently $\int f\,dm\geq N$ for every $N$, so
+      $\int f\,dm=+\infty$.
+    \item Define $f(x)=x^{-2}$ for $0<|x|\leq1$, set $f(0)=+\infty$,
+      and set $f(x)=0$ for $|x|>1$. For $0<a<1$,
+      \[
+        f\geq a^{-2}\mathbf 1_{(0,a)},
+        \qquad \int_{\bb R}f\,dm\geq a^{-1}.
+      \]
+      Thus $\int f\,dm=+\infty$, even though $f$ is finite almost
+      everywhere. The divergence comes from its values near zero,
+      not merely from its value at zero.
+    \item With the same $f$ but with Dirac measure $\delta_0$,
+      \[
+        \int_{\bb R}f\,d\delta_0=f(0)=+\infty.
+      \]
+      Whether a single point contributes to an integral depends on
+      the measure.
+  \end{enumerate}
+\end{example}
+
+\subsection{The monotone convergence theorem}
+
+\begin{theorem}[Monotone convergence theorem]
+  \label{thm:mct-sep-22}
+  Suppose $f_n\in L^+$ and $f_n\uparrow f$ pointwise. Then $f\in L^+$
+  and
+  \[
+    \int_X f\,d\mu=\lim_{n\to\infty}\int_X f_n\,d\mu.
+  \]
+  Both sides are allowed to be $+\infty$.
+\end{theorem}
+
+\begin{proof}
+  Measurability of $f$ follows from
+  Proposition~\ref{prop:measurable-sequential-operations-sep-17}.
+  By monotonicity, the sequence of integrals is increasing and
+  \[
+    A:=\lim_{n\to\infty}\int_X f_n\,d\mu\leq\int_X f\,d\mu.
+  \]
+  To prove the reverse inequality, fix a simple function
+  $0\leq\phi\leq f$ and a number $0<\alpha<1$. Set
+  \[
+    E_n=\{x\in X:f_n(x)\geq\alpha\phi(x)\}.
+  \]
+  These sets are measurable: on each level set $\{\phi=a_j\}$, the
+  defining condition is the measurable inequality
+  $f_n\geq\alpha a_j$. Since $f_n$ increases, $E_n\subseteq E_{n+1}$.
+  In fact $E_n\uparrow X$. If $\phi(x)=0$, then $x\in E_n$ for every
+  $n$. If $\phi(x)>0$, then
+  \[
+    \lim_n f_n(x)=f(x)\geq\phi(x)>\alpha\phi(x),
+  \]
+  so $x\in E_n$ for all sufficiently large $n$.
+
+  Now $\alpha\phi\mathbf 1_{E_n}\leq f_n$, and therefore
+  \[
+    \int_X f_n\,d\mu\geq\alpha\int_{E_n}\phi\,d\mu.
+  \]
+  Apply continuity from below to the measure
+  $\nu(E)=\int_E\phi\,d\mu$, established in
+  Proposition~\ref{prop:simple-integral-properties-sep-17}. This gives
+  \[
+    A\geq\alpha\lim_n\nu(E_n)
+      =\alpha\nu(X)=\alpha\int_X\phi\,d\mu.
+  \]
+  If $\int\phi\,d\mu=+\infty$, this already forces $A=+\infty$.
+  Otherwise, let $\alpha\uparrow1$ to obtain $A\geq\int\phi\,d\mu$.
+  Taking the supremum over all such $\phi$ proves
+  $A\geq\int f\,d\mu$.
+\end{proof}
+
+\begin{remark}
+  The factor $\alpha<1$ is essential in this proof: $f_n(x)$ can
+  approach $\phi(x)=f(x)$ from below without ever reaching it. It
+  creates the strict gap needed to ensure $\bigcup_n E_n=X$.
+\end{remark}
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[x=1.55cm,y=1.05cm,>=Latex]
+    \fill[blue!8] (0,0) -- plot[domain=0:5,samples=60]
+      (\x,{0.55+0.8*sin(36*\x)}) -- (5,0) -- cycle;
+    \draw[->] (-0.1,0)--(5.5,0) node[right] {$x$};
+    \draw[->] (0,-0.1)--(0,3.25) node[above] {value};
+    \draw[blue!45!black,thick,domain=0:5,samples=60]
+      plot (\x,{0.55+0.8*sin(36*\x)});
+    \draw[blue!65!black,thick,domain=0:5,samples=60]
+      plot (\x,{1.1+0.8*sin(36*\x)});
+    \draw[blue!85!black,thick,domain=0:5,samples=60]
+      plot (\x,{1.65+0.8*sin(36*\x)});
+    \draw[black,very thick,domain=0:5,samples=60]
+      plot (\x,{2.2+0.8*sin(36*\x)});
+    \node[right] at (5,0.55) {$f_1$};
+    \node[right] at (5,1.1) {$f_2$};
+    \node[right] at (5,1.65) {$f_3$};
+    \node[right] at (5,2.2) {$f$};
+    \draw[->,red!70!black,thick] (2.5,1.5)--(2.5,2.92);
+  \end{tikzpicture}
+  \caption{For an increasing sequence of nonnegative functions, the
+    regions below the graphs increase to the region below the limit.
+    The monotone convergence theorem makes this area intuition valid
+    on an arbitrary measure space.}
+  \label{fig:mct-sep-22}
+\end{figure}
+
+\begin{corollary}[Computing with simple approximations]
+  If $0\leq\phi_n\uparrow f$ are simple, then
+  \[
+    \int_X f\,d\mu=\lim_n\int_X\phi_n\,d\mu.
+  \]
+  In particular, the approximations constructed in
+  Theorem~\ref*{thm:simple-approximation-sep-17} compute the integral.
+\end{corollary}
+
+\begin{proposition}[Integrating sums of nonnegative functions]
+  \label{prop:nonnegative-series-sep-22}
+  If $f_n\in L^+$, then
+  \[
+    \int_X\left(\sum_{n=1}^{\infty}f_n\right)\,d\mu
+      =\sum_{n=1}^{\infty}\int_X f_n\,d\mu.
+  \]
+  The analogous identity holds for finite sums.
+\end{proposition}
+
+\begin{proof}
+  First take two functions $f,g\in L^+$. Choose nonnegative simple
+  functions $\phi_n\uparrow f$ and $\psi_n\uparrow g$. Then
+  $\phi_n+\psi_n\uparrow f+g$, so the monotone convergence theorem and
+  additivity of the simple integral give
+  \begin{align*}
+    \int_X(f+g)\,d\mu
+      &=\lim_n\int_X(\phi_n+\psi_n)\,d\mu\\
+      &=\lim_n\left(\int_X\phi_n\,d\mu+\int_X\psi_n\,d\mu\right)\\
+      &=\int_X f\,d\mu+\int_X g\,d\mu.
+  \end{align*}
+  All quantities are nonnegative, so no undefined subtraction occurs
+  even when a limit is infinite. Induction proves finite additivity.
+  Finally, apply monotone convergence to
+  $S_N=\sum_{n=1}^N f_n\uparrow\sum_{n=1}^{\infty}f_n$:
+  \[
+    \int_X\sum_{n=1}^{\infty}f_n\,d\mu
+      =\lim_N\sum_{n=1}^N\int_X f_n\,d\mu
+      =\sum_{n=1}^{\infty}\int_X f_n\,d\mu.
+  \]
+\end{proof}
+
+\subsection{Null sets and almost everywhere convergence}
+
+\begin{lemma}[Zero integral]
+  \label{lem:zero-integral-sep-22}
+  For $f\in L^+$,
+  \[
+    \int_X f\,d\mu=0
+    \quad\Longleftrightarrow\quad f=0\quad\mu\text{-a.e.}
+  \]
+\end{lemma}
+
+\begin{proof}
+  If $f=0$ a.e., every nonnegative simple function $\phi\leq f$
+  vanishes a.e. Its positive level sets are null, so
+  $\int\phi\,d\mu=0$. Taking the supremum gives $\int f\,d\mu=0$.
+
+  Conversely, suppose $\int f\,d\mu=0$. For each $n\geq1$, set
+  $A_n=\{f>1/n\}$. Since $f\geq n^{-1}\mathbf 1_{A_n}$,
+  \[
+    0=\int_X f\,d\mu\geq\frac1n\mu(A_n),
+  \]
+  whence $\mu(A_n)=0$. The identity
+  $\{f>0\}=\bigcup_{n=1}^{\infty}A_n$ now proves the claim.
+\end{proof}
+
+\begin{corollary}[Changing a function on a null set]
+  \label{cor:ae-integrals-sep-22}
+  If $f,g\in L^+$ and $f=g$ a.e., then $\int f\,d\mu=\int g\,d\mu$.
+  More generally, $f\leq g$ a.e. implies
+  $\int f\,d\mu\leq\int g\,d\mu$.
+\end{corollary}
+
+\begin{proof}
+  Choose a measurable null set $N$ outside which the equality or
+  inequality holds. The lemma gives
+  $\int f\mathbf 1_N\,d\mu=\int g\mathbf 1_N\,d\mu=0$.
+  Split each function into its parts on $N$ and $X\setminus N$, use
+  additivity, and compare the parts on $X\setminus N$.
+\end{proof}
+
+\begin{corollary}[Almost everywhere monotone convergence]
+  If $f_n,f\in L^+$ and $f_n\uparrow f$ a.e., then
+  \[
+    \lim_n\int_X f_n\,d\mu=\int_X f\,d\mu.
+  \]
+\end{corollary}
+
+\begin{proof}
+  Outside one measurable null set $N$, both monotonicity and convergence
+  hold. If these properties are initially stated separately a.e., take
+  the union of their countably many exceptional null sets. Then
+  $f_n\mathbf 1_{X\setminus N}\uparrow f\mathbf 1_{X\setminus N}$
+  everywhere. Apply Theorem~\ref{thm:mct-sep-22} and
+  Corollary~\ref{cor:ae-integrals-sep-22}.
+\end{proof}
+
+\subsection{Fatou's lemma}
+
+Pointwise convergence by itself does not justify interchanging a limit
+and an integral.
+
+\begin{example}[Two ways for mass to disappear]
+  \label{ex:escaping-mass-sep-22}
+  For Lebesgue measure on $\bb R$, consider
+  \[
+    u_n=\mathbf 1_{[n,n+1]},
+    \qquad v_n=n\mathbf 1_{(0,1/n)}.
+  \]
+  Both sequences converge to zero at every point, but for every $n$,
+  \[
+    \int u_n\,dm=\int v_n\,dm=1.
+  \]
+  In the first example
+  the support moves to infinity; in the second it shrinks toward zero
+  while the height increases. Neither sequence is increasing.
+\end{example}
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[>=Latex,font=\small]
+    \begin{scope}[x=0.65cm,y=1.1cm]
+      \draw[->] (0,0)--(6.7,0) node[right] {$x$};
+      \draw[->] (0,0)--(0,1.65);
+      \foreach \a/\col in {1/blue,3/teal,5/orange} {
+        \fill[\col!15] (\a,0) rectangle (\a+1,1);
+        \draw[\col!75!black,thick]
+          (\a,0)--(\a,1)--(\a+1,1)--(\a+1,0);
+      }
+      \node[left] at (0,1) {$1$};
+      \node[below] at (3,0) {$n$};
+      \draw[->,thick] (1.5,1.35)--(5.5,1.35);
+      \node at (3.3,-0.8) {support moves to infinity};
+    \end{scope}
+    \begin{scope}[shift={(6.1cm,0)},x=2.6cm,y=0.43cm]
+      \draw[->] (0,0)--(1.35,0) node[right] {$x$};
+      \draw[->] (0,0)--(0,4.6);
+      \foreach \n/\col in {1/blue,2/teal,4/orange} {
+        \draw[\col!75!black,thick]
+          (0,\n)--(1/\n,\n)--(1/\n,0);
+      }
+      \node[left] at (0,4) {$n$};
+      \node[below] at (0.25,0) {$1/n$};
+      \node at (0.6,-2.05) {height grows as support shrinks};
+    \end{scope}
+  \end{tikzpicture}
+  \caption{Each rectangle has area $1$, but both pointwise limits are
+    zero. Endpoint values do not affect these Lebesgue integrals.}
+  \label{fig:escaping-mass-sep-22}
+\end{figure}
+
+\begin{theorem}[Fatou's lemma]\label{thm:fatou-sep-22}
+  For any sequence $f_n\in L^+$,
+  \[
+    \int_X\liminf_{n\to\infty}f_n\,d\mu
+      \leq\liminf_{n\to\infty}\int_X f_n\,d\mu.
+  \]
+  In particular, if $f_n\to f$ a.e. and $f\in L^+$, then
+  \[
+    \int_X f\,d\mu\leq\liminf_{n\to\infty}\int_X f_n\,d\mu.
+  \]
+\end{theorem}
+
+\begin{proof}
+  Let $g_k=\inf_{n\geq k}f_n$. These functions are measurable,
+  nonnegative, and increase to $\liminf_n f_n$. Hence
+  \[
+    \int_X\liminf_n f_n\,d\mu
+      =\lim_k\int_X g_k\,d\mu
+  \]
+  by monotone convergence. For every $n\geq k$, $g_k\leq f_n$, so
+  \[
+    \int_X g_k\,d\mu\leq\inf_{n\geq k}\int_X f_n\,d\mu.
+  \]
+  Letting $k\to\infty$ proves the inequality. In the almost everywhere
+  convergence case, $\liminf_n f_n=f$ a.e.; changing a function on a
+  null set does not change its integral.
+\end{proof}
+
+\begin{example}[Fatou's lemma for series]
+  On $\bb N$ with counting measure, the nonnegative integral is a sum:
+  $\int h\,d\mu=\sum_{k=1}^{\infty}h(k)$. This follows by applying
+  monotone convergence to $h\mathbf 1_{\{1,\ldots,N\}}$ (with
+  truncation as well if $h$ takes infinite values). Thus if
+  $a_{n,k}\geq0$ and $a_{n,k}\to a_k$ for each fixed $k$, then
+  \[
+    \sum_{k=1}^{\infty}a_k
+      \leq\liminf_{n\to\infty}\sum_{k=1}^{\infty}a_{n,k}.
+  \]
+\end{example}
+
+\FloatBarrier
+
+\subsection{Integrating real-valued functions}
+
+Recall $f^+=\max\{f,0\}$ and $f^-=\max\{-f,0\}$, so that
+$f=f^+-f^-$ and $|f|=f^++f^-$. Both parts are nonnegative measurable
+functions whenever $f\colon X\to\bb R$ is measurable.
+
+\begin{definition}[Signed integral and integrability]
+  If at least one of $\int f^+\,d\mu$ and $\int f^-\,d\mu$ is finite,
+  define
+  \[
+    \int_X f\,d\mu=\int_X f^+\,d\mu-\int_X f^-\,d\mu.
+  \]
+  If both are finite, $f$ is called \emph{integrable}. Equivalently,
+  \[
+    f\text{ is integrable}\quad\Longleftrightarrow\quad
+    \int_X|f|\,d\mu<\infty,
+  \]
+  since $\int|f|=\int f^++\int f^-$. If both parts have infinite
+  integral, $\int f$ is undefined: the expression
+  $+\infty-(+\infty)$ has no assigned value.
+\end{definition}
+
+Write $\mathcal L^1(X,\mu;\bb R)$ for the real-valued integrable
+measurable functions. In the next lecture, $L^1$ will denote the space
+obtained by identifying functions that agree almost everywhere.
+
+\begin{proposition}[Linearity of the real integral]
+  \label{prop:real-linearity-sep-22}
+  The set $\mathcal L^1(X,\mu;\bb R)$ is a real vector space, and
+  integration is a linear functional on it. Thus, for integrable
+  $f,g$ and $a,b\in\bb R$,
+  \[
+    \int_X(af+bg)\,d\mu=a\int_X f\,d\mu+b\int_X g\,d\mu.
+  \]
+\end{proposition}
+
+\begin{proof}
+  First, $|af+bg|\leq|a||f|+|b||g|$, so $af+bg$ is integrable.
+  If $c\geq0$, then $(cf)^+=cf^+$ and $(cf)^-=cf^-$, giving
+  $\int cf=c\int f$. If $c<0$, the positive and negative parts switch:
+  $(cf)^+=(-c)f^-$ and $(cf)^-=(-c)f^+$, giving the same identity.
+
+  For additivity, put $h=f+g$. The pointwise identity
+  \[
+    h^++f^-+g^-=h^-+f^++g^+
+  \]
+  involves only nonnegative functions. Integrating and using
+  nonnegative additivity gives
+  \[
+    \int h^++\int f^-+\int g^-
+      =\int h^-+\int f^++\int g^+.
+  \]
+  All six integrals are finite, so rearrangement is legitimate and
+  yields $\int h=\int f+\int g$.
+\end{proof}
+
+\begin{remark}
+  If $f,g$ are real-valued integrable functions and $f\leq g$ a.e.,
+  then $\int f\,d\mu\leq\int g\,d\mu$. Indeed, $g-f$ is
+  nonnegative a.e., so its negative part has integral zero, and
+  linearity gives $\int g-\int f=\int(g-f)\geq0$.
+\end{remark}
+
+\FloatBarrier
