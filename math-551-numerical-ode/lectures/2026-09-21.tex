@@ -1,0 +1,313 @@
+\section{September 21, 2026}
+% Based on pages 1--3 of 5510921.pdf.
+
+We continue the study of implicit Runge--Kutta methods, derive their
+stability functions, and develop the collocation construction outlined
+on September 18. The main connection is that integrating an
+interpolating polynomial produces both the RK coefficients and an
+associated quadrature rule.
+
+We retain \(x_n\), \(\tau_n=t_{n+1}-t_n\), and the stage slopes
+\(k_i\). On a single step, write \(\tau=\tau_n\). As in the previous
+lecture, \(\mathsf A=(a_{ij})\) denotes the RK coefficient matrix.
+
+\subsection{Implicit Runge--Kutta methods and stability functions}
+
+An \(s\)-stage RK method has the form
+\begin{align}
+ k_i&=f\left(t_n+c_i\tau,
+       x_n+\tau\sum_{j=1}^s a_{ij}k_j\right),
+       \qquad i=1,\ldots,s,
+       \label{eq:rk-stages-sep-21}\\
+ x_{n+1}&=x_n+\tau\sum_{i=1}^s b_i k_i.
+       \label{eq:rk-update-sep-21}
+\end{align}
+The coefficients are arranged in the Butcher tableau
+\[
+ \begin{array}{c|c}
+  c&\mathsf A\\ \hline
+   &b^{\mathsf T}
+ \end{array},
+ \qquad
+ c=\begin{bmatrix}c_1\\ \vdots\\ c_s\end{bmatrix},
+ \quad
+ b=\begin{bmatrix}b_1\\ \vdots\\ b_s\end{bmatrix}.
+\]
+For an implicit method, the stage equations generally form a coupled
+algebraic system. They are nonlinear when \(f\) is nonlinear.
+
+Apply the method to the scalar test equation
+\[
+ x'=\lambda x,\qquad \lambda\in\bb C,
+ \qquad z=\tau\lambda.
+\]
+The stage equations become
+\[
+ k_i=\lambda x_n+z\sum_{j=1}^s a_{ij}k_j.
+\]
+With \(k=(k_1,\ldots,k_s)^{\mathsf T}\) and
+\(\mathbf1=(1,\ldots,1)^{\mathsf T}\), this is
+\[
+ (I-z\mathsf A)k=\lambda x_n\mathbf1.
+\]
+Whenever \(I-z\mathsf A\) is invertible,
+\[
+ k=\lambda x_n(I-z\mathsf A)^{-1}\mathbf1.
+\]
+Substitution into the update gives
+\begin{equation}\label{eq:rk-stability-function-sep-21}
+ x_{n+1}=R(z)x_n,
+ \qquad
+ \boxed{R(z)=1+z b^{\mathsf T}(I-z\mathsf A)^{-1}\mathbf1.}
+\end{equation}
+Thus an implicit RK method generally has a rational stability
+function. For an explicit method, \(\mathsf A^s=0\), so
+\[
+ (I-z\mathsf A)^{-1}
+  =I+z\mathsf A+\cdots+z^{s-1}\mathsf A^{s-1},
+\]
+and \(R\) is a polynomial of degree at most \(s\).
+
+Keeping the distinction from the previous lectures, the strict
+absolute stability region and the non-strict stability domain are
+\begin{align*}
+ \mathcal S&=\{z\in\bb C: I-z\mathsf A\text{ is invertible},\ |R(z)|<1\},\\
+ \mathcal D&=\{z\in\bb C: I-z\mathsf A\text{ is invertible},\ |R(z)|\leq1\}.
+\end{align*}
+For a fixed step, \(x_n=R(z)^n x_0\). Hence points in \(\mathcal S\)
+give decay to zero, while points with \(|R(z)|=1\) give bounded
+scalar iterates without decay. The invertibility condition ensures
+that the stages themselves are uniquely defined.
+
+\subsection{The collocation polynomial}
+
+Consider a system \(x'=f(t,x)\), where the solution takes values in
+\(\bb R^d\). Choose distinct nodes \(c_1,\ldots,c_s\in[0,1]\).
+Let \(\mathcal P_m\) denote the
+scalar polynomials of degree at most \(m\).
+
+\begin{definition}[Collocation on one time step]
+ Seek a vector polynomial \(u\in(\mathcal P_s)^d\) on
+ \([t_n,t_{n+1}]\) satisfying
+ \begin{align}
+  u(t_n)&=x_n,\label{eq:collocation-initial-sep-21}\\
+  u'(t_n+c_i\tau)
+   &=f\bigl(t_n+c_i\tau,u(t_n+c_i\tau)\bigr),
+   \qquad i=1,\ldots,s.
+   \label{eq:collocation-equations-sep-21}
+ \end{align}
+ The next numerical value is
+ \[
+  x_{n+1}=u(t_{n+1}).
+ \]
+\end{definition}
+
+The polynomial agrees with the initial value and satisfies the
+differential equation at the chosen collocation points. It need not
+satisfy the differential equation between those points. The initial
+condition and the \(s\) collocation conditions give \((s+1)d\)
+scalar equations for the \((s+1)d\) polynomial coefficients.
+For smooth \(f\), the corresponding stage equations have a unique
+local solution near \(\tau=0\); arbitrary large steps need not have
+this property.
+
+\subsection{Lagrange interpolation and the RK coefficients}
+
+The Lagrange basis for the nodes is
+\begin{equation}\label{eq:lagrange-basis-sep-21}
+ \ell_j(\theta)
+   =\prod_{\substack{m=1\\m\neq j}}^s
+     \frac{\theta-c_m}{c_j-c_m},
+ \qquad \ell_j(c_i)=\delta_{ij}.
+\end{equation}
+Each \(\ell_j\) has degree at most \(s-1\). Given scalar data
+\(\varphi(c_j)\), the polynomial
+\[
+ P(\theta)=\sum_{j=1}^s\varphi(c_j)\ell_j(\theta)
+\]
+interpolates \(\varphi\) at all the nodes. In particular, if
+\(\varphi\in\mathcal P_{s-1}\), then \(P=\varphi\) identically.
+
+Define the collocation slopes by
+\[
+ k_j=u'(t_n+c_j\tau)
+    =f\bigl(t_n+c_j\tau,u(t_n+c_j\tau)\bigr).
+\]
+Since \(u'\) has degree at most \(s-1\), its interpolation is exact:
+\begin{equation}\label{eq:collocation-derivative-sep-21}
+ u'(t_n+\theta\tau)=\sum_{j=1}^s k_j\ell_j(\theta).
+\end{equation}
+Integrating and using the initial condition gives
+\begin{align}
+ u(t_n+\theta\tau)-x_n
+  &=\tau\int_0^\theta u'(t_n+\xi\tau)\,d\xi\notag\\
+  &=\tau\sum_{j=1}^s
+      \left(\int_0^\theta\ell_j(\xi)\,d\xi\right)k_j.
+      \label{eq:collocation-polynomial-sep-21}
+\end{align}
+The factor \(\tau\) comes from the change of variables
+\(t=t_n+\xi\tau\).
+
+At \(\theta=c_i\), equation
+\eqref{eq:collocation-polynomial-sep-21} yields
+\[
+ u(t_n+c_i\tau)=x_n+\tau\sum_{j=1}^s a_{ij}k_j,
+ \qquad
+ a_{ij}=\int_0^{c_i}\ell_j(\theta)\,d\theta.
+\]
+Inserting these stage values into
+\eqref{eq:collocation-equations-sep-21} gives exactly the RK stage
+equations \eqref{eq:rk-stages-sep-21}. At \(\theta=1\), we obtain
+\[
+ x_{n+1}=x_n+\tau\sum_{j=1}^s b_jk_j,
+ \qquad
+ b_j=\int_0^1\ell_j(\theta)\,d\theta.
+\]
+Consequently, the collocation coefficients are
+\begin{equation}\label{eq:collocation-coefficients-sep-21}
+ \boxed{
+  a_{ij}=\int_0^{c_i}\ell_j(\theta)\,d\theta,
+  \qquad
+  b_j=\int_0^1\ell_j(\theta)\,d\theta.}
+\end{equation}
+Conversely, slopes satisfying this RK system define a collocation
+polynomial through \eqref{eq:collocation-polynomial-sep-21}.
+Thus the two formulations are equivalent.
+
+Because \(\sum_j\ell_j(\theta)=1\), the coefficients automatically
+satisfy
+\[
+ \sum_{j=1}^s a_{ij}=c_i,
+ \qquad
+ \sum_{j=1}^s b_j=1.
+\]
+These are the internal consistency relation
+\(c=\mathsf A\mathbf1\) and the first-order condition
+\(b^{\mathsf T}\mathbf1=1\).
+
+Collocation generally produces implicit RK methods: the integrated
+basis functions couple the unknown stages. The one-node choice
+\(c_1=0\) is an exception, giving forward Euler. The choices
+\(c_1=1\) and \((c_1,c_2)=(0,1)\) recover backward Euler and the
+implicit trapezoidal method, respectively, as on September 18.
+
+\subsection{The associated quadrature rule}
+
+Integrating the Lagrange interpolant of a function \(\varphi\) gives
+the interpolatory quadrature rule
+\begin{equation}\label{eq:quadrature-rule-sep-21}
+ \int_0^1\varphi(\theta)\,d\theta
+   \approx\sum_{j=1}^s b_j\varphi(c_j),
+ \qquad b_j=\int_0^1\ell_j(\theta)\,d\theta.
+\end{equation}
+The \(c_j\) are the quadrature nodes and the \(b_j\) are its weights.
+Write the quadrature error as
+\[
+ E[\varphi]=\int_0^1\varphi(\theta)\,d\theta
+              -\sum_{j=1}^s b_j\varphi(c_j).
+\]
+We use \(E\) here to distinguish the error functional from the
+stability function \(R(z)\).
+
+\begin{definition}[Degree of precision]
+ A quadrature rule has \emph{degree of precision} \(p\) if
+ \[
+  E[\varphi]=0\quad\text{for every }\varphi\in\mathcal P_p,
+ \]
+ but \(E[\varphi]\neq0\) for at least one
+ \(\varphi\in\mathcal P_{p+1}\).
+\end{definition}
+
+Every interpolatory rule with these \(s\) distinct nodes has
+\(p\geq s-1\). Indeed, for \(\varphi\in\mathcal P_{s-1}\),
+\[
+ \varphi(\theta)=\sum_{j=1}^s\varphi(c_j)\ell_j(\theta),
+\]
+and integrating proves exactness. Equivalently, exactness through
+degree \(p\) is expressed by the moment conditions
+\begin{equation}\label{eq:quadrature-moments-sep-21}
+ \sum_{j=1}^s b_jc_j^m=\frac1{m+1},
+ \qquad m=0,\ldots,p.
+\end{equation}
+For \(m=0\), the left-hand side means \(\sum_j b_j\).
+
+The largest possible degree of precision for \(s\) real nodes is
+\(2s-1\). To see the upper bound, consider
+\[
+ q(\theta)=\prod_{j=1}^s(\theta-c_j)^2.
+\]
+This polynomial has degree \(2s\), vanishes at every node, and has
+strictly positive integral on \([0,1]\). Therefore no such rule can
+be exact for every polynomial of degree \(2s\).
+Gaussian quadrature attains the bound \(p=2s-1\) with a suitable
+choice of nodes. Its use in RK methods is the topic announced for
+the next lecture.
+
+\subsection{Quadrature precision and collocation order}
+
+\begin{theorem}[Order of a collocation method]
+ Suppose the interpolatory quadrature rule associated with the
+ collocation nodes has degree of precision \(p\). Then the
+ corresponding collocation RK method has order \(p+1\), assuming
+ sufficient smoothness of \(f\) and the solution.
+\end{theorem}
+
+Here \(p\) denotes quadrature precision; the RK order is \(p+1\).
+Thus a step started from the exact solution satisfies
+\[
+ x(t_{n+1})-u(t_{n+1})=O(\tau^{p+2}).
+\]
+Under the usual smoothness and Lipschitz assumptions, this leads to
+global error \(O(h^{p+1})\) on a fixed finite interval, where
+\(h=\max_n\tau_n\). The order statement concerns the values at step
+endpoints; it does not assert the same error order at every point of
+the collocation polynomial.
+
+The role of quadrature is especially transparent when
+\(f(t,x)=g(t)\) is independent of \(x\). Then
+\[
+ x_{n+1}=x_n+\tau\sum_{j=1}^s b_jg(t_n+c_j\tau),
+\]
+whereas the exact increment is
+\[
+ x(t_{n+1})-x(t_n)=\tau\int_0^1g(t_n+\theta\tau)\,d\theta.
+\]
+Taylor expansion of \(g\) and the moment conditions
+\eqref{eq:quadrature-moments-sep-21} give a one-step error of
+\(O(\tau^{p+2})\). The theorem extends this order conclusion to
+general nonlinear collocation equations.
+
+\begin{example}[One collocation node]
+ With \(s=1\) and \(c_1=c\), the basis polynomial is
+ \(\ell_1=1\), so the tableau is
+ \[
+  \begin{array}{c|c}c&c\\ \hline &1\end{array}.
+ \]
+ The quadrature rule is \(\int_0^1\varphi\approx\varphi(c)\).
+ It is exact for linear polynomials precisely when \(c=1/2\).
+ Thus the midpoint choice gives the second-order implicit midpoint
+ method
+ \[
+  x_{n+1}=x_n+\tau f\left(t_n+\frac\tau2,
+                              \frac{x_n+x_{n+1}}2\right).
+ \]
+ The endpoint choices \(c=0\) and \(c=1\) have precision zero
+ and give the first-order forward and backward Euler methods.
+\end{example}
+
+\begin{example}[Endpoint collocation]
+ For \(c_1=0\), \(c_2=1\), the weights are
+ \(b_1=b_2=1/2\). The quadrature rule is exact for constants and
+ linear polynomials, but
+ \[
+  \frac12(0^2+1^2)=\frac12\neq\frac13=\int_0^1\theta^2\,d\theta.
+ \]
+ Hence \(p=1\), and the associated trapezoidal collocation method
+ has order two.
+\end{example}
+
+For Gaussian nodes, \(p=2s-1\), so the resulting \(s\)-stage Gauss
+collocation method has order \(2s\). In particular, one Gauss node
+gives order two and two Gauss nodes give order four. The placement
+of the nodes, not just their number, determines the quadrature
+precision and hence the collocation order.

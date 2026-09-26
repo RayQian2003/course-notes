@@ -1,0 +1,317 @@
+\section{September 23, 2026}
+% Based on pages 1--4 of 551-0923.pdf.
+
+We explain why quadrature precision determines the endpoint order of
+a collocation method, then construct Gauss Runge--Kutta methods.
+Exactness of Gaussian quadrature also gives preservation of quadratic
+first integrals and a direct proof of \(A\)-stability.
+We retain \(\tau=\tau_n\), the stage slopes \(k_i\), and the RK matrix
+\(\mathsf A\); \(A\) is reserved for an ODE matrix.
+
+\subsection{Collocation and quadrature error}
+
+Recall that the collocation polynomial \(u\in(\mathcal P_s)^d\)
+satisfies
+\begin{align*}
+ u(t_n)&=x_n,\\
+ u'(t_n+c_i\tau)&=f\bigl(t_n+c_i\tau,u(t_n+c_i\tau)\bigr),
+       \qquad i=1,\ldots,s,\\
+ x_{n+1}&=u(t_n+\tau).
+\end{align*}
+The associated RK coefficients are
+\[
+ a_{ij}=\int_0^{c_i}\ell_j(\theta)\,d\theta,
+ \qquad b_j=\int_0^1\ell_j(\theta)\,d\theta,
+\]
+where \(\ell_j\) is the Lagrange basis from
+\eqref{eq:lagrange-basis-sep-21}.
+
+On the physical time interval, define the quadrature error functional
+\begin{equation}\label{eq:physical-quadrature-error-sep-23}
+ E_{n,\tau}[\varphi]
+  =\int_{t_n}^{t_n+\tau}\varphi(t)\,dt
+       -\tau\sum_{j=1}^s b_j\varphi(t_n+c_j\tau).
+\end{equation}
+This is a linear functional. As on September 21, \(E\) denotes
+quadrature error, while \(R(z)\) denotes a stability function.
+
+\begin{lemma}[Scaling of quadrature error]
+ Suppose the quadrature rule has degree of precision \(p\). For
+ \(\varphi\in C^{p+1}([t_n,t_n+\tau])\),
+ \[
+  |E_{n,\tau}[\varphi]|
+   \leq C\tau^{p+2}
+      \max_{t_n\leq t\leq t_n+\tau}|\varphi^{(p+1)}(t)|,
+ \]
+ where \(C\) depends only on the fixed nodes and weights.
+\end{lemma}
+
+\begin{proof}
+ Expand \(\varphi(t_n+\tau\theta)\) through degree \(p\):
+ \[
+  \varphi(t_n+\tau\theta)
+   =\sum_{m=0}^p\frac{\varphi^{(m)}(t_n)}{m!}
+                     \tau^m\theta^m+r(\theta),
+ \]
+ with
+ \[
+  |r(\theta)|\leq
+   \frac{\tau^{p+1}}{(p+1)!}
+   \max|\varphi^{(p+1)}|,
+   \qquad 0\leq\theta\leq1.
+ \]
+ Exactness cancels every displayed polynomial term. The remaining
+ integral and weighted sum are bounded by
+ \(\tau(1+\sum_j|b_j|)\max|r|\), proving the estimate.
+\end{proof}
+
+The same estimate holds componentwise for vector-valued functions.
+If the integrand itself depends on \(\tau\), the derivative bound
+must be uniform as \(\tau\to0\).
+
+\subsection{The collocation defect and variation of constants}
+
+For the local error analysis, let \(x(t)\) be the exact solution
+started from \(x(t_n)=x_n\). Define the defect
+\begin{equation}\label{eq:collocation-defect-sep-23}
+ h(t)=u'(t)-f(t,u(t)).
+\end{equation}
+Then the polynomial solves a perturbed differential equation,
+\[
+ u'=f(t,u)+h(t),\qquad u(t_n)=x_n,
+\]
+and the collocation conditions say exactly that
+\begin{equation}\label{eq:defect-zeros-sep-23}
+ h(t_n+c_i\tau)=0,\qquad i=1,\ldots,s.
+\end{equation}
+
+For the linear problem \(x'=Ax\), variation of constants gives
+\[
+ u(t)=e^{(t-t_n)A}x_n+
+          \int_{t_n}^t e^{(t-\eta)A}h(\eta)\,d\eta.
+\]
+Thus, writing \(T=t_n+\tau\),
+\begin{equation}\label{eq:linear-defect-error-sep-23}
+ x(T)-u(T)=-\int_{t_n}^T e^{(T-t)A}h(t)\,dt.
+\end{equation}
+The minus sign follows from defining \(h=u'-f(t,u)\) and taking
+the local error to be exact minus numerical, as in
+\eqref{eq:local-error-aug-31}.
+
+For a nonlinear equation, the analogous identity uses the exact flow
+\(\Phi^{T,t}(y)\), namely the solution at time \(T\) started from
+\(y\) at time \(t\). Put
+\[
+ M(T,t)=D_y\Phi^{T,t}(u(t)).
+\]
+The flow identity
+\(\partial_t\Phi^{T,t}(y)=-D_y\Phi^{T,t}(y)f(t,y)\) gives
+\[
+ \frac{d}{dt}\Phi^{T,t}(u(t))=M(T,t)h(t).
+\]
+Integrating from \(t_n\) to \(T\) yields the nonlinear
+variation-of-constants formula
+\begin{equation}\label{eq:nonlinear-defect-error-sep-23}
+ x(T)-u(T)=-\int_{t_n}^T M(T,t)h(t)\,dt.
+\end{equation}
+
+Set \(\varphi(t)=M(T,t)h(t)\). By
+\eqref{eq:defect-zeros-sep-23}, every quadrature sample vanishes, so
+\[
+ x(T)-u(T)=-E_{n,\tau}[\varphi].
+\]
+For sufficiently smooth \(f\), on the local branch of collocation
+solutions for small \(\tau\), the required derivatives of
+\(\varphi\) remain bounded. The quadrature error estimate therefore
+gives
+\begin{equation}\label{eq:collocation-local-order-sep-23}
+ \boxed{x(t_n+\tau)-u(t_n+\tau)=O(\tau^{p+2}).}
+\end{equation}
+This proves the order \(p+1\) conclusion stated on September 21.
+The extra accuracy at the endpoint comes from cancellation in the
+integral of the defect; merely bounding \(\|h\|\) would miss that
+cancellation.
+
+\subsection{Gauss collocation}
+
+Gaussian quadrature with \(s\) nodes has degree of precision
+\(2s-1\), the largest possible value. Its nodes are the roots of the
+shifted Legendre polynomial of degree \(s\):
+\[
+ L_s(\theta)=P_s(2\theta-1),\qquad 0< c_1<\cdots<c_s<1,
+\]
+where \(P_s\) is the Legendre polynomial on \([-1,1]\).
+Equivalently, the monic nodal polynomial
+\(\pi_s(\theta)=\prod_{j=1}^s(\theta-c_j)\) is orthogonal to
+\(\mathcal P_{s-1}\) on \([0,1]\):
+\[
+ \int_0^1\pi_s(\theta)q(\theta)\,d\theta=0,
+ \qquad q\in\mathcal P_{s-1}.
+\]
+
+To see the resulting precision, divide any
+\(v\in\mathcal P_{2s-1}\) as
+\(v=\pi_s q+r\), with \(q,r\in\mathcal P_{s-1}\).
+The integral of \(\pi_s q\) vanishes by orthogonality, and all its
+quadrature samples vanish as well. The interpolatory rule integrates
+\(r\) exactly. Hence it integrates \(v\) exactly.
+
+The nodes and weights satisfy
+\begin{equation}\label{eq:gauss-node-properties-sep-23}
+ c_j=1-c_{s+1-j},\qquad
+ b_j=b_{s+1-j}>0.
+\end{equation}
+Positivity follows directly from exactness applied to
+\(\ell_j^2\), whose degree is \(2s-2\):
+\[
+ b_j=\sum_{i=1}^s b_i\ell_j(c_i)^2
+     =\int_0^1\ell_j(\theta)^2\,d\theta>0.
+\]
+
+Collocation at these nodes gives the \emph{Gauss RK method} with
+\(s\) stages. The quadrature precision is \(2s-1\), so
+\eqref{eq:collocation-local-order-sep-23} gives
+\[
+ \text{RK order}=2s,
+ \qquad \text{local error}=O(\tau^{2s+1}).
+\]
+
+\subsubsection{One stage: implicit midpoint}
+
+For \(s=1\), \(c_1=1/2\), \(b_1=1\), and \(a_{11}=1/2\):
+\[
+ \begin{array}{c|c}\tfrac12&\tfrac12\\ \hline &1\end{array}.
+\]
+Thus
+\[
+ k_1=f\left(t_n+\frac\tau2,x_n+\frac\tau2k_1\right),
+ \qquad x_{n+1}=x_n+\tau k_1.
+\]
+Equivalently,
+\[
+ x_{n+1}=x_n+\tau f\left(t_n+\frac\tau2,
+                              \frac{x_n+x_{n+1}}2\right).
+\]
+This method has order two. Its stability function is
+\[
+ R_{\mathrm{G},1}(z)=\frac{1+z/2}{1-z/2}.
+\]
+It agrees with the trapezoidal stability function on the linear test
+equation, although the two methods differ for general nonlinear \(f\).
+
+\subsubsection{Two-stage Gauss method}
+
+The roots of \(L_2(\theta)=6\theta^2-6\theta+1\) are
+\[
+ c_1=\frac12-\frac{\sqrt3}{6},\qquad
+ c_2=\frac12+\frac{\sqrt3}{6}.
+\]
+Integrating their Lagrange basis functions gives
+\begin{equation}\label{eq:gauss-two-tableau-sep-23}
+ \begin{array}{c|cc}
+  \tfrac12-\tfrac{\sqrt3}{6}
+    &\tfrac14&\tfrac14-\tfrac{\sqrt3}{6}\\[4pt]
+  \tfrac12+\tfrac{\sqrt3}{6}
+    &\tfrac14+\tfrac{\sqrt3}{6}&\tfrac14\\[4pt] \hline
+    &\tfrac12&\tfrac12
+ \end{array}.
+\end{equation}
+In particular, the upper-right entry has a minus sign, so that the
+first row sums to \(c_1\). The stage equations are
+\begin{align*}
+ k_1&=f\left(t_n+c_1\tau,
+       x_n+\tau\left[\frac14k_1+
+                    \left(\frac14-\frac{\sqrt3}{6}\right)k_2\right]\right),\\*
+ k_2&=f\left(t_n+c_2\tau,
+       x_n+\tau\left[\left(\frac14+\frac{\sqrt3}{6}\right)k_1+
+                    \frac14k_2\right]\right),\\*
+ x_{n+1}&=x_n+\frac\tau2(k_1+k_2).
+\end{align*}
+Both slopes must be solved for together. The method has order four,
+and substitution into \eqref{eq:rk-stability-function-sep-21} gives
+\begin{equation}\label{eq:gauss-two-stability-sep-23}
+ R_{\mathrm{G},2}(z)
+  =\frac{1+z/2+z^2/12}{1-z/2+z^2/12}.
+\end{equation}
+
+\subsection{Quadratic first integrals}
+
+For the autonomous equation \(x'=f(x)\), a function \(I(x)\) is a
+\emph{first integral} if it is constant along every solution.
+Consider a quadratic function
+\[
+ I(x)=x^{\mathsf T}Qx,\qquad Q^{\mathsf T}=Q.
+\]
+Positive definiteness is not needed for conservation. Since
+\[
+ \frac{d}{dt}I(x(t))=2x(t)^{\mathsf T}Qf(x(t)),
+\]
+the condition for a quadratic first integral is
+\begin{equation}\label{eq:quadratic-invariant-condition-sep-23}
+ x^{\mathsf T}Qf(x)=0\qquad\text{for every }x.
+\end{equation}
+
+\begin{theorem}[Quadratic invariants of Gauss methods]
+ Every Gauss collocation method preserves each quadratic first
+ integral exactly, provided its stage equations are solved exactly.
+\end{theorem}
+
+\begin{proof}
+ Let \(U(\theta)=u(t_n+\tau\theta)\) and \(U_j=U(c_j)\).
+ The polynomial \(U\) has degree at most \(s\), and
+ \[
+  U'(c_j)=\tau f(U_j).
+ \]
+ Therefore \(2U^{\mathsf T}QU'\) has degree at most \(2s-1\)
+ and Gaussian quadrature is exact for it. Consequently,
+ \begin{align*}
+  I(x_{n+1})-I(x_n)
+   &=\int_0^1 2U(\theta)^{\mathsf T}QU'(\theta)\,d\theta\\
+   &=2\tau\sum_{j=1}^s b_j U_j^{\mathsf T}Qf(U_j)=0.
+ \end{align*}
+ The last equality uses \eqref{eq:quadratic-invariant-condition-sep-23}
+ at each stage value.
+\end{proof}
+
+For example, if \(f(x)=Ax\) and \(A^{\mathsf T}Q+QA=0\), the
+quadratic form is preserved by the exact solution and by every Gauss
+method. Taking \(Q=I\) and \(A^{\mathsf T}=-A\) recovers norm
+preservation for the oscillator from September 18.
+The argument relies on the invariant being quadratic; it does not
+give exact preservation of a general nonlinear first integral.
+
+\subsection{An energy identity for the scalar test equation}
+
+Apply Gauss collocation to \(x'=\lambda x\), with
+\(z=\tau\lambda\). Now \(U\) is complex-valued and
+\(U'(c_j)=zU_j\). Since the derivative of \(|U|^2\) is a real
+polynomial of degree at most \(2s-1\), exact quadrature gives
+\begin{align}
+ |x_{n+1}|^2-|x_n|^2
+  &=2\int_0^1\operatorname{Re}
+       \bigl(\overline{U(\theta)}U'(\theta)\bigr)\,d\theta\notag\\
+  &=2\operatorname{Re}z\sum_{j=1}^s b_j|U_j|^2.
+       \label{eq:gauss-energy-identity-sep-23}
+\end{align}
+For \(\operatorname{Re}z<0\), positivity of the weights implies
+\(|x_{n+1}|\leq|x_n|\).
+
+This also proves unique solvability in the open left half-plane.
+Indeed, for a homogeneous stage system take \(x_n=0\). The left
+side is then nonnegative and the right side nonpositive, so every
+\(U_j=0\). Since \(U(0)=0\) and the Gauss nodes are distinct and
+interior, \(U\) has \(s+1\) distinct zeros and must vanish
+identically. Thus the stage matrix has trivial kernel.
+
+For \(x_n\neq0\), the sum in
+\eqref{eq:gauss-energy-identity-sep-23} is strictly positive: if all
+\(U_j=0\), then all \(U'(c_j)=0\), so \(U'\equiv0\) and
+\(U\equiv0\), a contradiction. Therefore
+\[
+ \operatorname{Re}z<0\quad\Longrightarrow\quad |R(z)|<1.
+\]
+Every Gauss RK method is consequently \(A\)-stable. On the
+imaginary axis, the same identity gives \(|R(z)|=1\) whenever the
+stages are defined, explaining the absence of artificial damping for
+oscillatory modes. We continue this comparison with Radau methods
+in the next lecture.
