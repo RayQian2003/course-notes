@@ -1,0 +1,255 @@
+\section{September 25, 2026}
+
+\subsection{Invertible linear maps}
+
+Write $\operatorname{Id}_V$ for the identity map on $V$, defined by
+$\operatorname{Id}_V(v)=v$. As with matrix multiplication, we sometimes
+write $ST$ for the composition $S\circ T$.
+
+\begin{definition}[Invertibility]
+  A linear map $T\in\mathcal L(V,W)$ is \emph{invertible} if there
+  exists a linear map $S\in\mathcal L(W,V)$ such that
+  \[
+    S\circ T=\operatorname{Id}_V
+    \qquad\text{and}\qquad
+    T\circ S=\operatorname{Id}_W.
+  \]
+  Such a map $S$ is called an \emph{inverse} of $T$.
+\end{definition}
+
+\begin{proposition}[Uniqueness of the inverse]
+  An invertible linear map has a unique inverse.
+\end{proposition}
+
+\begin{proof}
+  Suppose $S_1,S_2\in\mathcal L(W,V)$ are both inverses of $T$.
+  By associativity of composition,
+  \begin{align*}
+    S_1
+      &=S_1\circ\operatorname{Id}_W \\
+      &=S_1\circ(T\circ S_2) \\
+      &=(S_1\circ T)\circ S_2 \\
+      &=\operatorname{Id}_V\circ S_2=S_2.
+  \end{align*}
+\end{proof}
+
+We denote the unique inverse by $T^{-1}\in\mathcal L(W,V)$. Thus
+\[
+  T^{-1}T=\operatorname{Id}_V
+  \qquad\text{and}\qquad
+  TT^{-1}=\operatorname{Id}_W.
+\]
+
+\begin{example}\label{ex:rotation-scaling-inverse}
+  Define $T\colon\bb{R}^3\to\bb{R}^3$ by
+  \[
+    T\begin{bmatrix}x\\y\\z\end{bmatrix}
+      =\begin{bmatrix}-y\\x\\4z\end{bmatrix}.
+  \]
+  Its values on the standard basis are
+  \[
+    T(e_1)=\begin{bmatrix}0\\1\\0\end{bmatrix},
+    \qquad
+    T(e_2)=\begin{bmatrix}-1\\0\\0\end{bmatrix},
+    \qquad
+    T(e_3)=\begin{bmatrix}0\\0\\4\end{bmatrix}.
+  \]
+  Hence its matrix with respect to the standard basis is
+  \[
+    A=\begin{bmatrix}0&-1&0\\1&0&0\\0&0&4\end{bmatrix}.
+  \]
+  To recover the input from an output $(x,y,z)$, reverse the first
+  two coordinates with the appropriate sign and divide the third
+  coordinate by $4$. This gives
+  \[
+    T^{-1}\begin{bmatrix}x\\y\\z\end{bmatrix}
+      =\begin{bmatrix}y\\-x\\z/4\end{bmatrix},
+    \qquad
+    A^{-1}=\begin{bmatrix}0&1&0\\-1&0&0\\0&0&\tfrac14\end{bmatrix}.
+  \]
+  Indeed, direct multiplication gives $AA^{-1}=A^{-1}A=I_3$.
+  Equivalently, augment $A$ by the identity matrix and perform the
+  row operations $R_1\leftrightarrow R_2$, $R_2\leftarrow-R_2$,
+  and $R_3\leftarrow\tfrac14 R_3$:
+  \[
+    \left[\begin{array}{ccc|ccc}
+      0&-1&0&1&0&0\\
+      1&0&0&0&1&0\\
+      0&0&4&0&0&1
+    \end{array}\right]
+    \quad\longrightarrow\quad
+    \left[\begin{array}{ccc|ccc}
+      1&0&0&0&1&0\\
+      0&1&0&-1&0&0\\
+      0&0&1&0&0&\tfrac14
+    \end{array}\right].
+  \]
+\end{example}
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[>=Stealth, font=\small, scale=1.15]
+    \draw[->, gray] (-1.8,0) -- (2.2,0) node[right] {$x$};
+    \draw[->, gray] (0,-.7) -- (0,2.5) node[above] {$y$};
+    \draw[->, very thick, blue!65!black] (0,0) -- (1.7,.85)
+      node[right] {$(x,y)$};
+    \draw[->, very thick, red!70!black] (0,0) -- (-.85,1.7)
+      node[above left] {$(-y,x)$};
+    \draw[->, thick] (26.565:1.3)
+      arc[start angle=26.565, end angle=116.565, radius=1.3];
+    \node at (.5,1.65) {$T$};
+    \draw[->, thick, dashed] (116.565:2.15)
+      arc[start angle=116.565, end angle=26.565, radius=2.15];
+    \node at (1.15,2.1) {$T^{-1}$};
+    \node[below left] at (0,0) {$0$};
+  \end{tikzpicture}
+  \caption{In the $xy$-plane, $T$ rotates by $90^\circ$
+    counterclockwise and $T^{-1}$ rotates clockwise. In the third
+    coordinate, $T$ multiplies by $4$ and $T^{-1}$ divides by $4$.}
+  \label{fig:rotation-inverse}
+\end{figure}
+
+\subsection{Invertibility and bijectivity}
+
+\begin{proposition}\label{prop:invertible-iff-bijective}
+  A linear map is invertible if and only if it is bijective.
+\end{proposition}
+
+\begin{proof}
+  Let $T\in\mathcal L(V,W)$. Suppose first that $T$ is invertible.
+  If $T(u)=T(v)$, applying $T^{-1}$ gives
+  \[
+    u=T^{-1}(T(u))=T^{-1}(T(v))=v.
+  \]
+  Thus $T$ is injective. For every $w\in W$, the vector
+  $v=T^{-1}(w)$ satisfies
+  \[
+    T(v)=T(T^{-1}(w))=w,
+  \]
+  so $T$ is also surjective.
+
+  Conversely, suppose that $T$ is bijective. For each $w\in W$,
+  surjectivity provides $v\in V$ with $T(v)=w$, and injectivity
+  makes this vector unique. Define $S\colon W\to V$ by assigning
+  to $w$ this unique vector. By construction,
+  $T\circ S=\operatorname{Id}_W$. Also, for $v\in V$,
+  \[
+    T(S(T(v)))=T(v),
+  \]
+  so injectivity gives $S(T(v))=v$. Thus
+  $S\circ T=\operatorname{Id}_V$.
+
+  It remains to check that $S$ is linear. For $w_1,w_2\in W$,
+  \begin{align*}
+    T(S(w_1)+S(w_2))
+      &=T(S(w_1))+T(S(w_2)) \\
+      &=w_1+w_2 \\
+      &=T(S(w_1+w_2)).
+  \end{align*}
+  Injectivity of $T$ yields
+  \[
+    S(w_1+w_2)=S(w_1)+S(w_2).
+  \]
+  Similarly, for $\lambda\in\bb{F}$ and $w\in W$,
+  \[
+    T(\lambda S(w))=\lambda T(S(w))=\lambda w=T(S(\lambda w)),
+  \]
+  so $S(\lambda w)=\lambda S(w)$. Therefore
+  $S\in\mathcal L(W,V)$ and $S$ is an inverse of $T$.
+\end{proof}
+
+\subsection{Why the dimension hypotheses matter}
+
+In general, injectivity alone or surjectivity alone does not imply
+invertibility.
+
+\begin{example}
+  On the space $\mathcal P(\bb{R})$ of all real polynomials, define
+  \[
+    M\colon\mathcal P(\bb{R})\to\mathcal P(\bb{R}),
+    \qquad (Mp)(x)=x^2p(x).
+  \]
+  This map is linear and injective: if $x^2p(x)$ is the zero
+  polynomial, then $p$ is the zero polynomial. It is not surjective,
+  because the constant polynomial $1$ does not belong to its image.
+  Thus $M$ is not invertible, even though its domain and codomain
+  are the same vector space.
+\end{example}
+
+\begin{example}[A complementary example]
+  Differentiation
+  \[
+    D\colon\mathcal P(\bb{R})\to\mathcal P(\bb{R}),
+    \qquad D(p)=p',
+  \]
+  is surjective, since every real polynomial has a polynomial
+  antiderivative. It is not injective, since every constant polynomial
+  belongs to $\ker D$. Therefore $D$ is not invertible.
+\end{example}
+
+\begin{proposition}\label{prop:equal-dimension-invertibility}
+  Suppose that $V$ and $W$ are finite-dimensional with
+  $\dim V=\dim W$, and let $T\in\mathcal L(V,W)$. Then the
+  following are equivalent:
+  \begin{enumerate}[label=(\roman*)]
+    \item $T$ is invertible;
+    \item $T$ is injective;
+    \item $T$ is surjective.
+  \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+  By rank--nullity and the equality of dimensions,
+  \begin{align*}
+    T\text{ is injective}
+      &\quad\Longleftrightarrow\quad \ker T=\{0\} \\
+      &\quad\Longleftrightarrow\quad \dim\ker T=0 \\
+      &\quad\Longleftrightarrow\quad
+        \dim\operatorname{im}T=\dim V=\dim W \\
+      &\quad\Longleftrightarrow\quad \operatorname{im}T=W \\
+      &\quad\Longleftrightarrow\quad T\text{ is surjective}.
+  \end{align*}
+  Here we used the fact that a subspace of a finite-dimensional space
+  with the same dimension is the whole space. Thus either
+  injectivity or surjectivity implies bijectivity, which is equivalent
+  to invertibility by Proposition~\ref{prop:invertible-iff-bijective}.
+\end{proof}
+
+\subsection{One-sided inverses in equal dimensions}
+
+\begin{proposition}\label{prop:one-sided-inverse}
+  Suppose that $V$ and $W$ are finite-dimensional with
+  $\dim V=\dim W$. If $T\in\mathcal L(V,W)$ and
+  $S\in\mathcal L(W,V)$, then
+  \[
+    ST=\operatorname{Id}_V
+    \quad\Longleftrightarrow\quad
+    TS=\operatorname{Id}_W.
+  \]
+  In either case, $S=T^{-1}$.
+\end{proposition}
+
+\begin{proof}
+  Suppose $ST=\operatorname{Id}_V$. If $v\in\ker T$, then
+  \[
+    v=(ST)(v)=S(T(v))=S(0)=0.
+  \]
+  Hence $T$ is injective, and
+  Proposition~\ref{prop:equal-dimension-invertibility} makes it
+  invertible. Consequently,
+  \[
+    S=S(TT^{-1})=(ST)T^{-1}=T^{-1},
+  \]
+  which implies $TS=\operatorname{Id}_W$.
+
+  Conversely, suppose $TS=\operatorname{Id}_W$. For every $w\in W$,
+  \[
+    w=T(S(w)),
+  \]
+  so $T$ is surjective and hence invertible by the same proposition.
+  Therefore
+  \[
+    S=(T^{-1}T)S=T^{-1}(TS)=T^{-1},
+  \]
+  and $ST=\operatorname{Id}_V$.
+\end{proof}

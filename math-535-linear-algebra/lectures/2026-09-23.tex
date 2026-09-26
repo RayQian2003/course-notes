@@ -1,0 +1,212 @@
+\section{September 23, 2026}
+
+\subsection{Injectivity, surjectivity, and dimension}
+
+Recall from Proposition~\ref{prop:injective-kernel} that a linear map
+$T\in\mathcal L(V,W)$ is injective if and only if $\ker T=\{0\}$.
+In particular, if $\ker T=\{0\}$, then
+\[
+  T(v)=T(v')
+  \quad\Longrightarrow\quad T(v-v')=0
+  \quad\Longrightarrow\quad v-v'=0
+  \quad\Longrightarrow\quad v=v'.
+\]
+The corresponding criterion for surjectivity follows directly from
+the definition of the image:
+\[
+  T\text{ is surjective}
+  \quad\Longleftrightarrow\quad \operatorname{im}T=W.
+\]
+
+\subsection{Proof of the fundamental theorem of linear maps}
+
+We now prove Theorem~\ref{thm:fundamental-linear-maps}: if $V$ is
+finite-dimensional and $T\in\mathcal L(V,W)$, then
+$\operatorname{im}T$ is finite-dimensional and
+\[
+  \dim V=\dim\ker T+\dim\operatorname{im}T.
+\]
+This identity is also called the \emph{rank--nullity formula};
+$\dim\operatorname{im}T$ is the rank and $\dim\ker T$ is the nullity.
+
+\begin{proof}[Proof of Theorem~\ref{thm:fundamental-linear-maps}]
+  Since $\ker T$ is a subspace of the finite-dimensional space $V$,
+  it has a basis $u_1,\ldots,u_m$. Extend this collection to a basis
+  \[
+    u_1,\ldots,u_m,v_1,\ldots,v_n
+  \]
+  of $V$. Thus $\dim\ker T=m$ and $\dim V=m+n$. We claim that
+  \[
+    T(v_1),\ldots,T(v_n)
+  \]
+  is a basis of $\operatorname{im}T$.
+
+  First, every $v\in V$ can be written as
+  \[
+    v=a_1u_1+\cdots+a_mu_m+b_1v_1+\cdots+b_nv_n.
+  \]
+  Because each $u_i$ belongs to $\ker T$, linearity gives
+  \[
+    T(v)=b_1T(v_1)+\cdots+b_nT(v_n).
+  \]
+  Hence $\operatorname{im}T$ is contained in the span of the displayed
+  images. The reverse inclusion holds because each $T(v_j)$ belongs
+  to the subspace $\operatorname{im}T$. Therefore
+  \[
+    \operatorname{im}T
+      =\operatorname{span}\{T(v_1),\ldots,T(v_n)\}.
+  \]
+
+  To show linear independence, suppose that
+  \[
+    c_1T(v_1)+\cdots+c_nT(v_n)=0.
+  \]
+  Then $T(c_1v_1+\cdots+c_nv_n)=0$, so
+  $c_1v_1+\cdots+c_nv_n\in\ker T$. There are scalars
+  $d_1,\ldots,d_m$ such that
+  \[
+    c_1v_1+\cdots+c_nv_n=d_1u_1+\cdots+d_mu_m.
+  \]
+  Rearranging gives
+  \[
+    -d_1u_1-\cdots-d_mu_m+c_1v_1+\cdots+c_nv_n=0.
+  \]
+  The chosen basis of $V$ is linearly independent, so all the
+  coefficients are zero. In particular, $c_1=\cdots=c_n=0$.
+
+  Thus the image has a basis of $n$ vectors, so
+  $\dim\operatorname{im}T=n$. It follows that
+  \[
+    \dim V=m+n=\dim\ker T+\dim\operatorname{im}T.
+  \]
+  The same argument includes $m=0$ or $n=0$, using the empty basis
+  for the zero subspace.
+\end{proof}
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[>=Stealth, font=\small,
+      box/.style={draw, rounded corners, minimum width=3.6cm,
+        minimum height=1cm, align=center}]
+    \node[box, fill=red!7] (kernel) at (0,0)
+      {$u_1,\ldots,u_m$\\basis of $\ker T$};
+    \node[box, fill=blue!7] (complement) at (0,-1.6)
+      {$v_1,\ldots,v_n$\\extension to a basis of $V$};
+    \node[box, fill=red!7] (zero) at (6,0) {$0$};
+    \node[box, fill=blue!7] (range) at (6,-1.6)
+      {$T(v_1),\ldots,T(v_n)$\\basis of $\operatorname{im}T$};
+    \node at (0,1) {$V$};
+    \node at (6,1) {$W$};
+    \draw[->, thick] (kernel) -- node[above] {$T$} (zero);
+    \draw[->, thick] (complement) -- node[above] {$T$} (range);
+  \end{tikzpicture}
+  \caption{The kernel basis maps to zero; the images of the remaining
+    basis vectors form a basis of the image.}
+  \label{fig:rank-nullity-bases}
+\end{figure}
+
+\subsection{Dimension restrictions on linear maps}
+
+\begin{corollary}\label{cor:dimension-obstructs-injectivity}
+  Let $V$ and $W$ be finite-dimensional vector spaces. If
+  $\dim V>\dim W$, then no linear map from $V$ to $W$ is injective.
+\end{corollary}
+
+\begin{proof}
+  If $T\in\mathcal L(V,W)$, then $\operatorname{im}T\subseteq W$, so
+  $\dim\operatorname{im}T\leq\dim W$. Rank--nullity gives
+  \[
+    \dim\ker T
+      =\dim V-\dim\operatorname{im}T
+      \geq\dim V-\dim W>0.
+  \]
+  Hence $\ker T\neq\{0\}$, and $T$ is not injective.
+\end{proof}
+
+\begin{example}
+  Define $T\colon\bb{R}^4\to\bb{R}^3$ by
+  \[
+    T\begin{bmatrix}x_1\\x_2\\x_3\\x_4\end{bmatrix}
+      =\begin{bmatrix}
+        \sqrt{7}\,x_1+\pi x_2+x_4\\
+        97x_1+3x_2+2x_3\\
+        x_2+6x_3+7x_4
+      \end{bmatrix}.
+  \]
+  Since $4>3$, this map is not injective, regardless of the particular
+  coefficients. There is no need to solve for its kernel explicitly.
+  The same example works over $\bb{C}$.
+\end{example}
+
+\begin{proposition}\label{prop:dimension-obstructs-surjectivity}
+  Suppose that $V$ and $W$ are finite-dimensional and
+  $\dim V<\dim W$. Then no linear map from $V$ to $W$ is surjective.
+\end{proposition}
+
+\begin{proof}
+  For $T\in\mathcal L(V,W)$, rank--nullity gives
+  \[
+    \dim\operatorname{im}T
+      =\dim V-\dim\ker T
+      \leq\dim V<\dim W.
+  \]
+  Thus $\operatorname{im}T\neq W$, so $T$ is not surjective.
+\end{proof}
+
+\subsection{A complement to the kernel}
+
+\begin{proposition}\label{prop:kernel-complement-image}
+  Let $V$ be finite-dimensional, and let $T\in\mathcal L(V,W)$.
+  There is a subspace $U\subseteq V$ such that
+  \[
+    V=\ker T\oplus U
+    \qquad\text{and}\qquad
+    \operatorname{im}T=\{T(u):u\in U\}.
+  \]
+  In particular, $U\cap\ker T=\{0\}$, and the restriction
+  $T|_U\colon U\to\operatorname{im}T$ is bijective.
+\end{proposition}
+
+\begin{proof}
+  As in the proof of rank--nullity, extend a basis $u_1,\ldots,u_m$
+  of $\ker T$ to a basis $u_1,\ldots,u_m,v_1,\ldots,v_n$ of $V$.
+  Set
+  \[
+    U=\operatorname{span}\{v_1,\ldots,v_n\}.
+  \]
+  The combined basis spans $V$, so $V=\ker T+U$. If $w\in U\cap\ker T$,
+  then
+  \[
+    w=b_1v_1+\cdots+b_nv_n=a_1u_1+\cdots+a_mu_m.
+  \]
+  Linear independence of the combined basis forces every coefficient
+  to vanish. Thus $w=0$, and the sum is direct.
+
+  Every $v\in V$ has the form $v=k+u$, where $k\in\ker T$ and
+  $u\in U$. Therefore $T(v)=T(u)$, proving that $T|_U$ maps onto
+  $\operatorname{im}T$. Its kernel is $U\cap\ker T=\{0\}$, so it
+  is also injective.
+\end{proof}
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[>=Stealth, font=\small, scale=1.05]
+    \draw[->, thick, blue!65!black] (-1,0) -- (3.5,0)
+      node[right] {$U$};
+    \draw[->, thick, red!70!black] (0,-.6) -- (0,2.8)
+      node[above] {$\ker T$};
+    \draw[dashed, gray] (2.5,0) -- (2.5,1.8) -- (0,1.8);
+    \draw[->, thick] (0,0) -- (2.5,1.8)
+      node[above right] {$v=(a,b)$};
+    \draw[->, thick, blue!65!black] (0,0) -- (2.5,0);
+    \draw[->, thick, red!70!black] (0,0) -- (0,1.8);
+    \fill (2.5,0) circle (1.5pt);
+    \node[below] at (2.5,0) {$u=(a,0)$};
+    \node[left] at (0,1.8) {$k=(0,b)$};
+    \node[below left] at (0,0) {$0$};
+  \end{tikzpicture}
+  \caption{For $T\colon\bb{R}^2\to\bb{R}$, $T(x,y)=x$, take $U$ to
+    be the horizontal axis. The decomposition $v=k+u$ gives
+    $T(v)=T(u)=a$, while $T(k)=0$.}
+  \label{fig:kernel-complement-projection}
+\end{figure}
