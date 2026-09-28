@@ -1,0 +1,264 @@
+\section{September 28, 2026}
+
+\subsection{Isomorphic vector spaces}
+
+\begin{definition}[Isomorphism]
+  An \emph{isomorphism} is an invertible linear map. Two vector spaces
+  $V$ and $W$ over the same field $\bb{F}$ are \emph{isomorphic} if
+  there exists an isomorphism from $V$ onto $W$. We write $V\cong W$.
+\end{definition}
+
+By Proposition~\ref{prop:invertible-iff-bijective}, a linear map is an
+isomorphism precisely when it is both injective and surjective.
+
+\begin{proposition}\label{prop:isomorphic-iff-equal-dimension}
+  Two finite-dimensional vector spaces over $\bb{F}$ are isomorphic
+  if and only if they have the same dimension.
+\end{proposition}
+
+\begin{proof}
+  Suppose first that $T\colon V\to W$ is an isomorphism. Then $T$ is
+  injective and surjective, so $\ker T=\{0\}$ and
+  $\operatorname{im}T=W$. By the fundamental theorem of linear maps
+  (Theorem~\ref{thm:fundamental-linear-maps}),
+  \[
+    \dim V=\dim\ker T+\dim\operatorname{im}T
+      =0+\dim W=\dim W.
+  \]
+
+  Conversely, let $\dim V=\dim W=n$. Choose bases
+  $v_1,\ldots,v_n$ of $V$ and $w_1,\ldots,w_n$ of $W$. By the
+  linear map lemma (Lemma~\ref{lem:linear-map}), there is a unique
+  linear map $T\colon V\to W$ satisfying $T(v_j)=w_j$ for all $j$.
+  Explicitly,
+  \[
+    T(c_1v_1+\cdots+c_nv_n)=c_1w_1+\cdots+c_nw_n.
+  \]
+  This map is well-defined because coordinates with respect to a
+  basis are unique. Since $w_1,\ldots,w_n$ spans $W$, every vector
+  in $W$ occurs as an output, so $T$ is surjective. If
+  $T(c_1v_1+\cdots+c_nv_n)=0$, then
+  \[
+    c_1w_1+\cdots+c_nw_n=0.
+  \]
+  Linear independence of the $w_j$ gives $c_1=\cdots=c_n=0$.
+  Thus $\ker T=\{0\}$, and Proposition~\ref{prop:injective-kernel}
+  shows that $T$ is injective. Therefore $T$ is an isomorphism.
+  When $n=0$, the unique map between the two zero spaces is an
+  isomorphism as well.
+\end{proof}
+
+\subsection{The space of linear maps and the space of matrices}
+
+Fix ordered bases
+\[
+  \mathcal B=(v_1,\ldots,v_n)
+  \qquad\text{and}\qquad
+  \mathcal C=(w_1,\ldots,w_m)
+\]
+of $V$ and $W$, respectively. To keep track of both bases, write
+$[T]_{\mathcal C}^{\mathcal B}$ for the matrix of
+$T\in\mathcal L(V,W)$, characterized by
+\[
+  [T(v)]_{\mathcal C}
+    =[T]_{\mathcal C}^{\mathcal B}[v]_{\mathcal B}.
+\]
+Thus the $j$th column is $[T(v_j)]_{\mathcal C}$, as in
+Theorem~\ref{thm:matrix-representation}. The superscript specifies the domain basis and the subscript specifies
+the codomain basis. Thus the matrix takes $\mathcal B$-coordinates to
+$\mathcal C$-coordinates.
+
+\begin{proposition}\label{prop:matrix-map-isomorphism}
+  The map
+  \[
+    \mathcal M\colon\mathcal L(V,W)\longrightarrow M_{m\times n}(\bb{F}),
+    \qquad \mathcal M(T)=[T]_{\mathcal C}^{\mathcal B},
+  \]
+  is an isomorphism of vector spaces.
+\end{proposition}
+
+\begin{proof}
+  The calculations in
+  Section~\ref{subsec:matrix-operations-linear-maps} show that
+  \[
+    \mathcal M(T+S)=\mathcal M(T)+\mathcal M(S),
+    \qquad
+    \mathcal M(\alpha T)=\alpha\mathcal M(T).
+  \]
+  Hence $\mathcal M$ is linear.
+
+  For injectivity, suppose that $\mathcal M(T)$ is the zero matrix.
+  Every column is zero, so for each $j$,
+  \[
+    T(v_j)=0w_1+\cdots+0w_m=0.
+  \]
+  Since the $v_j$ form a basis, linearity implies that $T(v)=0$ for
+  every $v\in V$. Thus $T$ is the zero map, and
+  $\ker\mathcal M=\{0\}$. By
+  Proposition~\ref{prop:injective-kernel}, $\mathcal M$ is injective.
+
+  For surjectivity, take an arbitrary matrix
+  $A=[A_{ij}]\in M_{m\times n}(\bb{F})$. Prescribe
+  \[
+    T(v_j)=\sum_{i=1}^m A_{ij}w_i
+    \qquad (j=1,\ldots,n).
+  \]
+  Lemma~\ref{lem:linear-map} gives a linear map $T\in\mathcal L(V,W)$
+  with these values, and its matrix is exactly $A$. Therefore
+  $\mathcal M$ is surjective. Being linear and bijective, it is an
+  isomorphism by Proposition~\ref{prop:invertible-iff-bijective}.
+\end{proof}
+
+\begin{corollary}\label{cor:dimension-linear-maps}
+  If $V$ and $W$ are finite-dimensional, then $\mathcal L(V,W)$ is
+  finite-dimensional and
+  \[
+    \dim\mathcal L(V,W)=(\dim V)(\dim W).
+  \]
+\end{corollary}
+
+\begin{proof}
+  Set $n=\dim V$ and $m=\dim W$. For $1\leq i\leq m$ and
+  $1\leq j\leq n$, let $E_{ij}$ be the matrix with a $1$ in entry
+  $(i,j)$ and zeros elsewhere. Every matrix $A=[A_{ij}]$ has the
+  unique expansion
+  \[
+    A=\sum_{i=1}^m\sum_{j=1}^n A_{ij}E_{ij}.
+  \]
+  Thus the $mn$ matrices $E_{ij}$ form a basis of
+  $M_{m\times n}(\bb{F})$. Because $\mathcal M$ is a linear
+  isomorphism, the maps $\mathcal M^{-1}(E_{ij})$ form a basis of
+  $\mathcal L(V,W)$. Hence this space is finite-dimensional with
+  dimension $mn$. If either $m$ or $n$ is zero, the space of linear
+  maps is the zero space, and the same formula holds.
+\end{proof}
+
+\subsection{Invertible matrices}
+
+\begin{definition}[Invertible matrix]
+  A square matrix $A\in M_{n\times n}(\bb{F})$ is \emph{invertible}
+  if there exists $B\in M_{n\times n}(\bb{F})$ such that
+  \[
+    AB=BA=I_n,
+  \]
+  where $I_n$ is the identity matrix. We call $B$ the \emph{inverse}
+  of $A$ and denote it by $A^{-1}$.
+\end{definition}
+
+The inverse is unique: if $B$ and $C$ are both inverses of $A$, then
+\[
+  B=B(AC)=(BA)C=C.
+\]
+
+Let $V$ and $W$ be finite-dimensional, and let $T\colon V\to W$
+be an isomorphism. By
+Proposition~\ref{prop:isomorphic-iff-equal-dimension}, both spaces
+have the same dimension $n$. Let
+\[
+  A=[T]_{\mathcal C}^{\mathcal B},
+  \qquad
+  B=[T^{-1}]_{\mathcal B}^{\mathcal C}.
+\]
+By Section~\ref{subsec:composition-matrix-multiplication}, composition
+corresponds to matrix multiplication. Thus
+$T^{-1}T=\operatorname{Id}_V$ and
+$TT^{-1}=\operatorname{Id}_W$ give
+\[
+  BA=I_n
+  \qquad\text{and}\qquad
+  AB=I_n.
+\]
+Consequently,
+\[
+  [T^{-1}]_{\mathcal B}^{\mathcal C}
+    =\bigl([T]_{\mathcal C}^{\mathcal B}\bigr)^{-1}.
+\]
+Notice that the roles of the domain and codomain bases are reversed
+for the inverse map.
+
+\subsection{Change of basis}
+
+Let
+\[
+  \mathcal B=(v_1,\ldots,v_n)
+  \qquad\text{and}\qquad
+  \mathcal C=(u_1,\ldots,u_n)
+\]
+be two ordered bases of the same vector space $V$. Define
+\[
+  P=[\operatorname{Id}_V]_{\mathcal C}^{\mathcal B},
+  \qquad
+  Q=[\operatorname{Id}_V]_{\mathcal B}^{\mathcal C}.
+\]
+Although the identity map leaves each vector unchanged, its matrix
+need not be $I_n$ when the domain and codomain use different bases.
+Here
+\[
+  [v]_{\mathcal C}=P[v]_{\mathcal B},
+  \qquad
+  [v]_{\mathcal B}=Q[v]_{\mathcal C}.
+\]
+In particular, the columns of $P$ are the old basis vectors
+expressed in the new basis:
+\[
+  P=
+  \begin{bmatrix}
+    \vert & & \vert \\
+    [v_1]_{\mathcal C} & \cdots & [v_n]_{\mathcal C} \\
+    \vert & & \vert
+  \end{bmatrix}.
+\]
+
+\begin{proposition}\label{prop:change-of-basis-inverses}
+  The matrices $P$ and $Q$ are invertible, and each is the inverse
+  of the other.
+\end{proposition}
+
+\begin{proof}
+  Changing from $\mathcal B$-coordinates to $\mathcal C$-coordinates
+  and then back represents the composition
+  $\operatorname{Id}_V\circ\operatorname{Id}_V=\operatorname{Id}_V$
+  with $\mathcal B$ used at both ends. Hence $QP=I_n$.
+  Reversing the order gives $PQ=I_n$. Thus $Q=P^{-1}$.
+\end{proof}
+
+\begin{proposition}[Change-of-basis formula]
+  \label{prop:change-of-basis-formula}
+  Let $T\in\mathcal L(V,V)$, and let
+  \[
+    A=[T]_{\mathcal B}^{\mathcal B},
+    \qquad
+    B=[T]_{\mathcal C}^{\mathcal C}.
+  \]
+  With $P=[\operatorname{Id}_V]_{\mathcal C}^{\mathcal B}$,
+  we have
+  \[
+    B=PAP^{-1}=PAQ.
+  \]
+\end{proposition}
+
+\begin{proof}
+  Applying $T$ and then changing coordinates has the same effect as
+  changing coordinates first and then applying $T$ in the new basis.
+  The following diagram expresses this equality:
+  \[
+    \begin{CD}
+      [v]_{\mathcal B} @>{A}>> [T(v)]_{\mathcal B} \\
+      @V{P}VV @VV{P}V \\
+      [v]_{\mathcal C} @>{B}>> [T(v)]_{\mathcal C}.
+    \end{CD}
+  \]
+  Equivalently, the identity
+  $T\circ\operatorname{Id}_V=\operatorname{Id}_V\circ T$ gives
+  \[
+    BP=PA.
+  \]
+  Multiplying on the right by $P^{-1}=Q$ yields
+  $B=PAP^{-1}=PAQ$.
+\end{proof}
+
+To interpret the formula, start with a vector in
+$\mathcal C$-coordinates. The rightmost factor $P^{-1}$ converts it
+to $\mathcal B$-coordinates, $A$ computes the coordinates of its
+image under $T$, and $P$ converts the result back to
+$\mathcal C$-coordinates.
