@@ -1,0 +1,272 @@
+\section{September 30, 2026}
+
+\subsection{A change-of-basis example}
+
+Recall Proposition~\ref{prop:change-of-basis-formula} and its notation.
+If $\mathcal B$ and $\mathcal C$ are ordered bases of $V$, then
+\[
+  A=[T]_{\mathcal B}^{\mathcal B},\qquad
+  B=[T]_{\mathcal C}^{\mathcal C},\qquad
+  P=[\operatorname{Id}_V]_{\mathcal C}^{\mathcal B}
+\]
+satisfy $B=PAP^{-1}$. Equivalently, if
+$Q=P^{-1}=[\operatorname{Id}_V]_{\mathcal B}^{\mathcal C}$, then
+\[
+  A=QBQ^{-1},\qquad B=Q^{-1}AQ.
+\]
+Thus the direction of the coordinate change determines which matrix
+appears on the left of $A$.
+
+\begin{example}
+  Let $V=\mathcal P_2(\bb{R})$, with ordered bases
+  \[
+    \mathcal B=(1,x,x^2),\qquad
+    \mathcal C=(1,x+1,(x+1)^2),
+  \]
+  and define $T\colon V\to V$ by $(Tp)(x)=xp'(x)$.
+  Expanding the vectors of $\mathcal C$ in the basis $\mathcal B$ gives
+  \[
+    Q=[\operatorname{Id}_V]_{\mathcal B}^{\mathcal C}
+      =\begin{bmatrix}1&1&1\\0&1&2\\0&0&1\end{bmatrix},
+    \qquad
+    P=Q^{-1}
+      =\begin{bmatrix}1&-1&1\\0&1&-2\\0&0&1\end{bmatrix}.
+  \]
+  Since $T(1)=0$, $T(x)=x$, and $T(x^2)=2x^2$, we have
+  \[
+    A=[T]_{\mathcal B}^{\mathcal B}
+      =\begin{bmatrix}0&0&0\\0&1&0\\0&0&2\end{bmatrix}.
+  \]
+  Therefore
+  \begin{align*}
+    B=[T]_{\mathcal C}^{\mathcal C}
+      &=Q^{-1}AQ\\
+      &=\begin{bmatrix}1&-1&1\\0&1&-2\\0&0&1\end{bmatrix}
+        \begin{bmatrix}0&0&0\\0&1&0\\0&0&2\end{bmatrix}
+        \begin{bmatrix}1&1&1\\0&1&2\\0&0&1\end{bmatrix}\\
+      &=\begin{bmatrix}0&-1&0\\0&1&-2\\0&0&2\end{bmatrix}.
+  \end{align*}
+  We can also check the columns directly:
+  \begin{align*}
+    T(1)&=0,\\
+    T(x+1)&=x=-1+(x+1),\\
+    T((x+1)^2)&=2x(x+1)=-2(x+1)+2(x+1)^2.
+  \end{align*}
+\end{example}
+
+\subsection{Polynomials and their zeros}
+
+We now turn to polynomials (Chapter~4 of Axler). Write
+$\mathcal P(\bb{F})$ for the space of polynomials over $\bb{F}$ and
+$\mathcal P_m(\bb{F})$ for those of degree at most $m$, together with
+the zero polynomial.
+
+\begin{definition}[Degree and zeros]
+  A nonzero polynomial
+  \[
+    p(z)=a_0+a_1z+\cdots+a_mz^m,
+    \qquad a_0,\ldots,a_m\in\bb{F},\quad a_m\neq0,
+  \]
+  has \emph{degree} $m$, denoted $\deg p=m$. We use the convention
+  $\deg 0=-\infty$. A scalar $\lambda\in\bb{F}$ is a \emph{zero}
+  or \emph{root} of $p$ if $p(\lambda)=0$.
+\end{definition}
+
+Each polynomial defines a function $\bb{F}\to\bb{F}$ by evaluation.
+Over an infinite field, in particular $\bb{R}$ or $\bb{C}$, this
+function uniquely determines the coefficients, as we prove below.
+Over a finite field, we distinguish a polynomial from the function
+it defines.
+
+\begin{proposition}[Factor theorem]\label{prop:polynomial-factor-theorem}
+  Let $p\in\mathcal P(\bb{F})$ have degree $m\geq1$, and let
+  $\lambda\in\bb{F}$. Then $p(\lambda)=0$ if and only if there is
+  a polynomial $q$ of degree $m-1$ such that
+  \[
+    p(z)=(z-\lambda)q(z).
+  \]
+\end{proposition}
+
+\begin{proof}
+  If $p(z)=(z-\lambda)q(z)$, evaluation at $z=\lambda$ gives
+  $p(\lambda)=0$.
+
+  Conversely, suppose $p(\lambda)=0$, and write
+  $p(z)=a_0+a_1z+\cdots+a_mz^m$, where $a_m\neq0$. Using
+  \[
+    z^k-\lambda^k
+      =(z-\lambda)\sum_{j=0}^{k-1}z^{k-1-j}\lambda^j
+      \qquad(k\geq1),
+  \]
+  we obtain
+  \begin{align*}
+    p(z)&=p(z)-p(\lambda)\\
+      &=\sum_{k=1}^m a_k(z^k-\lambda^k)\\
+      &=(z-\lambda)
+        \underbrace{\sum_{k=1}^m a_k
+          \sum_{j=0}^{k-1}z^{k-1-j}\lambda^j}_{q(z)}.
+  \end{align*}
+  The leading term of $q$ is $a_mz^{m-1}$, so $\deg q=m-1$.
+\end{proof}
+
+\begin{proposition}\label{prop:polynomial-root-bound}
+  A nonzero polynomial of degree $m$ has at most $m$ distinct roots
+  in $\bb{F}$.
+\end{proposition}
+
+\begin{proof}
+  We argue by induction on $m$. A nonzero constant has no roots.
+  For $m=1$, the polynomial $a_0+a_1z$, with $a_1\neq0$, has the
+  unique root $-a_0/a_1$.
+
+  Suppose $m\geq2$ and the result holds for degree $m-1$. If $p$
+  has no roots, there is nothing to prove. Otherwise, choose a root
+  $\lambda$. By Proposition~\ref{prop:polynomial-factor-theorem},
+  \[
+    p(z)=(z-\lambda)q(z),\qquad \deg q=m-1.
+  \]
+  If $\mu\neq\lambda$ is another root of $p$, then
+  $0=(\mu-\lambda)q(\mu)$ implies $q(\mu)=0$. By the induction
+  hypothesis, $q$ has at most $m-1$ distinct roots. Including
+  $\lambda$, the polynomial $p$ therefore has at most $m$.
+\end{proof}
+
+\begin{example}
+  The polynomial $p(z)=z^2+1$ has no roots in $\bb{R}$, but has
+  exactly two roots in $\bb{C}$, namely $i$ and $-i$.
+\end{example}
+
+\subsection{Uniqueness of polynomial coefficients}
+
+\begin{corollary}\label{cor:polynomial-coefficients-unique}
+  Over an infinite field $\bb{F}$, a polynomial's values as a
+  function $\bb{F}\to\bb{F}$ uniquely determine its coefficients.
+\end{corollary}
+
+\begin{proof}
+  Suppose that, for every $z\in\bb{F}$,
+  \[
+    a_0+a_1z+\cdots+a_mz^m=b_0+b_1z+\cdots+b_nz^n.
+  \]
+  Without loss of generality, assume $m\geq n$, and put $b_j=0$
+  for $n<j\leq m$. The polynomial
+  \[
+    h(z)=\sum_{j=0}^m(a_j-b_j)z^j
+  \]
+  vanishes at every element of $\bb{F}$, so it has infinitely many
+  roots. Proposition~\ref{prop:polynomial-root-bound} implies that
+  $h$ is the zero polynomial. Thus $a_j=b_j$ for every $j$.
+\end{proof}
+
+In particular, over an infinite field the degree of a nonzero
+polynomial function is well-defined.
+
+\begin{example}[Why the infinite-field hypothesis matters]
+  Over $\bb{F}_2$, the nonzero polynomial $p(z)=z^2+z$ defines the
+  zero function: $p(0)=0$ and $p(1)=1+1=0$. Thus distinct
+  polynomials can give the same function on a finite field.
+  As a polynomial, $z^2+z$ still has degree $2$.
+\end{example}
+
+\subsection{The division algorithm for polynomials}
+
+For integers $a\geq0$ and $b>0$, the division algorithm gives unique
+integers $q,r\geq0$ such that $a=qb+r$ and $0\leq r<b$.
+For polynomials, degree takes the place of the size of an integer.
+
+\begin{theorem}[Polynomial division algorithm]
+  \label{thm:polynomial-division}
+  Let $p,s\in\mathcal P(\bb{F})$, with $s\neq0$. There exist unique
+  polynomials $q,r\in\mathcal P(\bb{F})$ such that
+  \[
+    p=qs+r,\qquad \deg r<\deg s.
+  \]
+  The polynomials $q$ and $r$ are the \emph{quotient} and
+  \emph{remainder}, respectively.
+\end{theorem}
+
+\begin{example}
+  If $p(z)=z^2+1$ and $s(z)=z-2$, then
+  \[
+    z^2+1=z(z-2)+2(z-2)+5=(z+2)(z-2)+5.
+  \]
+  Hence $q(z)=z+2$ and $r(z)=5$.
+\end{example}
+
+\begin{proof}[Proof of Theorem~\ref{thm:polynomial-division}]
+  If $p=0$, take $q=r=0$. Otherwise, let $n=\deg p$ and
+  $m=\deg s$. If $n<m$, take $q=0$ and $r=p$.
+
+  Suppose $n\geq m$. Consider the following list in
+  $\mathcal P_n(\bb{F})$:
+  \[
+    1,z,\ldots,z^{m-1},\ s,zs,\ldots,z^{n-m}s.
+  \]
+  Its members have distinct degrees $0,1,\ldots,n$, with nonzero
+  leading coefficients. They are linearly independent: in a
+  nontrivial linear combination, the term of highest degree with
+  a nonzero coefficient cannot be canceled by the others. There
+  are $n+1=\dim\mathcal P_n(\bb{F})$ members, so they form a basis.
+  Therefore there are unique scalars such that
+  \[
+    p(z)=\underbrace{r_0+r_1z+\cdots+r_{m-1}z^{m-1}}_{r(z)}
+      +\underbrace{(q_0+q_1z+\cdots+q_{n-m}z^{n-m})}_{q(z)}s(z).
+  \]
+  This gives $p=qs+r$ with $\deg r<m$. If $m=0$, the initial
+  list $1,z,\ldots,z^{m-1}$ is empty, and $r=0$.
+
+  To verify uniqueness in all cases, suppose
+  $p=q_1s+r_1=q_2s+r_2$, with $\deg r_1,\deg r_2<m$. Then
+  \[
+    (q_1-q_2)s=r_2-r_1.
+  \]
+  If $q_1-q_2\neq0$, the left side has degree
+  $\deg(q_1-q_2)+m\geq m$, whereas the right side has degree
+  less than $m$, a contradiction. Hence $q_1=q_2$ and $r_1=r_2$.
+\end{proof}
+
+\subsection{Factorization over the complex and real numbers}
+
+\begin{theorem}[Factorization over $\bb{C}$]
+  \label{thm:complex-polynomial-factorization}
+  Every nonconstant polynomial $p\in\mathcal P(\bb{C})$ of degree
+  $m$ has a factorization
+  \[
+    p(z)=c(z-\lambda_1)\cdots(z-\lambda_m),
+  \]
+  where $c\in\bb{C}\setminus\{0\}$ and
+  $\lambda_1,\ldots,\lambda_m\in\bb{C}$. The scalar $c$ is the
+  leading coefficient of $p$, and the roots, listed with
+  multiplicity, are unique up to permutation.
+\end{theorem}
+
+This is the factorization form of the fundamental theorem of algebra.
+Repeated roots are allowed; the root bound counts distinct roots.
+
+\begin{theorem}[Factorization over $\bb{R}$]
+  \label{thm:real-polynomial-factorization}
+  Every nonconstant polynomial $p\in\mathcal P(\bb{R})$ has a
+  factorization
+  \[
+    p(x)=c\prod_{j=1}^{k}(x-\lambda_j)
+      \prod_{\ell=1}^{r}(x^2+b_\ell x+c_\ell),
+  \]
+  where $c\in\bb{R}\setminus\{0\}$,
+  $\lambda_j,b_\ell,c_\ell\in\bb{R}$, and
+  \[
+    b_\ell^2<4c_\ell\qquad(\ell=1,\ldots,r).
+  \]
+  The factorization is unique up to reordering the factors, with
+  multiplicities included, and $\deg p=k+2r$. Either product may
+  be empty.
+\end{theorem}
+
+The inequality $b_\ell^2<4c_\ell$ says that the quadratic factor
+has negative discriminant, so it has no real roots. Such factors
+arise by pairing nonreal conjugate roots: if $\lambda=a+bi$ with
+$b\neq0$, then
+\[
+  (x-\lambda)(x-\overline\lambda)
+    =x^2-2ax+(a^2+b^2),
+\]
+whose discriminant is $-4b^2<0$.

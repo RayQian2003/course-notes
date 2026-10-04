@@ -1,0 +1,479 @@
+\section{September 29, 2026}
+
+Throughout, $(X,\mathcal M,\mu)$ is a measure space. We continue to
+write $\mathbf 1_E$ for a characteristic function and $m$ for Lebesgue
+measure. Recall that a measurable real- or complex-valued function is
+\emph{integrable} precisely when
+\[
+  \int_X|f|\,d\mu<\infty.
+\]
+We write $\mathcal L^1(X,\mu)$ for actual integrable functions and
+$L^1(X,\mu)$ for their equivalence classes under a.e. equality, usually
+denoting a class by its representative $f$. A nonnegative measurable
+function can have a well-defined integral equal to $+\infty$ without
+being integrable.
+
+\subsection{Dominated convergence revisited}
+
+Recall Theorem~\ref{thm:dct-sep-24}: if $f_n\to f$ a.e. and there is
+a nonnegative $g\in\mathcal L^1(X,\mu)$ such that $|f_n|\leq g$ a.e.
+for every $n$, then $f$ is integrable and
+\[
+  \int_X|f_n-f|\,d\mu\longrightarrow0,
+  \qquad
+  \int_X f_n\,d\mu\longrightarrow\int_X f\,d\mu.
+\]
+As before, a limit defined only a.e. is extended measurably by zero on
+a measurable null exceptional set.
+
+\begin{example}
+  On $X=(0,1]$ with Lebesgue measure, let
+  \[
+    f_n(x)=\frac{e^{-x/n}}{\sqrt{x}}.
+  \]
+  Then $f_n(x)\to x^{-1/2}$ and
+  $0\leq f_n(x)\leq g(x)=x^{-1/2}$. Since
+  $\int_{(0,1]}g\,dm=2$, dominated convergence gives
+  \[
+    \lim_{n\to\infty}\int_{(0,1]}
+      \frac{e^{-x/n}}{\sqrt{x}}\,dm=2.
+  \]
+  Since this sequence is increasing, Theorem~\ref{thm:mct-sep-22}
+  also gives the same conclusion by monotone convergence.
+\end{example}
+
+\begin{proof}[Alternative proof using Fatou's lemma]
+  First suppose that all the functions are real-valued. After changing
+  them on one measurable null set, assume that $f_n\to f$ and
+  $|f_n|\leq g$ everywhere. Then $|f|\leq g$, so $f$ is integrable.
+  The functions $g+f_n$ and $g-f_n$ are nonnegative. Fatou's lemma
+  (Theorem~\ref{thm:fatou-sep-22}) applied to the first sequence gives
+  \begin{align*}
+    \int_X g\,d\mu+\int_X f\,d\mu
+      &=\int_X\liminf_{n\to\infty}(g+f_n)\,d\mu\\
+      &\leq\liminf_{n\to\infty}\int_X(g+f_n)\,d\mu\\
+      &=\int_X g\,d\mu+\liminf_{n\to\infty}\int_X f_n\,d\mu.
+  \end{align*}
+  Similarly,
+  \begin{align*}
+    \int_X g\,d\mu-\int_X f\,d\mu
+      &\leq\liminf_{n\to\infty}\int_X(g-f_n)\,d\mu\\
+      &=\int_X g\,d\mu-\limsup_{n\to\infty}\int_X f_n\,d\mu.
+  \end{align*}
+  Since $\int_X g\,d\mu$ is finite, subtraction is legitimate. Thus
+  \[
+    \limsup_{n\to\infty}\int_X f_n\,d\mu
+      \leq\int_X f\,d\mu
+      \leq\liminf_{n\to\infty}\int_X f_n\,d\mu.
+  \]
+  The reverse inequality between $\liminf$ and $\limsup$ always
+  holds, so the limit exists and equals $\int_X f\,d\mu$.
+
+  For complex-valued functions, apply the real-valued result to the
+  real and imaginary parts, both dominated in absolute value by $g$.
+  Finally, applying the result to $|f_n-f|\leq2g$ also recovers
+  convergence in $L^1$.
+\end{proof}
+
+\begin{example}[Why Fatou's lemma needs a lower bound]
+  On $\bb R$, set $f_n=-\mathbf 1_{(n,n+1)}$. Then $f_n\to0$
+  pointwise, but
+  \[
+    \int_{\bb R}\liminf_n f_n\,dm=0
+      >-1=\liminf_n\int_{\bb R}f_n\,dm.
+  \]
+  Likewise, for $h_n=\mathbf 1_{(0,1)}-\mathbf 1_{(n,n+1)}$,
+  \[
+    h_n\longrightarrow\mathbf 1_{(0,1)}\quad\text{pointwise},
+    \qquad \int h_n\,dm=0,
+    \qquad \int\liminf_n h_n\,dm=1.
+  \]
+  Thus Fatou's inequality cannot be applied directly to arbitrary
+  signed functions. It does apply when there is a common integrable
+  lower bound $u$: apply the nonnegative version to $f_n-u$ and then
+  add $\int u$. The proof above uses the lower bound $-g$.
+\end{example}
+
+\subsection{Absolutely summable series of integrable functions}
+
+\begin{corollary}\label{cor:integrable-series-sep-29}
+  Suppose $f_n\in\mathcal L^1(X,\mu)$ and
+  \[
+    \sum_{n=1}^{\infty}\int_X|f_n|\,d\mu<\infty.
+  \]
+  Then $\sum_{n=1}^{\infty}f_n(x)$ converges absolutely for a.e.
+  $x$. Its sum $f$, extended by zero on the exceptional set, is
+  integrable, and
+  \[
+    \int_X f\,d\mu
+      =\int_X\sum_{n=1}^{\infty}f_n\,d\mu
+      =\sum_{n=1}^{\infty}\int_X f_n\,d\mu.
+  \]
+  The partial sums also converge to $f$ in $L^1$.
+\end{corollary}
+
+\begin{proof}
+  By Proposition~\ref{prop:nonnegative-series-sep-22}, which follows
+  from monotone convergence, the measurable function
+  \[
+    g=\sum_{n=1}^{\infty}|f_n|
+  \]
+  satisfies
+  \[
+    \int_X g\,d\mu
+      =\sum_{n=1}^{\infty}\int_X|f_n|\,d\mu<\infty.
+  \]
+  In particular, $g<\infty$ a.e.: for every $M>0$,
+  $M\mu(\{g=+\infty\})\leq\int g$, forcing this set to be null.
+  Hence the series defining $f$ converges absolutely a.e.
+
+  Set $F_N=\sum_{n=1}^N f_n$. Then $F_N\to f$ a.e. and
+  $|F_N|\leq g$. Changing $g$ to zero on its null set of infinite
+  values gives an integrable dominating function in the a.e. sense.
+  Dominated convergence and finite linearity give
+  \[
+    \int_X f\,d\mu
+      =\lim_{N\to\infty}\int_X F_N\,d\mu
+      =\lim_{N\to\infty}\sum_{n=1}^N\int_X f_n\,d\mu.
+  \]
+  Dominated convergence also gives $\|F_N-f\|_1\to0$. More precisely,
+  the pointwise tail estimate implies
+  \[
+    \|f-F_N\|_1
+      \leq\sum_{n=N+1}^{\infty}\|f_n\|_1\longrightarrow0.
+  \]
+  Finally, Proposition~\ref{prop:integral-triangle-sep-24} shows that
+  the series of integrals is absolutely convergent as well.
+\end{proof}
+
+\subsection{Completeness of \texorpdfstring{$L^1$}{L1}}
+
+Recall from Proposition~\ref{prop:l1-metric-sep-24} that
+\[
+  d(f,g)=\|f-g\|_1=\int_X|f-g|\,d\mu
+\]
+is a metric on the space of a.e. equivalence classes $L^1(X,\mu)$.
+
+\begin{theorem}\label{thm:l1-complete-sep-29}
+  The metric space $(L^1(X,\mu),d)$ is complete. Equivalently,
+  $L^1(X,\mu)$ with the norm $\|f\|_1=\int_X|f|\,d\mu$ is a
+  Banach space.
+\end{theorem}
+
+\begin{proof}
+  Let $(f_n)$ be Cauchy in $L^1$. Choose strictly increasing indices
+  $n_k$ such that
+  \[
+    d(f_p,f_q)<2^{-k}\qquad\text{whenever }p,q\geq n_k.
+  \]
+  In particular, $d(f_{n_{k+1}},f_{n_k})<2^{-k}$. Choose measurable
+  representatives and define
+  \[
+    g_1=f_{n_1},\qquad
+    g_k=f_{n_k}-f_{n_{k-1}}\quad(k\geq2).
+  \]
+  Then
+  \[
+    \sum_{k=1}^{\infty}\|g_k\|_1
+      \leq\|f_{n_1}\|_1+\sum_{k=2}^{\infty}2^{-(k-1)}<\infty.
+  \]
+  Corollary~\ref{cor:integrable-series-sep-29} gives an integrable
+  function $f=\sum_{k=1}^{\infty}g_k$, with absolute convergence
+  a.e. The partial sums telescope:
+  \[
+    \sum_{k=1}^K g_k=f_{n_K}.
+  \]
+  Thus $f_{n_K}\to f$ a.e. To see the metric convergence directly,
+  set $h=\sum_{k=1}^{\infty}|g_k|$. We have $h\in L^1$ after a
+  null modification, and
+  \[
+    |f_{n_K}-f|\leq2h\quad\text{a.e.}
+  \]
+  Dominated convergence gives $d(f_{n_K},f)\to0$.
+
+  Finally, convergence of this subsequence and the Cauchy property
+  imply convergence of the original sequence. Given $\varepsilon>0$,
+  choose $N$ so that $d(f_p,f_q)<\varepsilon/2$ for $p,q\geq N$,
+  and then choose $K$ with $n_K\geq N$ and
+  $d(f_{n_K},f)<\varepsilon/2$. For every $n\geq N$,
+  \[
+    d(f_n,f)\leq d(f_n,f_{n_K})+d(f_{n_K},f)<\varepsilon.
+  \]
+  Hence $f_n\to f$ in $L^1$.
+\end{proof}
+
+\begin{example}[Convergence in $L^1$ need not be pointwise]
+  \label{ex:typewriter-sep-29}
+  On $[0,1]$ with Lebesgue measure, list the characteristic functions
+  of the dyadic intervals one level at a time. More precisely, for
+  $k\geq0$ and $0\leq j<2^k$, set
+  \[
+    I_{k,j}=
+    \begin{cases}
+      [j2^{-k},(j+1)2^{-k}),&j<2^k-1,\\
+      [1-2^{-k},1],&j=2^k-1,
+    \end{cases}
+    \qquad f_{2^k+j}=\mathbf 1_{I_{k,j}}.
+  \]
+  Thus the first levels are
+  \[
+    \mathbf 1_{[0,1]};\qquad
+    \mathbf 1_{[0,1/2)},\ \mathbf 1_{[1/2,1]};\qquad
+    \mathbf 1_{[0,1/4)},\ \mathbf 1_{[1/4,1/2)},\
+    \mathbf 1_{[1/2,3/4)},\ \mathbf 1_{[3/4,1]}.
+  \]
+  The endpoint convention makes each level a partition of $[0,1]$.
+  For $2^k\leq n<2^{k+1}$,
+  \[
+    d(f_n,0)=\int_{[0,1]}f_n\,dm=2^{-k}\longrightarrow0.
+  \]
+  Nevertheless, each $x\in[0,1]$ belongs to exactly one interval in
+  every level. Thus $f_n(x)=1$ infinitely often and $f_n(x)=0$
+  infinitely often. In particular,
+  \[
+    \liminf_n f_n(x)=0,\qquad\limsup_n f_n(x)=1
+    \qquad(x\in[0,1]).
+  \]
+  The sequence converges to zero in $L^1$ but converges pointwise
+  nowhere. This explains why the completeness proof first selects a
+  subsequence to obtain an a.e. limit.
+\end{example}
+
+\begin{example}[An $L^1$ limit of continuous functions]
+  On $\bb R$, define the continuous functions
+  \[
+    f_n(x)=
+    \begin{cases}
+      0,&x\leq-1/n,\\
+      1+nx,&-1/n<x<0,\\
+      1,&0\leq x\leq1,\\
+      1-n(x-1),&1<x<1+1/n,\\
+      0,&x\geq1+1/n.
+    \end{cases}
+  \]
+  Then $f_n\to\mathbf 1_{[0,1]}$ pointwise and
+  \[
+    \|f_n-\mathbf 1_{[0,1]}\|_1
+      =\frac1{2n}+\frac1{2n}=\frac1n\longrightarrow0.
+  \]
+  Thus $(f_n)$ is Cauchy in $L^1$, although its limit has no continuous
+  representative. Indeed, any continuous representative would have
+  to be identically zero on $(-\infty,0)$ and identically one on
+  $(0,1)$, contradicting continuity at zero. Consequently, the
+  subspace of continuous integrable functions is not complete in the
+  $L^1$ metric.
+\end{example}
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[x=4cm,y=2cm,>=Latex]
+    \fill[blue!15] (-0.35,0)--(0,1)--(0,0)--cycle;
+    \fill[blue!15] (1,0)--(1,1)--(1.35,0)--cycle;
+    \draw[->] (-0.55,0)--(1.6,0) node[right] {$x$};
+    \draw[->] (0,-0.12)--(0,1.35);
+    \draw[blue!75!black,very thick]
+      (-0.5,0)--(-0.35,0)--(0,1)--(1,1)--(1.35,0)--(1.5,0);
+    \draw[orange!85!black,thick,dashed] (0,0)--(0,1)--(1,1)--(1,0);
+    \node[below] at (-0.35,0) {$-1/n$};
+    \node[below left] at (0,0) {$0$};
+    \node[below] at (1,0) {$1$};
+    \node[below] at (1.35,0) {$1+1/n$};
+    \node[left] at (0,1) {$1$};
+    \node[blue!75!black] at (0.5,1.2) {$f_n$};
+  \end{tikzpicture}
+  \caption{The two shaded triangles give the $L^1$ distance from
+    $f_n$ to $\mathbf 1_{[0,1]}$. Their total area is $1/n$.}
+  \label{fig:continuous-l1-approximation-sep-29}
+\end{figure}
+
+\FloatBarrier
+
+\subsection{Integrals depending on a parameter}
+
+Let $-\infty<a<b<\infty$, and suppose
+$f\colon X\times[a,b]\to\bb C$ has integrable sections
+$f(\cdot,t)$ for every $t\in[a,b]$. Define
+\[
+  F(t)=\int_X f(x,t)\,d\mu(x).
+\]
+
+\begin{theorem}[Continuity under the integral sign]
+  \label{thm:parameter-continuity-sep-29}
+  Suppose there is a nonnegative $g\in\mathcal L^1(X,\mu)$ and a
+  measurable null set $N$ such that
+  \[
+    |f(x,t)|\leq g(x)\qquad(x\notin N,\ t\in[a,b]).
+  \]
+  If $t\mapsto f(x,t)$ is continuous at $t_0\in[a,b]$ for every
+  $x\notin N$, then $F$ is continuous at $t_0$, relative to $[a,b]$.
+\end{theorem}
+
+\begin{proof}
+  For any sequence $t_n\to t_0$ in $[a,b]$, the functions
+  $f_n(x)=f(x,t_n)$ converge a.e. to $f(x,t_0)$ and satisfy
+  $|f_n|\leq g$ a.e. Dominated convergence yields
+  \[
+    F(t_n)=\int_X f(x,t_n)\,d\mu(x)
+      \longrightarrow\int_X f(x,t_0)\,d\mu(x)=F(t_0).
+  \]
+  The sequential criterion for continuity gives the result.
+\end{proof}
+
+\begin{theorem}[Differentiation under the integral sign]
+  \label{thm:parameter-differentiation-sep-29}
+  Suppose there is a measurable null set $N$ such that
+  $t\mapsto f(x,t)$ is differentiable on $(a,b)$ for every
+  $x\notin N$. If there is a nonnegative
+  $g\in\mathcal L^1(X,\mu)$ with
+  \[
+    \left|\frac{\partial f}{\partial t}(x,t)\right|\leq g(x)
+    \qquad(x\notin N,\ t\in(a,b)),
+  \]
+  then $F$ is differentiable on $(a,b)$ and
+  \[
+    F'(t)=\int_X\frac{\partial f}{\partial t}(x,t)\,d\mu(x).
+  \]
+  The derivative in this integral is extended by zero on $N$.
+\end{theorem}
+
+\begin{proof}
+  Fix $t_0\in(a,b)$ and an arbitrary sequence $t_n\to t_0$ with
+  $t_n\in(a,b)\setminus\{t_0\}$. Put
+  \[
+    h_n(x)=\frac{f(x,t_n)-f(x,t_0)}{t_n-t_0}.
+  \]
+  Each $h_n$ is measurable, and
+  \[
+    h_n(x)\longrightarrow\frac{\partial f}{\partial t}(x,t_0)
+    \qquad(x\notin N).
+  \]
+  In particular, the derivative, extended by zero on $N$, is
+  measurable as a pointwise limit of measurable functions; compare
+  Proposition~\ref{prop:measurable-sequential-operations-sep-17} and
+  Corollary~\ref{cor:complex-coordinate-measurability-sep-17}.
+
+  The mean value inequality gives $|h_n(x)|\leq g(x)$ off $N$.
+  For completeness, this remains valid for complex-valued $f$:
+  choose $|\alpha|=1$ so that
+  $\alpha(f(x,t_n)-f(x,t_0))$ is nonnegative real, and apply the
+  real mean value theorem to $t\mapsto\operatorname{Re}(\alpha f(x,t))$
+  on the interval with endpoints $t_0,t_n$. Its derivative has
+  absolute value at most $g(x)$, proving the claimed inequality.
+
+  Dominated convergence and linearity now yield
+  \begin{align*}
+    \int_X\frac{\partial f}{\partial t}(x,t_0)\,d\mu(x)
+      &=\lim_{n\to\infty}\int_X h_n\,d\mu\\
+      &=\lim_{n\to\infty}
+        \frac{F(t_n)-F(t_0)}{t_n-t_0}.
+  \end{align*}
+  Since the sequence $t_n\to t_0$ was arbitrary, this is precisely
+  differentiability at $t_0$ and the asserted formula for $F'(t_0)$.
+\end{proof}
+
+\begin{remark}
+  Both results are local in the parameter: it suffices to have the
+  appropriate integrable bound on a neighborhood of the parameter
+  under consideration. The exceptional null set must be common to
+  all parameter values in that neighborhood.
+\end{remark}
+
+\begin{example}[Exponential integrals and factorials]
+  Let $X=(0,+\infty)$ with Lebesgue measure, and set
+  \[
+    f(x,t)=e^{-tx},\qquad
+    F(t)=\int_0^{\infty}e^{-tx}\,dx=\frac1t\quad(t>0).
+  \]
+  For $1\leq t\leq2$,
+  \[
+    \left|\frac{\partial f}{\partial t}(x,t)\right|
+      =xe^{-tx}\leq xe^{-x},
+  \]
+  an integrable bound. Hence, for $1<t<2$,
+  \[
+    -\frac1{t^2}=F'(t)=-\int_0^{\infty}xe^{-tx}\,dx.
+  \]
+  More generally, on any compact parameter interval $[c,d]$
+  with $0<c<d$,
+  \[
+    \left|\frac{\partial^r f}{\partial t^r}(x,t)\right|
+      =x^r e^{-tx}\leq x^r e^{-cx}\qquad(r\geq0).
+  \]
+  These bounds are integrable. Indeed, using the term of degree $r$
+  in the exponential series gives
+  \[
+    e^{cx/2}\geq\frac{(cx/2)^r}{r!},\qquad
+    x^r e^{-cx}\leq r!\left(\frac2c\right)^r e^{-cx/2}.
+  \]
+  Repeated differentiation under the integral sign is therefore
+  justified on $(0,+\infty)$, giving
+  \[
+    F^{(r)}(t)
+      =\frac{(-1)^r r!}{t^{r+1}}
+      =(-1)^r\int_0^{\infty}x^r e^{-tx}\,dx.
+  \]
+  Consequently,
+  \[
+    \int_0^{\infty}x^r e^{-tx}\,dx=\frac{r!}{t^{r+1}},
+    \qquad
+    \int_0^{\infty}x^r e^{-x}\,dx=r!
+    \qquad(r=0,1,2,\ldots).
+  \]
+  To evaluate at $t=1$, use a parameter interval containing $1$ in
+  its interior, for example $[1/2,2]$.
+\end{example}
+
+\subsection{Lebesgue versus Riemann integration}
+
+Let $f\colon[a,b]\to\bb R$ be bounded. For a partition
+\[
+  P=\{a=t_0<t_1<\cdots<t_n=b\},
+\]
+define
+\[
+  m_j=\inf_{t\in[t_{j-1},t_j]}f(t),\qquad
+  M_j=\sup_{t\in[t_{j-1},t_j]}f(t).
+\]
+
+\begin{definition}[Darboux sums and integrals]
+  The \emph{lower sum} and \emph{upper sum} associated with $P$ are
+  \[
+    s_P(f)=\sum_{j=1}^n m_j(t_j-t_{j-1}),\qquad
+    S_P(f)=\sum_{j=1}^n M_j(t_j-t_{j-1}).
+  \]
+  The lower and upper Riemann integrals are
+  \[
+    \underline I_a^b(f)=\sup_P s_P(f),\qquad
+    \overline I_a^b(f)=\inf_P S_P(f),
+  \]
+  where $P$ ranges over all partitions of $[a,b]$. The function $f$
+  is \emph{Riemann integrable} when these two numbers agree; their
+  common value is denoted by $\int_a^b f(x)\,dx$.
+\end{definition}
+
+Refining a partition increases its lower sum and decreases its upper
+sum. Taking a common refinement of any two partitions gives
+\[
+  \underline I_a^b(f)\leq\overline I_a^b(f).
+\]
+Equivalently, $f$ is Riemann integrable if for every $\varepsilon>0$
+there is a partition $P$ such that
+\[
+  S_P(f)-s_P(f)<\varepsilon.
+\]
+
+\begin{remark}[Connection with simple-function integration]
+  The step functions with respective values $m_j$ and $M_j$ on
+  $(t_{j-1},t_j]$ bound $f$ a.e. Their Lebesgue integrals are
+  $s_P(f)$ and $S_P(f)$; endpoint values do not affect the integrals
+  by Corollary~\ref{cor:ae-integrals-sep-22}. If $f$ is Lebesgue
+  measurable, it is integrable by boundedness, and
+  \[
+    \underline I_a^b(f)
+      \leq\int_{[a,b]}f\,dm
+      \leq\overline I_a^b(f).
+  \]
+  Thus the two integrals agree whenever $f$ is also Riemann integrable.
+\end{remark}
+
+\FloatBarrier

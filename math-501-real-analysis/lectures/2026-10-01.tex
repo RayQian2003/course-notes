@@ -1,0 +1,386 @@
+\section{October 1, 2026}
+
+We complete the comparison of Riemann and Lebesgue integration, then
+study convergence in measure. As before, $m$ denotes Lebesgue measure,
+$\mathbf 1_E$ denotes a characteristic function, and
+$d(f,g)=\|f-g\|_1=\int_X|f-g|\,d\mu$ is the metric on
+$L^1(X,\mu)$.
+
+\subsection{Darboux sums and refining partitions}
+
+Let $f\colon[a,b]\to\bb R$ be bounded, where $a<b$. Recall that for
+a partition $P=\{a=t_0<t_1<\cdots<t_n=b\}$ we set
+\[
+  m_j=\inf_{[t_{j-1},t_j]}f,\qquad
+  M_j=\sup_{[t_{j-1},t_j]}f,
+\]
+and define the lower and upper sums by
+\[
+  s_P(f)=\sum_{j=1}^n m_j(t_j-t_{j-1}),\qquad
+  S_P(f)=\sum_{j=1}^n M_j(t_j-t_{j-1}).
+\]
+If $Q$ refines $P$, then
+\[
+  s_P(f)\leq s_Q(f)\leq S_Q(f)\leq S_P(f).
+\]
+Taking common refinements gives
+\[
+  \underline I_a^b(f):=\sup_P s_P(f)
+    \leq\inf_P S_P(f)=:\overline I_a^b(f).
+\]
+Equality is precisely Riemann integrability, and the common value is
+$\int_a^b f(x)\,dx$.
+
+\begin{lemma}\label{lem:refining-partitions-oct-01}
+  There is a sequence of partitions $(P_k)$ such that
+  $P_k\subseteq P_{k+1}$,
+  \[
+    \operatorname{mesh}(P_k)
+      :=\max_j(t_j-t_{j-1})\longrightarrow0,
+  \]
+  and
+  \[
+    s_{P_k}(f)\uparrow\underline I_a^b(f),\qquad
+    S_{P_k}(f)\downarrow\overline I_a^b(f).
+  \]
+\end{lemma}
+
+\begin{proof}
+  For each $k$, choose partitions $A_k,B_k$ with
+  \[
+    s_{A_k}(f)>\underline I_a^b(f)-\frac1k,\qquad
+    S_{B_k}(f)<\overline I_a^b(f)+\frac1k.
+  \]
+  Let $D_k$ be the partition into $2^k$ equal subintervals, and let
+  $P_k$ be the common refinement of $A_1,\ldots,A_k$,
+  $B_1,\ldots,B_k$, and $D_k$. These partitions are nested and have
+  mesh at most $(b-a)2^{-k}$. The refinement inequalities and the
+  choices of $A_k,B_k$ give the asserted limits.
+\end{proof}
+
+\subsection{Riemann integrability and the discontinuity set}
+
+\begin{theorem}[Lebesgue's criterion for Riemann integrability]
+  \label{thm:riemann-lebesgue-oct-01}
+  Let $f\colon[a,b]\to\bb R$ be bounded.
+  \begin{enumerate}[label=(\roman*)]
+    \item If $f$ is Riemann integrable, then it is Lebesgue measurable
+      and integrable, and
+      \[
+        \int_a^b f(x)\,dx=\int_{[a,b]}f\,dm.
+      \]
+    \item The function $f$ is Riemann integrable if and only if
+      \[
+        D:=\{x\in[a,b]:f\text{ is discontinuous at }x\}
+      \]
+      has Lebesgue measure zero. Continuity at the endpoints is
+      understood relative to $[a,b]$.
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}[Proof of (i)]
+  For each partition $P$, define the step functions
+  \[
+    g_P=f(a)\mathbf 1_{\{a\}}
+      +\sum_{j=1}^n m_j\mathbf 1_{(t_{j-1},t_j]},\qquad
+    G_P=f(a)\mathbf 1_{\{a\}}
+      +\sum_{j=1}^n M_j\mathbf 1_{(t_{j-1},t_j]}.
+  \]
+  Then $g_P\leq f\leq G_P$ everywhere, and
+  \[
+    \int_{[a,b]}g_P\,dm=s_P(f),\qquad
+    \int_{[a,b]}G_P\,dm=S_P(f).
+  \]
+  Choose the nested partitions of
+  Lemma~\ref{lem:refining-partitions-oct-01}. Refinement gives
+  $g_{P_k}\uparrow g$ and $G_{P_k}\downarrow G$ for bounded
+  measurable functions $g,G$, with $g\leq f\leq G$. If $|f|\leq M$,
+  all these functions are bounded in absolute value by $M$.
+  Dominated convergence on the finite interval therefore gives
+  \[
+    \int_{[a,b]}g\,dm=\underline I_a^b(f),\qquad
+    \int_{[a,b]}G\,dm=\overline I_a^b(f).
+  \]
+  One can also apply monotone convergence to $g_{P_k}+M$ and
+  $M-G_{P_k}$.
+
+  If $f$ is Riemann integrable, these integrals agree. Thus
+  $G-g\geq0$ has integral zero, so $G=g$ a.e. by
+  Lemma~\ref{lem:zero-integral-sep-22}. The inequalities
+  $g\leq f\leq G$ imply $f=g$ outside the measurable null set
+  $\{G\neq g\}$. Completeness of Lebesgue measure makes $f$
+  Lebesgue measurable, even though measurability was not assumed.
+  Boundedness gives integrability, and a.e. equality yields
+  \[
+    \int_{[a,b]}f\,dm=\int_{[a,b]}g\,dm
+      =\int_a^b f(x)\,dx.
+  \]
+\end{proof}
+
+\begin{proof}[Proof of (ii)]
+  For $x\in[a,b]$, define the local lower and upper envelopes
+  \[
+    h(x)=\lim_{\delta\downarrow0}
+      \inf_{\substack{y\in[a,b]\\|y-x|\leq\delta}}f(y),\qquad
+    H(x)=\lim_{\delta\downarrow0}
+      \sup_{\substack{y\in[a,b]\\|y-x|\leq\delta}}f(y).
+  \]
+  These limits exist: as the neighborhood shrinks, the infimum
+  increases and the supremum decreases, and both stay bounded.
+  Moreover,
+  \[
+    h(x)\leq f(x)\leq H(x).
+  \]
+  The function $f$ is continuous at $x$ if and only if
+  $h(x)=H(x)$. Indeed, continuity forces both envelopes to equal
+  $f(x)$; conversely, equality makes the supremum and infimum on a
+  sufficiently small neighborhood arbitrarily close to $f(x)$.
+
+  Use the same partitions and step functions as above, and let
+  \[
+    T=\bigcup_{k=1}^{\infty}P_k.
+  \]
+  This is a countable set, hence $m(T)=0$. We claim that
+  \[
+    g(x)=h(x),\qquad G(x)=H(x)\qquad(x\notin T).
+  \]
+  Fix $x\notin T$. For any $\delta>0$, if
+  $\operatorname{mesh}(P_k)<\delta$, the closed partition interval
+  containing $x$ lies in $[x-\delta,x+\delta]$. Hence
+  \[
+    g_{P_k}(x)\geq
+      \inf_{\substack{y\in[a,b]\\|y-x|\leq\delta}}f(y).
+  \]
+  First letting $k\to\infty$, then $\delta\downarrow0$, gives
+  $g(x)\geq h(x)$.
+
+  Conversely, for fixed $k$ we have
+  $\operatorname{dist}(x,P_k)>0$. If
+  $0<\delta<\operatorname{dist}(x,P_k)$, the neighborhood
+  $[x-\delta,x+\delta]$ lies inside the partition interval containing
+  $x$, so
+  \[
+    g_{P_k}(x)\leq
+      \inf_{\substack{y\in[a,b]\\|y-x|\leq\delta}}f(y).
+  \]
+  Letting $\delta\downarrow0$ and then $k\to\infty$ gives
+  $g(x)\leq h(x)$. The same argument with suprema gives $G(x)=H(x)$.
+
+  Since $h=g$ and $H=G$ outside the null set $T$, completeness of
+  Lebesgue measure implies that $h,H$ are measurable. In particular,
+  $D=\{H-h>0\}$ is measurable. The integral identities proved above
+  hold for any bounded $f$, without assuming Riemann integrability.
+  Consequently,
+  \[
+    \overline I_a^b(f)-\underline I_a^b(f)
+      =\int_{[a,b]}(G-g)\,dm=\int_{[a,b]}(H-h)\,dm.
+  \]
+  Since $H-h\geq0$, the right-hand side is zero if and only if
+  $H=h$ a.e., or equivalently $m(D)=0$. The left-hand side is zero
+  precisely when $f$ is Riemann integrable.
+\end{proof}
+
+\subsection{Examples of different modes of convergence}
+
+\begin{example}\label{ex:convergence-modes-oct-01}
+  On $(\bb R,\mathcal L,m)$, consider
+  \[
+    f_n=\frac1n\mathbf 1_{(0,n)},\qquad
+    g_n=\mathbf 1_{(n,n+1)},\qquad
+    h_n=n\mathbf 1_{[0,1/n]}.
+  \]
+  \begin{enumerate}[label=(\roman*)]
+    \item $f_n\to0$ uniformly, since $\sup_x|f_n(x)|=1/n$.
+    \item $g_n\to0$ pointwise, since each fixed $x$ eventually lies
+      outside $(n,n+1)$. The convergence is not uniform, since
+      $\sup_x|g_n(x)|=1$.
+    \item $h_n\to0$ a.e., but not at every point: $h_n(0)=n$, while
+      $h_n(x)=0$ eventually for every $x\neq0$.
+  \end{enumerate}
+  Nevertheless, for every $n$,
+  \[
+    \int_{\bb R}f_n\,dm=\int_{\bb R}g_n\,dm
+      =\int_{\bb R}h_n\,dm=1.
+  \]
+  All three functions are nonnegative, so their $L^1$ distances to
+  zero equal $1$. None of these sequences converges to zero in
+  $L^1$. Compare Example~\ref{ex:dominating-envelope-sep-24}.
+\end{example}
+
+\begin{example}[The typewriter sequence revisited]
+  Use the dyadic intervals $I_{k,j}$ from
+  Example~\ref{ex:typewriter-sep-29}, with the same endpoint convention,
+  and write $p_{2^k+j}=\mathbf 1_{I_{k,j}}$ on $[0,1]$, where
+  $k\geq0$ and $0\leq j<2^k$. Then
+  \[
+    \|p_{2^k+j}\|_1=m(I_{k,j})=2^{-k}\longrightarrow0.
+  \]
+  Thus $p_n\to0$ in $L^1([0,1],m)$, although $p_n(x)$ fails to
+  converge at every $x\in[0,1]$: it takes the values $0$ and $1$
+  infinitely often. Hence $L^1$ convergence does not imply a.e.
+  convergence of the whole sequence.
+\end{example}
+
+\subsection{Convergence in measure}
+
+Let $(X,\mathcal M,\mu)$ be a measure space, and let $f_n,f$ be
+measurable complex-valued functions on $X$.
+
+\begin{definition}
+  The sequence $(f_n)$ is \emph{Cauchy in measure} if, for every
+  $\varepsilon>0$,
+  \[
+    \mu\bigl(\{x:|f_n(x)-f_m(x)|\geq\varepsilon\}\bigr)
+      \longrightarrow0\qquad(n,m\to\infty).
+  \]
+  It \emph{converges in measure} to $f$ if, for every
+  $\varepsilon>0$,
+  \[
+    \mu\bigl(\{x:|f_n(x)-f(x)|\geq\varepsilon\}\bigr)
+      \longrightarrow0\qquad(n\to\infty).
+  \]
+\end{definition}
+
+Convergence in measure implies the Cauchy property, since
+\[
+  \{|f_n-f_m|\geq\varepsilon\}
+    \subseteq\{|f_n-f|\geq\varepsilon/2\}
+      \cup\{|f_m-f|\geq\varepsilon/2\}.
+\]
+
+\begin{example}
+  For the sequences in Example~\ref{ex:convergence-modes-oct-01},
+  both $f_n$ and $h_n$ converge to zero in measure. For a fixed
+  $\varepsilon>0$, the set $\{|f_n|\geq\varepsilon\}$ is empty
+  once $1/n<\varepsilon$, while
+  \[
+    m(\{|h_n|\geq\varepsilon\})=\frac1n
+      \qquad(n\geq\varepsilon).
+  \]
+  The typewriter sequence also converges to zero in measure, since
+  for $0<\varepsilon\leq1$,
+  \[
+    m(\{|p_{2^k+j}|\geq\varepsilon\})=2^{-k}.
+  \]
+  However, $(g_n)$ is not even Cauchy in measure. If $n\neq m$, the
+  intervals $(n,n+1)$ and $(m,m+1)$ are disjoint, so
+  \[
+    m(\{|g_n-g_m|\geq1/2\})=2.
+  \]
+  Thus pointwise convergence need not imply convergence in measure
+  on a space of infinite measure.
+\end{example}
+
+\begin{lemma}[Markov's inequality]\label{lem:markov-oct-01}
+  If $u\colon X\to\bb C$ is measurable and $\varepsilon>0$, then
+  \[
+    \mu(\{|u|\geq\varepsilon\})
+      \leq\frac1\varepsilon\int_X|u|\,d\mu.
+  \]
+  The inequality is understood in the extended sense if the integral
+  is infinite.
+\end{lemma}
+
+\begin{proof}
+  Set $E=\{|u|\geq\varepsilon\}$. Since
+  $|u|\mathbf 1_E\geq\varepsilon\mathbf 1_E$, monotonicity gives
+  \[
+    \varepsilon\mu(E)\leq\int_E|u|\,d\mu
+      \leq\int_X|u|\,d\mu.
+  \]
+  Divide by $\varepsilon$.
+\end{proof}
+
+\begin{proposition}\label{prop:l1-in-measure-oct-01}
+  If $f_n\to f$ in $L^1(X,\mu)$, then $f_n\to f$ in measure.
+\end{proposition}
+
+\begin{proof}
+  For each $\varepsilon>0$, Markov's inequality yields
+  \[
+    \mu(\{|f_n-f|\geq\varepsilon\})
+      \leq\frac1\varepsilon\int_X|f_n-f|\,d\mu
+      =\frac1\varepsilon d(f_n,f)\longrightarrow0.
+  \]
+\end{proof}
+
+\subsection{Limits of sequences that are Cauchy in measure}
+
+\begin{theorem}\label{thm:cauchy-in-measure-oct-01}
+  Let $(f_n)$ be a sequence of measurable functions $X\to\bb C$
+  that is Cauchy in measure. Then there is a measurable function
+  $f\colon X\to\bb C$ such that $f_n\to f$ in measure. Moreover, some
+  subsequence $(f_{n_j})$ converges to $f$ a.e.
+\end{theorem}
+
+\begin{proof}
+  Choose strictly increasing indices $n_j$ such that
+  \[
+    \mu(\{|f_p-f_q|\geq2^{-j}\})<2^{-j}
+      \qquad(p,q\geq n_j).
+  \]
+  Set $g_j=f_{n_j}$ and define
+  \[
+    E_j=\{|g_{j+1}-g_j|\geq2^{-j}\},\qquad
+    F_k=\bigcup_{j=k}^{\infty}E_j.
+  \]
+  Then
+  \[
+    \mu(F_k)\leq\sum_{j=k}^{\infty}\mu(E_j)
+      \leq\sum_{j=k}^{\infty}2^{-j}=2^{1-k}.
+  \]
+  If $x\notin F_k$ and $i>j\geq k$, the triangle inequality gives
+  \begin{equation}\label{eq:subsequence-tail-oct-01}
+    |g_i(x)-g_j(x)|
+      \leq\sum_{\ell=j}^{i-1}|g_{\ell+1}(x)-g_\ell(x)|
+      \leq\sum_{\ell=j}^{i-1}2^{-\ell}
+      <2^{1-j}.
+  \end{equation}
+  The set $F=\bigcap_{k=1}^{\infty}F_k$ is measurable and null,
+  since $\mu(F)\leq\mu(F_k)\leq2^{1-k}$ for every $k$.
+  If $x\notin F$, then $x\notin F_k$ for some $k$, and
+  \eqref{eq:subsequence-tail-oct-01} shows that $(g_j(x))$ is Cauchy
+  in $\bb C$. By completeness of $\bb C$, we may define
+  \[
+    f(x)=
+    \begin{cases}
+      \displaystyle\lim_{j\to\infty}g_j(x),&x\notin F,\\
+      0,&x\in F.
+    \end{cases}
+  \]
+  The measurable functions $g_j\mathbf 1_{X\setminus F}$ converge
+  everywhere to $f$, so $f$ is measurable. In particular,
+  $g_j\to f$ a.e. This construction does not require the measure
+  space to be complete.
+
+  Letting $i\to\infty$ in
+  \eqref{eq:subsequence-tail-oct-01}, with $j=k$, gives
+  \[
+    |f(x)-g_k(x)|\leq2^{1-k}\qquad(x\notin F_k).
+  \]
+  For any fixed $\varepsilon>0$, once $2^{1-k}<\varepsilon$,
+  \[
+    \{|f-g_k|\geq\varepsilon\}\subseteq F_k,
+    \qquad
+    \mu(\{|f-g_k|\geq\varepsilon\})\leq2^{1-k}\longrightarrow0.
+  \]
+  Thus the subsequence converges to $f$ in measure as well.
+
+  Finally, pass back to the original sequence. Fix
+  $\varepsilon,\eta>0$. The Cauchy property gives $N$ such that
+  \[
+    \mu(\{|f_n-f_m|\geq\varepsilon/2\})<\eta/2
+      \qquad(n,m\geq N).
+  \]
+  Choose $j$ with $n_j\geq N$ and
+  $\mu(\{|g_j-f|\geq\varepsilon/2\})<\eta/2$. For every $n\geq N$,
+  \[
+    \{|f_n-f|\geq\varepsilon\}
+      \subseteq\{|f_n-g_j|\geq\varepsilon/2\}
+        \cup\{|g_j-f|\geq\varepsilon/2\},
+  \]
+  so $\mu(\{|f_n-f|\geq\varepsilon\})<\eta$. Since $\eta$ was
+  arbitrary, $f_n\to f$ in measure.
+\end{proof}
+
+\FloatBarrier

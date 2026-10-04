@@ -1,0 +1,310 @@
+\section{September 28, 2026}
+% Based on pages 1--3 of 5510928.pdf.
+
+We revisit stability of Gauss and Radau methods, interpret their
+stability functions as Pad\'e approximations to the exponential,
+and study reversibility under a change in the direction of time.
+We retain \(A\) for the matrix in a linear ODE,
+\(\mathsf A=(a_{ij})\) for the RK coefficient matrix, and
+\(\tau=t_{n+1}-t_n\). As in the earlier lectures, \(\Phi\) is
+the exact flow and \(\Psi\) is the numerical flow.
+
+\subsection{Linear stability and stiff decay}
+
+For the constant-coefficient system \(x'=Ax\), the exact and RK
+updates are
+\[
+ x(t_{n+1})=e^{\tau A}x(t_n),\qquad
+ x_{n+1}=R(\tau A)x_n.
+\]
+Here \(R\) is the rational stability function
+\begin{equation}\label{eq:rk-stability-sep-28}
+ R(z)=1+z b^{\mathsf T}(I-z\mathsf A)^{-1}\mathbf1,
+ \qquad z=\tau\lambda.
+\end{equation}
+If \(R=P/Q\), its matrix evaluation means
+\(R(\tau A)=Q(\tau A)^{-1}P(\tau A)\), whenever defined;
+the RK stage system must also be solvable.
+
+Recall the distinction between the strict stability region
+\(\mathcal S\), where \(|R(z)|<1\), and the non-strict domain
+\(\mathcal D\), where \(|R(z)|\leq1\). In both cases we require
+the stages to be defined. The handwritten notes use the non-strict
+convention in this lecture. An \(A\)-stable method has
+\[
+ \{z\in\bb C:\operatorname{Re}z\leq0\}\subseteq\mathcal D.
+\]
+Gauss and Radau IIA methods are \(A\)-stable for every number
+of stages \(s\geq1\).
+
+For the differential equation, asymptotic stability of the origin
+means that every solution tends to zero, and is equivalent to
+\begin{equation}\label{eq:linear-decay-sep-28}
+ \operatorname{Re}\lambda<0\qquad\text{for all }\lambda\in\sigma(A).
+\end{equation}
+The sign is negative. Mere boundedness allows eigenvalues on the
+imaginary axis, provided they are semisimple, as discussed on
+September 11. Likewise, at a fixed positive step size,
+\[
+ R(\tau A)^n\longrightarrow0
+ \quad\Longleftrightarrow\quad
+ |R(\tau\lambda)|<1\quad\text{for all }\lambda\in\sigma(A).
+\]
+Gauss and Radau IIA satisfy this strict inequality in the open
+left half-plane, so both reproduce asymptotic decay for every
+\(\tau>0\) when \eqref{eq:linear-decay-sep-28} holds.
+
+\begin{definition}[\(L\)-stability]
+ An \(A\)-stable method is \emph{\(L\)-stable} if
+ \[
+  R(z)\longrightarrow0
+  \quad\text{as }|z|\to\infty\text{ in the left half-plane}.
+ \]
+\end{definition}
+
+In particular, for a fixed \(\lambda\) with
+\(\operatorname{Re}\lambda<0\), an \(L\)-stable method satisfies
+\(R(\tau\lambda)\to0\) as \(\tau\to\infty\), matching the
+limit of \(e^{\tau\lambda}\). This is a one-step damping property
+for very stiff modes, in addition to decay over many fixed steps.
+Radau IIA methods are \(L\)-stable; Gauss methods are not.
+
+\subsection{Pad\'e approximation of the exponential}
+
+\begin{definition}[Pad\'e approximant]
+ The \([m/n]\) Pad\'e approximant of \(e^z\) is a rational
+ function \(P_m(z)/Q_n(z)\), with
+ \[
+  \deg P_m\leq m,\qquad \deg Q_n\leq n,\qquad Q_n(0)=1,
+ \]
+ whose Taylor expansion agrees with that of \(e^z\) through
+ degree \(m+n\):
+ \begin{equation}\label{eq:pade-matching-sep-28}
+  Q_n(z)e^z-P_m(z)=O(z^{m+n+1}).
+ \end{equation}
+\end{definition}
+
+An RK method of order \(p\), applied to the scalar test equation,
+necessarily satisfies
+\[
+ R(z)=e^z+O(z^{p+1}).
+\]
+This explains the connection between RK stability functions and
+rational approximations to the exponential. The Pad\'e property
+requires the particular degree and matching conditions above;
+it does not hold for every RK stability function.
+
+For an \(s\)-stage RK method, the determinant identity gives
+\[
+ R(z)=
+ \frac{\det(I-z\mathsf A+z\mathbf1 b^{\mathsf T})}
+      {\det(I-z\mathsf A)}.
+\]
+Thus the numerator and denominator have degrees at most \(s\).
+A Gauss method has order \(2s\), so its stability function is
+the diagonal \([s/s]\) Pad\'e approximant of \(e^z\).
+The first two examples are
+\begin{align*}
+ R_{\mathrm{G},1}(z)&=\frac{1+z/2}{1-z/2},
+ &R_{\mathrm{G},1}(z)-e^z&=O(z^3),\\
+ R_{\mathrm{G},2}(z)&=\frac{1+z/2+z^2/12}{1-z/2+z^2/12},
+ &R_{\mathrm{G},2}(z)-e^z&=O(z^5).
+\end{align*}
+Consequently, on a linear system these methods give rational
+matrix approximations
+\[
+ e^{\tau A}\approx R(\tau A).
+\]
+For example, the one-stage Gauss method replaces the exponential by
+\((I-\tau A/2)^{-1}(I+\tau A/2)\).
+
+The diagonal exponential approximant can be written as
+\begin{equation}\label{eq:gauss-pade-sep-28}
+ R_{\mathrm{G},s}(z)=\frac{P_s(z)}{P_s(-z)},
+ \qquad
+ P_s(z)=\sum_{k=0}^s
+ \frac{(2s-k)!\,s!}{(2s)!\,(s-k)!\,k!}\,z^k.
+\end{equation}
+Its numerator and denominator have the same degree, and their
+leading coefficients differ by \((-1)^s\). Hence
+\[
+ \lim_{|z|\to\infty}R_{\mathrm{G},s}(z)=(-1)^s,
+\]
+which explains the failure of \(L\)-stability.
+
+\subsubsection{The nonlinear flow operator}
+
+For an autonomous equation \(x'=f(x)\) in \(\bb R^d\), introduce
+the differential operator
+\[
+ \mathcal L g(x)=\sum_{j=1}^d f_j(x)\frac{\partial g}{\partial x_j}(x)
+               =Dg(x)f(x).
+\]
+Along the exact solution,
+\[
+ \frac{d}{dt}g(x(t))=(\mathcal Lg)(x(t)).
+\]
+Thus the action of the exact flow on functions is formally
+\[
+ g(\Phi^\tau(x))=(e^{\tau\mathcal L}g)(x)
+ =g(x)+\tau\mathcal Lg(x)
+       +\frac{\tau^2}{2}\mathcal L^2g(x)+\cdots.
+\]
+For smooth functions this can be read as a finite Taylor expansion
+with a remainder; convergence of the infinite series needs further
+assumptions. This is the operator analogy with the matrix
+exponential mentioned in class. For general nonlinear \(f\), the
+RK map is not in general obtained by simply substituting
+\(\tau\mathcal L\) into its scalar stability function. The formula
+\(R(\tau A)x\) is exact for the numerical update of a linear system.
+
+\subsection{Why Radau IIA is \texorpdfstring{\(L\)}{L}-stable}
+
+Suppose \(\mathsf A\) is invertible. From
+\eqref{eq:rk-stability-sep-28},
+\[
+ z(I-z\mathsf A)^{-1}=-\mathsf A^{-1}+O(|z|^{-1}),
+\]
+and therefore
+\begin{equation}\label{eq:rk-limit-sep-28}
+ \lim_{|z|\to\infty}R(z)
+   =1-b^{\mathsf T}\mathsf A^{-1}\mathbf1.
+\end{equation}
+If \(b^{\mathsf T}\) coincides with the last row of
+\(\mathsf A\), then
+\[
+ b^{\mathsf T}=e_s^{\mathsf T}\mathsf A
+ \quad\Longrightarrow\quad
+ 1-b^{\mathsf T}\mathsf A^{-1}\mathbf1
+ =1-e_s^{\mathsf T}\mathbf1=0.
+\]
+Here \(e_s\) is the last coordinate vector. Together with
+\(A\)-stability, this proves \(L\)-stability.
+
+For collocation, the coefficients are
+\[
+ b_j=\int_0^1\ell_j(\theta)\,d\theta,\qquad
+ a_{ij}=\int_0^{c_i}\ell_j(\theta)\,d\theta.
+\]
+Right Radau nodes include \(c_s=1\), so \(a_{sj}=b_j\).
+This is the stiff accuracy property from September 25, and the
+last stage equals \(x_{n+1}\). The nodes are distinct and nonzero,
+so \(\mathsf A\) is invertible by the polynomial argument given
+there. Since Radau IIA is also \(A\)-stable, every member of the
+family is \(L\)-stable.
+
+For the first two members,
+\[
+ R_{\mathrm{R},1}(z)=\frac1{1-z},\qquad
+ R_{\mathrm{R},2}(z)=\frac{1+z/3}{1-2z/3+z^2/6}.
+\]
+Both tend to zero as \(|z|\to\infty\). More generally, the
+denominator has degree \(s\), and the zero limit forces the
+numerator to have degree at most \(s-1\). Since Radau IIA has
+order \(2s-1\), its stability function is the \([s-1/s]\)
+Pad\'e approximant of the exponential.
+
+\subsection{Time reversibility of a one-step method}
+
+For the exact flow of \(x'=f(t,x)\), uniqueness implies
+\[
+ \Phi^{t_2,t_1}(x(t_1))=x(t_2),\qquad
+ \Phi^{t_1,t_2}(x(t_2))=x(t_1).
+\]
+Whenever both directions of the flow exist,
+\begin{equation}\label{eq:exact-reversibility-sep-28}
+ \Phi^{t_1,t_2}\circ\Phi^{t_2,t_1}=I.
+\end{equation}
+Advancing along a solution and then returning along the same
+solution recovers the initial value.
+
+\begin{definition}
+ A one-step method is \emph{time-reversible}, or
+ \emph{symmetric}, if
+ \begin{equation}\label{eq:numerical-reversibility-sep-28}
+  \Psi^{t_n,t_{n+1}}\circ\Psi^{t_{n+1},t_n}=I.
+ \end{equation}
+ The backward map uses the same method with step \(-\tau\).
+ For an autonomous equation this reads
+ \(\Psi^{-\tau}\circ\Psi^\tau=I\).
+\end{definition}
+
+For implicit methods, this statement is understood where the
+forward and backward steps are well defined, using the locally
+unique solution branches of their stage equations.
+
+\begin{example}[Forward Euler is not reversible]
+ A forward step gives
+ \[
+  x_{n+1}=x_n+\tau f(t_n,x_n).
+ \]
+ Applying forward Euler with step \(-\tau\) from \(t_{n+1}\)
+ gives a returned value
+ \begin{align*}
+  \widehat x_n
+   &=x_{n+1}-\tau f(t_{n+1},x_{n+1})\\
+   &=x_n+\tau f(t_n,x_n)-\tau f(t_{n+1},x_{n+1}),
+ \end{align*}
+ which generally differs from \(x_n\). On \(x'=\lambda x\),
+ the forward and backward multipliers give
+ \[
+  \widehat x_n=(1-z)(1+z)x_n=(1-z^2)x_n.
+ \]
+\end{example}
+
+\subsection{Reversibility of Gauss collocation}
+
+\begin{theorem}
+ Gauss collocation methods are time-reversible wherever the
+ relevant collocation solutions are uniquely defined.
+\end{theorem}
+
+\begin{proof}
+ Let \(t_{n+1}=t_n+\tau\), and let \(u\in(\mathcal P_s)^d\)
+ be the forward collocation polynomial:
+ \[
+  u(t_n)=x_n,\qquad
+  u'(t_n+c_i\tau)=f(t_n+c_i\tau,u(t_n+c_i\tau)),
+ \]
+ with \(x_{n+1}=u(t_{n+1})\). The backward step seeks
+ \(v\in(\mathcal P_s)^d\) satisfying
+ \[
+  v(t_{n+1})=x_{n+1},\qquad
+  v'(t_{n+1}-c_i\tau)
+    =f(t_{n+1}-c_i\tau,v(t_{n+1}-c_i\tau)).
+ \]
+ Gauss nodes obey \(c_{s+1-i}=1-c_i\). Consequently,
+ \[
+  t_{n+1}-c_i\tau
+    =t_n+(1-c_i)\tau=t_n+c_{s+1-i}\tau.
+ \]
+ The backward collocation points are precisely the forward
+ collocation points in reverse order. The polynomial \(u\)
+ therefore satisfies all the backward conditions as well.
+ Uniqueness gives \(v=u\), and the returned value is
+ \(v(t_n)=u(t_n)=x_n\), proving
+ \eqref{eq:numerical-reversibility-sep-28}.
+\end{proof}
+
+The derivative in this proof is taken with respect to physical
+time; the backward step changes the node locations through
+\(-\tau\). Equivalently, in the normalized variable,
+\(V(\theta)=U(1-\theta)\) has
+\(V'(\theta)=-U'(1-\theta)\), which supplies the negative step
+in the backward collocation equations.
+
+On the scalar test equation, reversibility requires
+\[
+ R(-z)R(z)=1
+\]
+where both steps are defined. The Gauss Pad\'e formula
+\eqref{eq:gauss-pade-sep-28} has exactly this property.
+For the one-stage method, it is also immediate from
+\[
+ x_{n+1}=x_n+\tau f\left(t_n+\frac\tau2,
+                              \frac{x_n+x_{n+1}}2\right):
+\]
+interchanging the endpoints and replacing \(\tau\) by
+\(-\tau\) leaves the equation unchanged. The collocation proof
+extends this symmetry to every Gauss method and to nonlinear,
+time-dependent vector fields.

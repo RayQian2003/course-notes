@@ -1,0 +1,212 @@
+\section{October 2, 2026}
+
+\subsection{Operators and invariant subspaces}
+
+\begin{definition}[Linear operator]
+  A linear map from a vector space $V$ to itself is called a
+  \emph{linear operator} on $V$. We write
+  $\mathcal L(V)=\mathcal L(V,V)$ for the space of all operators
+  on $V$.
+\end{definition}
+
+One goal in studying an operator $T\in\mathcal L(V)$ is to find
+a direct sum decomposition
+\[
+  V=V_1\oplus\cdots\oplus V_n
+\]
+into subspaces that $T$ preserves. We can then study $T$ by
+studying its restrictions to these subspaces.
+
+\begin{definition}[Invariant subspace]
+  Let $T\in\mathcal L(V)$. A subspace $U\subseteq V$ is
+  \emph{invariant under $T$} if $T(u)\in U$ for every $u\in U$;
+  equivalently, $T(U)\subseteq U$.
+\end{definition}
+
+When $U$ is invariant under $T$, the restriction
+$T|_U\colon U\to U$ is itself an operator on $U$.
+
+\begin{example}
+  Define $D\in\mathcal L(\mathcal P(\bb{R}))$ by $D(p)=p''$.
+  The subspace $\mathcal P_5(\bb{R})$ is invariant under $D$:
+  taking two derivatives of a polynomial of degree at most $5$
+  produces a polynomial of degree at most $3$, or the zero
+  polynomial, and hence an element of $\mathcal P_5(\bb{R})$.
+\end{example}
+
+\begin{example}
+  For every $T\in\mathcal L(V)$, the subspaces
+  \[
+    \{0\},\qquad V,\qquad \ker T,\qquad \operatorname{im}T
+  \]
+  are invariant under $T$. The first two assertions follow from
+  $T(0)=0$ and the fact that $T$ maps $V$ to itself. If
+  $u\in\ker T$, then $T(u)=0\in\ker T$. If
+  $u\in\operatorname{im}T$, then $u=T(v)$ for some $v\in V$,
+  and $T(u)=T(T(v))\in\operatorname{im}T$.
+\end{example}
+
+\subsection{Eigenvalues and eigenvectors}
+
+Consider a one-dimensional subspace of $V$. Let
+$v\in V\setminus\{0\}$ and $U=\operatorname{span}\{v\}$. If
+$U$ is invariant under $T$, then $T(v)\in U$, so there is a
+scalar $\lambda\in\bb{F}$ such that
+\[
+  T(v)=\lambda v.
+\]
+Conversely, if $T(v)=\lambda v$, then for every $a\in\bb{F}$,
+\[
+  T(av)=aT(v)=a\lambda v\in U.
+\]
+Thus $U$ is invariant under $T$ precisely when $T(v)$ is a
+scalar multiple of $v$.
+
+\begin{definition}[Eigenvalue and eigenvector]
+  Let $T\in\mathcal L(V)$. A scalar $\lambda\in\bb{F}$ is an
+  \emph{eigenvalue} of $T$ if there exists a nonzero vector
+  $v\in V$ such that $T(v)=\lambda v$. Such a vector $v$ is
+  called an \emph{eigenvector} of $T$ corresponding to $\lambda$.
+\end{definition}
+
+Consequently, $V$ has a one-dimensional subspace invariant under
+$T$ if and only if $T$ has an eigenvalue.
+
+\begin{proposition}\label{prop:eigenvalue-equivalences}
+  Suppose that $V$ is finite-dimensional, $T\in\mathcal L(V)$,
+  and $\lambda\in\bb{F}$. The following are equivalent:
+  \begin{enumerate}[label=(\roman*)]
+    \item $\lambda$ is an eigenvalue of $T$;
+    \item $T-\lambda\operatorname{Id}_V$ is not injective;
+    \item $T-\lambda\operatorname{Id}_V$ is not surjective;
+    \item $T-\lambda\operatorname{Id}_V$ is not invertible.
+  \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+  For $v\in V$,
+  \[
+    T(v)=\lambda v
+      \quad\Longleftrightarrow\quad
+      (T-\lambda\operatorname{Id}_V)(v)=0.
+  \]
+  Hence $\lambda$ is an eigenvalue if and only if
+  $\ker(T-\lambda\operatorname{Id}_V)\neq\{0\}$, which is
+  equivalent to $T-\lambda\operatorname{Id}_V$ not being
+  injective. This proves (i)$\Longleftrightarrow$(ii).
+  Since $T-\lambda\operatorname{Id}_V$ is an operator on a
+  finite-dimensional space,
+  Proposition~\ref{prop:equal-dimension-invertibility} gives the
+  equivalence of (ii), (iii), and (iv).
+\end{proof}
+
+In particular, the eigenvectors corresponding to $\lambda$ are
+exactly the nonzero vectors in
+$\ker(T-\lambda\operatorname{Id}_V)$. This kernel includes the
+zero vector, but the zero vector is never an eigenvector.
+
+\subsection{A rotation over the real and complex numbers}
+
+\begin{example}\label{ex:rotation-eigenvalues}
+  Let $T\in\mathcal L(\bb{F}^2)$ be defined by
+  \[
+    T\begin{bmatrix}w\\z\end{bmatrix}
+      =\begin{bmatrix}-z\\w\end{bmatrix}.
+  \]
+  Its matrix with respect to the standard basis is
+  \[
+    A=\begin{bmatrix}0&-1\\1&0\end{bmatrix}.
+  \]
+
+  If $\bb{F}=\bb{R}$, then $T$ is counterclockwise rotation by
+  $90^\circ$. No nonzero real vector is taken to a scalar
+  multiple of itself. Thus $T$ has no real eigenvalues and no
+  eigenvectors in $\bb{R}^2$.
+
+  To see algebraically how the field matters, the eigenvector
+  equation is
+  \[
+    \begin{bmatrix}-z\\w\end{bmatrix}
+      =\lambda\begin{bmatrix}w\\z\end{bmatrix},
+    \qquad\text{so}\qquad
+    \lambda w=-z,\quad \lambda z=w.
+  \]
+  If $z=0$, then $w=0$, which is excluded for an eigenvector.
+  Therefore $z\neq0$, and substitution gives
+  \[
+    \lambda^2z=-z
+      \quad\Longrightarrow\quad \lambda^2=-1.
+  \]
+  There is no solution in $\bb{R}$. Over $\bb{C}$, the only
+  possibilities are $\lambda=i$ and $\lambda=-i$, and both
+  occur:
+  \begin{align*}
+    T\begin{bmatrix}1\\-i\end{bmatrix}
+      &=\begin{bmatrix}i\\1\end{bmatrix}
+        =i\begin{bmatrix}1\\-i\end{bmatrix},\\
+    T\begin{bmatrix}1\\i\end{bmatrix}
+      &=\begin{bmatrix}-i\\1\end{bmatrix}
+        =-i\begin{bmatrix}1\\i\end{bmatrix}.
+  \end{align*}
+  More precisely,
+  \[
+    \ker(T-i\operatorname{Id}_{\bb{C}^2})
+      =\operatorname{span}\left\{\begin{bmatrix}1\\-i\end{bmatrix}\right\},
+    \qquad
+    \ker(T+i\operatorname{Id}_{\bb{C}^2})
+      =\operatorname{span}\left\{\begin{bmatrix}1\\i\end{bmatrix}\right\}.
+  \]
+  Thus the eigenvectors for $i$ are $(w,-iw)$ with $w\neq0$,
+  and those for $-i$ are $(w,iw)$ with $w\neq0$.
+\end{example}
+
+\subsection{Eigenvectors corresponding to distinct eigenvalues}
+
+\begin{proposition}\label{prop:distinct-eigenvalues-independent}
+  Let $T\in\mathcal L(V)$. If $v_1,\ldots,v_n$ are eigenvectors
+  of $T$ corresponding to distinct eigenvalues
+  $\lambda_1,\ldots,\lambda_n$, then $v_1,\ldots,v_n$ are
+  linearly independent.
+\end{proposition}
+
+\begin{proof}
+  Suppose, to the contrary, that the list is linearly dependent.
+  Choose a dependent sublist of smallest length $m$ and relabel
+  it as $v_1,\ldots,v_m$. Denote their eigenvalues by
+  $\lambda_1,\ldots,\lambda_m$. All eigenvectors are nonzero,
+  so $m\geq2$. There are scalars $a_1,\ldots,a_m$, not
+  all zero, such that
+  \begin{equation}\label{eq:eigenvector-dependence}
+    a_1v_1+\cdots+a_mv_m=0.
+  \end{equation}
+  Minimality of $m$ implies that every $a_j$ is nonzero;
+  otherwise, omitting a term would give a shorter dependent
+  sublist. Applying $T$ to
+  \eqref{eq:eigenvector-dependence} gives
+  \[
+    a_1\lambda_1v_1+\cdots+a_m\lambda_mv_m=0.
+  \]
+  Subtracting $\lambda_1$ times
+  \eqref{eq:eigenvector-dependence}, we obtain
+  \[
+    a_2(\lambda_2-\lambda_1)v_2
+      +\cdots+a_m(\lambda_m-\lambda_1)v_m=0.
+  \]
+  Each coefficient is nonzero because $a_j\neq0$ and the
+  eigenvalues are distinct. This is a nontrivial dependence
+  relation among $m-1$ of the eigenvectors, contradicting the
+  minimality of $m$.
+\end{proof}
+
+\begin{corollary}\label{cor:eigenvalue-count-bound}
+  Every operator on a finite-dimensional vector space $V$ has
+  at most $\dim V$ distinct eigenvalues.
+\end{corollary}
+
+\begin{proof}
+  Choose one eigenvector for each distinct eigenvalue. By
+  Proposition~\ref{prop:distinct-eigenvalues-independent}, any
+  finite list of these vectors is linearly independent. Such a
+  list has length at most $\dim V$, so there cannot be more
+  than $\dim V$ distinct eigenvalues.
+\end{proof}
