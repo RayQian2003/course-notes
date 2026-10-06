@@ -1,0 +1,348 @@
+\section{October 6, 2026}
+
+Throughout, $(X,\mathcal M,\mu)$ is a measure space, $m$ denotes
+Lebesgue measure, and $\mathbf 1_E$ denotes a characteristic function.
+We continue the study of convergence in measure, prove Egoroff's and
+Lusin's theorems, and begin the construction of product measures.
+
+\subsection{Egoroff's theorem}
+
+Recall the definition of convergence in measure. For measurable
+$f_n,f\colon X\to\bb C$, we have $f_n\to f$ in measure if, for
+every $\delta>0$,
+\[
+  \mu(\{x:|f_n(x)-f(x)|\geq\delta\})\longrightarrow0.
+\]
+Almost everywhere convergence need not imply convergence in measure:
+on $\bb R$, $f_n=\mathbf 1_{(n,n+1)}$ converges pointwise to zero,
+but $m(\{|f_n|\geq1/2\})=1$ for every $n$. On a finite measure
+space, however, a.e. convergence has a stronger consequence.
+
+\begin{theorem}[Egoroff's theorem]\label{thm:egoroff-oct-06}
+  Suppose $\mu(X)<\infty$ and $f_n,f\colon X\to\bb C$ are
+  measurable, with $f_n\to f$ a.e. For every $\varepsilon>0$,
+  there is $E\in\mathcal M$ such that $\mu(E)<\varepsilon$ and
+  $f_n\to f$ uniformly on $X\setminus E$. That is, for every
+  $\delta>0$ there is $N$ such that
+  \[
+    |f_n(x)-f(x)|<\delta
+    \qquad(n\geq N,\ x\in X\setminus E).
+  \]
+\end{theorem}
+
+\begin{proof}
+  Let $Z$ be a measurable null set outside which $f_n\to f$.
+  For $n,k\geq1$, define
+  \[
+    E_n(1/k)=\bigcup_{j=n}^{\infty}
+      \{x\in X\setminus Z:|f_j(x)-f(x)|\geq1/k\}.
+  \]
+  For fixed $k$, these measurable sets decrease as $n$ increases,
+  and pointwise convergence on $X\setminus Z$ gives
+  \[
+    \bigcap_{n=1}^{\infty}E_n(1/k)=\varnothing.
+  \]
+  Since $\mu(X)<\infty$, continuity from above implies
+  $\mu(E_n(1/k))\to0$. Choose $n_k$ so that
+  \[
+    \mu(E_{n_k}(1/k))<\varepsilon 2^{-k},
+    \qquad
+    E=Z\cup\bigcup_{k=1}^{\infty}E_{n_k}(1/k).
+  \]
+  Countable subadditivity gives $\mu(E)<\varepsilon$. Given
+  $\delta>0$, choose $k$ with $1/k<\delta$. If $x\notin E$ and
+  $n\geq n_k$, then
+  \[
+    |f_n(x)-f(x)|<1/k<\delta.
+  \]
+  The index $n_k$ is independent of $x$, proving uniform convergence.
+\end{proof}
+
+\begin{corollary}\label{cor:ae-in-measure-oct-06}
+  If $\mu(X)<\infty$ and $f_n\to f$ a.e., then $f_n\to f$ in
+  measure.
+\end{corollary}
+
+\begin{proof}
+  Fix $\delta,\varepsilon>0$. Egoroff's theorem gives a measurable
+  set $E$ with $\mu(E)<\varepsilon$ such that $f_n\to f$ uniformly
+  on $X\setminus E$. For all sufficiently large $n$,
+  \[
+    \{|f_n-f|\geq\delta\}\subseteq E,
+    \qquad
+    \mu(\{|f_n-f|\geq\delta\})<\varepsilon.
+  \]
+  Since $\varepsilon$ is arbitrary, the desired limit is zero.
+\end{proof}
+
+\subsection{Approximation in \texorpdfstring{$L^1$}{L1}}
+
+The next goal is Lusin's theorem: a measurable function on a finite
+interval is continuous after restriction to a suitable compact set
+whose complement has arbitrarily small measure. We first establish
+the approximation results needed in its proof.
+
+\begin{lemma}[Density of integrable simple functions]
+  \label{lem:simple-density-oct-06}
+  For every $f\in\mathcal L^1(X,\mu)$ and $\varepsilon>0$, there
+  is an integrable simple function $\phi$ such that
+  \[
+    \|f-\phi\|_1=\int_X|f-\phi|\,d\mu<\varepsilon.
+  \]
+  Hence integrable simple functions, viewed modulo a.e. equality,
+  form a dense subspace of $L^1(X,\mu)$.
+\end{lemma}
+
+\begin{proof}
+  By Theorem~\ref{thm:simple-approximation-sep-17}, choose simple
+  functions $\phi_n\to f$ pointwise with $|\phi_n|\leq|f|$.
+  Each $\phi_n$ is integrable, and
+  \[
+    |\phi_n-f|\leq2|f|\in\mathcal L^1(X,\mu).
+  \]
+  Dominated convergence gives $\|\phi_n-f\|_1\to0$.
+\end{proof}
+
+\begin{lemma}[Approximation on the real line]
+  \label{lem:continuous-density-oct-06}
+  Let $\mu$ be a Lebesgue--Stieltjes measure on $\bb R$. For every
+  $f\in\mathcal L^1(\bb R,\mu)$ and $\varepsilon>0$:
+  \begin{enumerate}[label=(\roman*)]
+    \item There is a simple function
+      $\psi=\sum_{j=1}^N a_j\mathbf 1_{F_j}$, where each $F_j$ is
+      a finite union of bounded open intervals, such that
+      $\|f-\psi\|_1<\varepsilon$.
+    \item There is a continuous function $g\colon\bb R\to\bb C$
+      that vanishes outside a bounded interval and satisfies
+      $\|f-g\|_1<\varepsilon$.
+  \end{enumerate}
+  In particular, the space $C_c(\bb R)$ of continuous functions
+  with compact support is dense in $L^1(\bb R,\mu)$.
+\end{lemma}
+
+\begin{proof}
+  First we approximate sets of finite measure. If $E$ is measurable
+  and $\mu(E)<\infty$, regularity
+  (Theorem~\ref{thm:lebesgue-stieltjes-regularity-sep-10}) gives,
+  for any $\eta>0$, a compact $K\subseteq E$ and an open
+  $U\supseteq E$ such that
+  \[
+    \mu(E\setminus K)<\eta/2,\qquad
+    \mu(U\setminus E)<\eta/2.
+  \]
+  Cover $K$ by finitely many bounded open intervals contained in
+  $U$, and let $F$ be their union. Then $K\subseteq F\subseteq U$,
+  so
+  \[
+    E\mathbin{\triangle}F
+      :=(E\setminus F)\cup(F\setminus E)
+      \subseteq U\setminus K,
+    \qquad \mu(E\mathbin{\triangle}F)<\eta.
+  \]
+  Here one may take $F=\varnothing$ if $K=\varnothing$.
+
+  For (i), choose an integrable simple function
+  $\phi=\sum_{j=1}^N a_j\mathbf 1_{E_j}$ in standard form such
+  that $\|f-\phi\|_1<\varepsilon/2$. Discard the zero coefficient.
+  If $\phi=0$, there is nothing to prove. Otherwise, the $E_j$ are
+  disjoint and $a_j\neq0$, so
+  \[
+    |a_j|\mu(E_j)\leq\int_{\bb R}|\phi|\,d\mu<\infty.
+  \]
+  Choose finite unions $F_j$ of bounded open intervals with
+  \[
+    \mu(E_j\mathbin{\triangle}F_j)
+      <\frac{\varepsilon}{2N|a_j|}.
+  \]
+  Since $|\mathbf 1_{E_j}-\mathbf 1_{F_j}|
+  =\mathbf 1_{E_j\mathbin{\triangle}F_j}$, the function
+  $\psi=\sum_{j=1}^N a_j\mathbf 1_{F_j}$ satisfies
+  \[
+    \|f-\psi\|_1
+      \leq\|f-\phi\|_1+
+        \sum_{j=1}^N|a_j|\mu(E_j\mathbin{\triangle}F_j)
+      <\varepsilon.
+  \]
+
+  For (ii), it suffices to approximate $\mathbf 1_I$ for a bounded
+  open interval $I=(a,b)$: each $F_j$ is a finite disjoint union
+  of such intervals. For $n$ large enough that $2/n<b-a$, define
+  \[
+    h_n(x)=
+    \begin{cases}
+      0,&x\leq a,\\
+      n(x-a),&a<x<a+1/n,\\
+      1,&a+1/n\leq x\leq b-1/n,\\
+      n(b-x),&b-1/n<x<b,\\
+      0,&x\geq b.
+    \end{cases}
+  \]
+  Then $h_n\in C_c(\bb R)$, $0\leq h_n\leq\mathbf 1_I$, and
+  \[
+    \|\mathbf 1_I-h_n\|_1
+      \leq\mu((a,a+1/n))+\mu((b-1/n,b))\longrightarrow0.
+  \]
+  Both intervals decrease to the empty set, and their measures are
+  finite because Lebesgue--Stieltjes measures are finite on bounded
+  intervals. Thus continuity from above applies. The ramps lie
+  inside $(a,b)$, so the approximation is valid even if $\mu$ has
+  atoms at $a$ or $b$.
+
+  Apply (i) with error $\varepsilon/2$, express the resulting
+  $\psi$ as a finite linear combination of interval characteristic
+  functions, and replace each by a sufficiently accurate $h_n$.
+  The resulting finite linear combination $g$ belongs to
+  $C_c(\bb R)$ and satisfies $\|\psi-g\|_1<\varepsilon/2$.
+  The triangle inequality gives $\|f-g\|_1<\varepsilon$.
+\end{proof}
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[x=2.2cm,y=1.5cm,>=Latex]
+    \fill[blue!15] (0,0)--(0,1)--(0.55,1)--cycle;
+    \fill[blue!15] (2.45,1)--(3,1)--(3,0)--cycle;
+    \draw[->] (-0.4,0)--(3.55,0) node[right] {$x$};
+    \draw[orange!85!black,thick,dashed] (0,1)--(3,1);
+    \draw[blue!75!black,very thick]
+      (-0.3,0)--(0,0)--(0.55,1)--(2.45,1)--(3,0)--(3.4,0);
+    \node[below] at (0,0) {$a$};
+    \node[below] at (0.55,0) {$a+1/n$};
+    \node[below] at (2.45,0) {$b-1/n$};
+    \node[below] at (3,0) {$b$};
+    \node[left] at (0,1) {$1$};
+    \node[blue!75!black] at (1.5,0.65) {$h_n$};
+  \end{tikzpicture}
+  \caption{Continuous approximation to $\mathbf 1_{(a,b)}$ from
+    inside the interval. The error is supported near the endpoints.}
+  \label{fig:interval-approximation-oct-06}
+\end{figure}
+
+\FloatBarrier
+
+\subsection{Lusin's theorem}
+
+\begin{theorem}[Lusin's theorem]\label{thm:lusin-oct-06}
+  Let $f\colon[a,b]\to\bb C$ be Lebesgue measurable, where
+  $-\infty<a<b<\infty$. For every $\varepsilon>0$, there is a
+  compact set $E\subseteq[a,b]$ such that
+  \[
+    m([a,b]\setminus E)<\varepsilon
+  \]
+  and $f|_E$ is continuous in the relative topology on $E$.
+\end{theorem}
+
+\begin{proof}
+  \emph{Step 1: restrict to a compact set on which $f$ is bounded.}
+  Since $f$ is finite-valued,
+  \[
+    A_N:=\{x\in[a,b]:|f(x)|\geq N\}\downarrow\varnothing.
+  \]
+  By continuity from above, $m(A_N)\to0$. Fix $N$ with
+  $m(A_N)<\varepsilon/4$. By outer regularity, choose an open
+  $U\supseteq A_N$ with $m(U)<\varepsilon/2$, and put
+  $K=[a,b]\setminus U$. Then $K$ is compact and $|f|<N$ on $K$.
+  Extend $f|_K$ by zero to a function $F$ on $\bb R$. It is
+  measurable and integrable, since
+  \[
+    \int_{\bb R}|F|\,dm\leq N(b-a)<\infty.
+  \]
+
+  \emph{Step 2: obtain uniform convergence on a large subset.}
+  By Lemma~\ref{lem:continuous-density-oct-06}, there are
+  $g_j\in C_c(\bb R)$ such that $\|F-g_j\|_1\to0$.
+  Proposition~\ref{prop:l1-in-measure-oct-01} and
+  Theorem~\ref{thm:cauchy-in-measure-oct-01} give a subsequence
+  converging to $F$ a.e. (limits in measure are unique a.e.).
+  Relabel this subsequence as $(g_j)$. On $K$, it converges to $f$
+  a.e. Egoroff's theorem on the finite measure space $K$ gives a
+  measurable $B\subseteq K$ such that
+  \[
+    m(B)<\varepsilon/4,\qquad
+    g_j\longrightarrow f\quad\text{uniformly on }K\setminus B.
+  \]
+
+  \emph{Step 3: make the remaining set compact.}
+  Choose an open $V\supseteq B$ with $m(V)<\varepsilon/2$, and
+  set $E=K\setminus V$. This is a closed subset of the compact
+  set $K$, hence compact, and
+  \[
+    m([a,b]\setminus E)
+      \leq m(U)+m(V)<\varepsilon.
+  \]
+  The restrictions $g_j|_E$ are continuous and converge uniformly
+  to $f|_E$. A uniform limit of continuous functions is continuous,
+  proving the assertion.
+\end{proof}
+
+\begin{remark}
+  Continuity of $f|_E$ refers only to points approaching within $E$;
+  it does not assert that $f$ is continuous on $[a,b]$ at every
+  point of $E$. For example, $\mathbf 1_{\bb Q\cap[a,b]}$ is
+  discontinuous everywhere on $[a,b]$, but its restriction to any
+  subset of the irrationals is identically zero.
+\end{remark}
+
+\subsection{Product measures: the rectangle algebra}
+
+Let $(X,\mathcal M,\mu)$ and $(Y,\mathcal N,\nu)$ be measure
+spaces. Recall from Lemma~\ref{lem:countable-product-rectangles} that
+\[
+  \mathcal M\otimes\mathcal N
+    =\sigma(\{A\times B:A\in\mathcal M,\ B\in\mathcal N\}).
+\]
+We seek a measure $\mu\times\nu$ on this product $\sigma$-algebra
+such that
+\[
+  (\mu\times\nu)(A\times B)=\mu(A)\nu(B),
+\]
+with the convention $0\cdot\infty=\infty\cdot0=0$.
+
+\begin{proposition}\label{prop:rectangle-algebra-oct-06}
+  Let $\mathcal A$ consist of all finite disjoint unions of
+  measurable rectangles $A\times B$. Then $\mathcal A$ is an
+  algebra on $X\times Y$, and
+  $\sigma(\mathcal A)=\mathcal M\otimes\mathcal N$.
+\end{proposition}
+
+\begin{proof}
+  The empty set and $X\times Y$ are rectangles. Intersections of
+  rectangles are rectangles, since
+  \[
+    (A\times B)\cap(C\times D)=(A\cap C)\times(B\cap D).
+  \]
+  Also, complements relative to $X\times Y$ have the disjoint
+  decomposition
+  \[
+    (A\times B)^c=(A^c\times B)\mathbin{\dot\cup}(X\times B^c).
+  \]
+  Any finite collection of rectangles can be refined into a finite
+  disjoint collection: partition $X$ according to membership in
+  the sets in $X$ and partition $Y$ according to membership in
+  the sets in $Y$, then take products
+  of the resulting pieces. Thus finite unions, intersections, and
+  complements of members of $\mathcal A$ belong to $\mathcal A$.
+  The equality of generated $\sigma$-algebras follows because
+  rectangles belong to $\mathcal A$ and every member of
+  $\mathcal A$ is a finite union of rectangles.
+\end{proof}
+
+\begin{remark}
+  The collection of individual measurable rectangles is generally
+  not an algebra: a union of two rectangles need not be a rectangle.
+  Passing to finite unions is essential.
+\end{remark}
+
+For a disjoint representation, define the candidate set function
+\[
+  \pi\left(\bigsqcup_{j=1}^N A_j\times B_j\right)
+    =\sum_{j=1}^N\mu(A_j)\nu(B_j).
+\]
+This is independent of the representation: refine two representations
+using the finite partitions of $X$ and $Y$ described above. Finite
+additivity of $\mu$ and $\nu$ shows that splitting a rectangle into
+these smaller rectangles preserves the sum. The same refinement
+argument shows that $\pi$ is finitely additive on $\mathcal A$.
+The next step in constructing the product measure is to prove that
+$\pi$ is a premeasure and apply the measure extension theorem.
+
+\FloatBarrier

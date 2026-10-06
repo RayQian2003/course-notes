@@ -1,0 +1,214 @@
+\section{October 5, 2026}
+
+Throughout, $V$ is a vector space over $\bb{F}$, and
+$\mathcal L(V)$ denotes the space of linear operators on $V$.
+We use $\operatorname{Id}_V$ for the identity operator and
+$\mathcal P(\bb{F})$ for the space of polynomials over $\bb{F}$.
+
+\subsection{The number of distinct eigenvalues}
+
+Recall Corollary~\ref{cor:eigenvalue-count-bound}: an operator on a
+finite-dimensional vector space $V$ has at most $\dim V$ distinct
+eigenvalues. Indeed, if $\lambda_1,\ldots,\lambda_m$ are distinct
+eigenvalues of $T$ and $v_1,\ldots,v_m$ are corresponding eigenvectors,
+then Proposition~\ref{prop:distinct-eigenvalues-independent} says that
+these vectors are linearly independent. Hence $m\leq\dim V$.
+
+\subsection{Powers of an operator}
+
+\begin{definition}[Powers of an operator]
+  Let $T\in\mathcal L(V)$. For a positive integer $m$, define
+  \[
+    T^m=\underbrace{T\circ\cdots\circ T}_{m\text{ times}},
+    \qquad T^0=\operatorname{Id}_V.
+  \]
+  If $T$ is invertible, also define
+  \[
+    T^{-m}=(T^{-1})^m\qquad(m\geq1).
+  \]
+\end{definition}
+
+Composition of operators will often be written as multiplication:
+$ST=S\circ T$, so $(ST)(v)=S(T(v))$. Associativity of composition gives
+\[
+  T^mT^n=T^{m+n},\qquad (T^m)^n=T^{mn}.
+\]
+These identities hold for nonnegative integers $m,n$ for every
+operator $T$, and for all integers $m,n$ when $T$ is invertible.
+
+\subsection{Polynomials applied to operators}
+
+\begin{definition}[Polynomial of an operator]
+  If $T\in\mathcal L(V)$ and
+  \[
+    p(z)=a_0+a_1z+\cdots+a_mz^m\in\mathcal P(\bb{F}),
+  \]
+  define the operator
+  \[
+    p(T)=a_0\operatorname{Id}_V+a_1T+\cdots+a_mT^m
+      =\sum_{j=0}^m a_jT^j.
+  \]
+\end{definition}
+
+The constant term becomes a scalar multiple of the identity operator.
+Thus $p(T)$ is an operator on $V$, and $p(T)v$ is a vector in $V$.
+
+\begin{example}[A polynomial in the differentiation operator]
+  Let $D\in\mathcal L(\mathcal P(\bb{F}))$ be the differentiation
+  operator $Dq=q'$, and let $p(z)=7+z+z^2$. Then
+  \[
+    p(D)=7\operatorname{Id}_{\mathcal P(\bb{F})}+D+D^2.
+  \]
+  Consequently, for every $q\in\mathcal P(\bb{F})$,
+  \[
+    p(D)q=7q+Dq+D(Dq)=7q+q'+q''.
+  \]
+\end{example}
+
+For a fixed operator $T$, the map
+\[
+  \mathcal P(\bb{F})\longrightarrow\mathcal L(V),
+  \qquad p\longmapsto p(T),
+\]
+is linear. Explicitly, for $a,b\in\bb{F}$ and polynomials $p,q$,
+\[
+  (ap+bq)(T)=ap(T)+bq(T).
+\]
+This follows by adding coefficients of equal powers, inserting zero
+coefficients if the degrees differ.
+
+The product of two polynomials is defined by
+$(pq)(z)=p(z)q(z)$. Polynomial evaluation at a fixed operator also
+preserves products.
+
+\begin{proposition}\label{prop:operator-polynomial-products}
+  Suppose $p,q\in\mathcal P(\bb{F})$ and $T\in\mathcal L(V)$. Then
+  \begin{enumerate}[label=(\roman*)]
+    \item $(pq)(T)=p(T)q(T)$;
+    \item $p(T)q(T)=q(T)p(T)$.
+  \end{enumerate}
+\end{proposition}
+
+\begin{proof}[Proof (left as an exercise in lecture)]
+  Write
+  \[
+    p(z)=\sum_{j=0}^m a_jz^j,\qquad
+    q(z)=\sum_{k=0}^n b_kz^k.
+  \]
+  Distributivity and the power law give
+  \[
+    p(T)q(T)=\sum_{j=0}^m\sum_{k=0}^n a_jb_kT^{j+k}
+      =(pq)(T).
+  \]
+  Since $pq=qp$, the first identity also yields
+  \[
+    p(T)q(T)=(pq)(T)=(qp)(T)=q(T)p(T).\qedhere
+  \]
+\end{proof}
+
+\begin{remark}
+  Arbitrary operators need not commute. The proposition says that
+  polynomials in the same operator commute. In particular, taking
+  $q(z)=z$ shows that $p(T)T=Tp(T)$.
+\end{remark}
+
+\subsection{Invariant subspaces from polynomials}
+
+\begin{proposition}\label{prop:polynomial-kernel-image-invariant}
+  If $T\in\mathcal L(V)$ and $p\in\mathcal P(\bb{F})$, then
+  $\ker p(T)$ and $\operatorname{im}p(T)$ are invariant under $T$.
+\end{proposition}
+
+\begin{proof}
+  First, let $u\in\ker p(T)$, so $p(T)u=0$. Because $T$ commutes
+  with $p(T)$,
+  \[
+    p(T)(Tu)=T(p(T)u)=T(0)=0.
+  \]
+  Thus $Tu\in\ker p(T)$, proving invariance of the kernel.
+
+  Next, let $u\in\operatorname{im}p(T)$. There is a vector $v\in V$
+  such that $u=p(T)v$. Again using commutativity,
+  \[
+    Tu=T(p(T)v)=p(T)(Tv)\in\operatorname{im}p(T).
+  \]
+  Thus the image is invariant as well.
+\end{proof}
+
+\subsection{Existence of eigenvalues over the complex numbers}
+
+\begin{theorem}\label{thm:complex-operator-has-eigenvalue}
+  Every operator on a nonzero finite-dimensional complex vector
+  space has an eigenvalue.
+\end{theorem}
+
+\begin{proof}
+  Let $T\in\mathcal L(V)$, where $V$ is a complex vector space of
+  dimension $n>0$. Choose $v\in V\setminus\{0\}$. The list
+  \[
+    v,Tv,T^2v,\ldots,T^nv
+  \]
+  contains $n+1$ vectors in an $n$-dimensional space, so it is
+  linearly dependent. Thus there are scalars $a_0,\ldots,a_n$, not
+  all zero, such that
+  \[
+    a_0v+a_1Tv+\cdots+a_nT^nv=0.
+  \]
+  Equivalently, some nonzero polynomial $p$ satisfies $p(T)v=0$.
+  Choose such a polynomial of smallest degree. Its degree is at
+  least one, because a nonzero constant polynomial gives
+  $p(T)v=a_0v\neq0$.
+
+  By the fundamental theorem of algebra
+  (Theorem~\ref{thm:complex-polynomial-factorization}), $p$ has a root
+  $\lambda\in\bb{C}$. The factor theorem gives
+  \[
+    p(z)=(z-\lambda)q(z),\qquad \deg q=\deg p-1.
+  \]
+  By Proposition~\ref{prop:operator-polynomial-products},
+  \[
+    p(T)=(T-\lambda\operatorname{Id}_V)q(T).
+  \]
+  Minimality of the degree of $p$ implies $q(T)v\neq0$, since $q$
+  is a nonzero polynomial of smaller degree. Setting $w=q(T)v$, we
+  therefore have
+  \[
+    w\neq0,\qquad
+    (T-\lambda\operatorname{Id}_V)w=p(T)v=0.
+  \]
+  Hence $Tw=\lambda w$, so $\lambda$ is an eigenvalue of $T$ with
+  eigenvector $w$.
+\end{proof}
+
+\begin{remark}[The minimal-degree polynomial used in the proof]
+  The polynomial above is chosen to satisfy $p(T)v=0$ for one fixed
+  nonzero vector $v$. This does not assert $p(T)=0$ as an operator
+  on all of $V$. The minimal polynomial of an operator instead
+  concerns an identity on the whole space. The eigenvalue argument
+  here needs only the relation for $v$.
+\end{remark}
+
+\subsection{Why the hypotheses matter}
+
+\begin{example}[A real operator without eigenvalues]
+  Recall the rotation $T(x,y)=(-y,x)$ on $\bb{R}^2$ from
+  Example~\ref{ex:rotation-eigenvalues} has no real eigenvalues.
+  Indeed, $T^2=-\operatorname{Id}_{\bb{R}^2}$, so $Tv=\lambda v$
+  for a nonzero real vector would imply
+  \[
+    -v=T^2v=\lambda^2v,\qquad\lambda^2=-1,
+  \]
+  which is impossible for $\lambda\in\bb{R}$.
+\end{example}
+
+\begin{example}[An operator on an infinite-dimensional space]
+  Consider the complex vector space $\mathcal P(\bb{C})$, which
+  is infinite-dimensional. Define the multiplication operator
+  \[
+    T\in\mathcal L(\mathcal P(\bb{C})),\qquad (Tp)(z)=zp(z).
+  \]
+  If $p\neq0$, then $\deg(Tp)=\deg p+1$. For $\lambda\neq0$,
+  the polynomial $\lambda p$ has degree $\deg p$, so $Tp$ cannot
+  equal $\lambda p$. For $\lambda=0$, the equation is also
+  impossible because $Tp\neq0$. Thus $T$ has no eigenvalues.
+\end{example}
