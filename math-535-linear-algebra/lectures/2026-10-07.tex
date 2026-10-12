@@ -1,0 +1,218 @@
+\section{October 7, 2026}
+
+Throughout, $V$ is a finite-dimensional vector space over $\bb{F}$,
+and $T\in\mathcal L(V)$. We continue to use
+$\mathcal P(\bb{F})$ for the space of polynomials over $\bb{F}$.
+
+\subsection{Monic polynomials and annihilating polynomials}
+
+\begin{definition}[Monic polynomial]
+  A nonzero polynomial is \emph{monic} if its leading coefficient
+  is $1$. Thus a monic polynomial of degree $m$ has the form
+  \[
+    p(z)=c_0+c_1z+\cdots+c_{m-1}z^{m-1}+z^m.
+  \]
+  In particular, the constant polynomial $1$ is monic of degree $0$.
+\end{definition}
+
+Recall that $p(T)=0$ means that $p(T)$ is the zero operator:
+$p(T)v=0$ for every $v\in V$. A polynomial satisfying this identity
+is said to \emph{annihilate} $T$.
+
+\begin{proposition}\label{prop:minimal-polynomial-existence}
+  There is a unique monic polynomial $p\in\mathcal P(\bb{F})$
+  of smallest degree such that $p(T)=0$. Furthermore,
+  \[
+    \deg p\leq\dim V.
+  \]
+\end{proposition}
+
+\begin{proof}
+  We first prove by induction on $\dim V$ that there is a monic
+  polynomial of degree at most $\dim V$ that annihilates $T$.
+  If $\dim V=0$, then $\operatorname{Id}_V$ is the zero operator,
+  so the constant polynomial $p=1$ works.
+
+  Suppose now that $n=\dim V>0$, and assume the existence statement
+  holds for operators on spaces of dimension less than $n$.
+  Choose $u\in V\setminus\{0\}$. The list
+  \[
+    u,Tu,T^2u,\ldots,T^nu
+  \]
+  is linearly dependent because it contains $n+1$ vectors. Let $m$
+  be the smallest positive integer such that $T^mu$ is a linear
+  combination of $u,Tu,\ldots,T^{m-1}u$. Then $1\leq m\leq n$,
+  the list $u,Tu,\ldots,T^{m-1}u$ is linearly independent, and
+  there are scalars $c_0,\ldots,c_{m-1}$ such that
+  \[
+    c_0u+c_1Tu+\cdots+c_{m-1}T^{m-1}u+T^mu=0.
+  \]
+  Define the monic polynomial
+  \[
+    q(z)=c_0+c_1z+\cdots+c_{m-1}z^{m-1}+z^m.
+  \]
+  Thus $q(T)u=0$. By
+  Proposition~\ref{prop:operator-polynomial-products}, $q(T)$
+  commutes with every power of $T$. Hence, for every $k\geq0$,
+  \[
+    q(T)(T^ku)=T^k(q(T)u)=0.
+  \]
+  In particular, $\ker q(T)$ contains the $m$ linearly independent
+  vectors $u,Tu,\ldots,T^{m-1}u$. Therefore
+  \[
+    \dim\ker q(T)\geq m.
+  \]
+  The fundamental theorem of linear maps
+  (Theorem~\ref{thm:fundamental-linear-maps}) now gives
+  \[
+    \dim\operatorname{im}q(T)
+      =n-\dim\ker q(T)\leq n-m<n.
+  \]
+
+  Set $U=\operatorname{im}q(T)$. By
+  Proposition~\ref{prop:polynomial-kernel-image-invariant}, $U$
+  is invariant under $T$, so $T|_U\in\mathcal L(U)$. We may apply
+  the induction hypothesis to obtain a monic polynomial $s$ with
+  \[
+    \deg s\leq\dim U\leq n-m,
+    \qquad s(T|_U)=0.
+  \]
+  Since $U$ is invariant under $T$, polynomial evaluation commutes
+  with restriction: $s(T)|_U=s(T|_U)$. For every $v\in V$, the
+  vector $q(T)v$ belongs to $U$, and thus
+  \[
+    (sq)(T)v=s(T)q(T)v=s(T|_U)(q(T)v)=0.
+  \]
+  Consequently, $sq$ annihilates $T$. It is monic, and
+  \[
+    \deg(sq)=\deg s+\deg q\leq(n-m)+m=n.
+  \]
+  This completes the induction.
+
+  Among all monic polynomials annihilating $T$, choose one, $p$,
+  of smallest degree. The existence argument implies
+  $\deg p\leq\dim V$. To prove uniqueness, suppose $r$ is another
+  monic polynomial of the same smallest degree with $r(T)=0$.
+  Then
+  \[
+    (p-r)(T)=0,\qquad \deg(p-r)<\deg p,
+  \]
+  because the leading terms cancel. If $p-r\neq0$, dividing
+  $p-r$ by its leading coefficient produces a monic polynomial
+  of smaller degree that still annihilates $T$, a contradiction.
+  Therefore $p=r$.
+\end{proof}
+
+\subsection{The minimal polynomial}
+
+\begin{definition}[Minimal polynomial]
+  The \emph{minimal polynomial} of $T$ is the unique monic
+  polynomial $p\in\mathcal P(\bb{F})$ of smallest degree such
+  that $p(T)=0$.
+\end{definition}
+
+If $V=\{0\}$, the minimal polynomial is $1$. If $V\neq\{0\}$,
+then no nonzero constant polynomial annihilates $T$, because
+$c\operatorname{Id}_V\neq0$ for $c\neq0$. Thus in this case
+\[
+  1\leq\deg p\leq\dim V.
+\]
+
+\subsection{Computing the minimal polynomial using matrices}
+
+Suppose $n=\dim V>0$. We seek the smallest positive integer $m$
+for which there are scalars $c_0,\ldots,c_{m-1}$ satisfying
+\[
+  c_0\operatorname{Id}_V+c_1T+\cdots+c_{m-1}T^{m-1}=-T^m.
+\]
+The corresponding minimal polynomial is then
+\[
+  p(z)=c_0+c_1z+\cdots+c_{m-1}z^{m-1}+z^m.
+\]
+
+Choose an ordered basis $\mathcal B$ of $V$ and put
+$A=[T]_{\mathcal B}^{\mathcal B}$. Since the matrix representation
+preserves sums, scalar multiplication, and composition, the
+operator equation is equivalent to
+\[
+  c_0I_n+c_1A+\cdots+c_{m-1}A^{m-1}=-A^m.
+\]
+Equating corresponding matrix entries gives $n^2$ linear equations
+in the $m$ unknowns $c_0,\ldots,c_{m-1}$. Try $m=1,2,\ldots,n$
+and stop at the first value for which the system has a solution.
+Proposition~\ref{prop:minimal-polynomial-existence} guarantees
+that such a value occurs by $m=n$.
+
+\subsection{A shortcut using a single vector}
+
+A faster method sometimes works by applying the operator equation
+to just one vector. Choose $v\in V\setminus\{0\}$ and consider
+\[
+  c_0v+c_1Tv+\cdots+c_{n-1}T^{n-1}v=-T^nv.
+\]
+This gives only $n$ scalar equations. The key condition is that
+\[
+  v,Tv,\ldots,T^{n-1}v
+\]
+be a basis of $V$. Such a vector is called a \emph{cyclic vector}
+for $T$.
+
+If this condition holds, the equation determines unique
+coefficients $c_0,\ldots,c_{n-1}$. Set
+\[
+  p(z)=c_0+c_1z+\cdots+c_{n-1}z^{n-1}+z^n.
+\]
+Then $p(T)v=0$, and commutativity gives
+\[
+  p(T)(T^kv)=T^k(p(T)v)=0\qquad(0\leq k\leq n-1).
+\]
+Thus $p(T)$ vanishes on a basis, so $p(T)=0$. Moreover, no nonzero
+polynomial of degree less than $n$ can even annihilate $v$:
+such a relation would contradict the linear independence of
+$v,Tv,\ldots,T^{n-1}v$. Hence $p$ is the minimal polynomial of $T$.
+
+\begin{remark}
+  For an arbitrary nonzero vector $v$, the equation $p(T)v=0$
+  need not imply $p(T)=0$. The basis condition above is what makes
+  this shortcut valid. If the list fails to be a basis, a
+  polynomial found using $v$ must still be checked on all of $V$.
+\end{remark}
+
+\begin{example}\label{ex:minimal-polynomial-cyclic-matrix}
+  Let $T\in\mathcal L(\bb{F}^5)$ have the following matrix with
+  respect to the standard basis $\mathcal E=(e_1,\ldots,e_5)$:
+  \[
+    A=[T]_{\mathcal E}^{\mathcal E}
+      =\begin{bmatrix}
+        0&0&0&0&-3\\
+        1&0&0&0&6\\
+        0&1&0&0&0\\
+        0&0&1&0&0\\
+        0&0&0&1&0
+      \end{bmatrix}.
+  \]
+  Take $v=e_1$. Reading the columns of $A$, we obtain
+  \begin{align*}
+    v&=e_1, & Tv&=e_2, & T^2v&=e_3,\\
+    T^3v&=e_4, & T^4v&=e_5, & T^5v&=-3e_1+6e_2.
+  \end{align*}
+  The first five vectors are the standard basis, so $v$ is cyclic.
+  The equation
+  \[
+    c_0v+c_1Tv+c_2T^2v+c_3T^3v+c_4T^4v=-T^5v
+  \]
+  becomes
+  \[
+    c_0e_1+c_1e_2+c_2e_3+c_3e_4+c_4e_5=3e_1-6e_2.
+  \]
+  Hence
+  \[
+    c_0=3,\qquad c_1=-6,\qquad c_2=c_3=c_4=0.
+  \]
+  Therefore the minimal polynomial of $T$ is
+  \[
+    \boxed{p(z)=z^5-6z+3}.
+  \]
+  In particular, $T^5-6T+3\operatorname{Id}_{\bb{F}^5}=0$,
+  and no nonzero polynomial of smaller degree annihilates $T$.
+\end{example}

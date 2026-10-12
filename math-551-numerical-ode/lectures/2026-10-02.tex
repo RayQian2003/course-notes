@@ -1,0 +1,211 @@
+\section{October 2, 2026}
+% Based on pages 4--6 of 6-7-week.pdf.
+
+We derive the leading global error of forward Euler and then construct
+its modified equation. These are two descriptions of the same leading
+perturbation: one changes the solution, while the other changes the
+vector field. We retain the convention that local error is exact
+minus numerical, whereas global error is numerical minus exact.
+
+\subsection{Perturbing the starting value of a one-step map}
+
+Consider \(x'=f(t,x)\) and a smooth first-order consistent map
+\[
+ \Psi^{t+\tau,t}(x)=x+\tau f(t,x)+O(\tau^2).
+\]
+Assume this expansion also holds after the needed derivatives in
+\(x\), uniformly on the region under consideration. Taylor expansion
+with respect to the starting value gives
+\begin{align}
+ \Psi^{t+\tau,t}(x+\delta x)
+  &=\Psi^{t+\tau,t}(x)+\delta x
+       +\tau f_x(t,x)\delta x\notag\\
+  &\quad+O\bigl(\tau^2\|\delta x\|
+                      +|\tau|\|\delta x\|^2\bigr).
+       \label{eq:step-perturbation-oct-02}
+\end{align}
+In particular, if \(\delta x=O(\tau^m)\) with integer \(m\geq1\),
+the remainder is \(O(\tau^{m+2})\). Here \(f_x=D_xf\) is a
+Jacobian, so \(f_x\delta x\) is a matrix--vector product.
+The identity term propagates an existing error, and the Jacobian
+describes its first-order change over the step.
+
+\subsection{The local error of forward Euler}
+
+Forward Euler is
+\begin{equation}\label{eq:euler-oct-02}
+ x_{n+1}=x_n+\tau f(t_n,x_n).
+\end{equation}
+Along an exact solution,
+\[
+ x''(t)=f_t(t,x(t))+f_x(t,x(t))f(t,x(t)).
+\]
+Consequently,
+\begin{align}
+ x(t+\tau)-\Psi^{t+\tau,t}(x(t))
+    &=\tau^2 d_2(t)+O(\tau^3),
+       \label{eq:euler-defect-oct-02}\\
+ d_2(t)&=\frac12
+   \bigl(f_t+f_xf\bigr)(t,x(t))=\frac12x''(t).
+       \label{eq:euler-d2-oct-02}
+\end{align}
+The subscript in \(d_2\) records the power of \(\tau\). This is
+the leading local-error coefficient denoted by \(d_0\) in the
+handwritten notes.
+
+\subsection{An equation for the leading global error}
+
+At grid points, seek an expansion
+\begin{equation}\label{eq:euler-global-expansion-oct-02}
+ x_\tau(t)=x(t)+\tau C_1(t)+\tau^2C_2(t)+\cdots,
+ \qquad x_\tau(t_n)=x_n.
+\end{equation}
+We use powers beginning at one, so \(C_1\) is the coefficient called
+\(c_0\) in the handwritten expansion. Exact initial data give
+\(C_j(t_0)=0\) for every correction.
+
+Insert \eqref{eq:euler-global-expansion-oct-02} into the Euler
+recurrence. The terms involving \(C_2\) cancel at order \(\tau^2\),
+leaving
+\[
+ \tau^2d_2(t)+\tau\bigl(C_1(t+\tau)-C_1(t)\bigr)
+      -\tau^2f_x(t,x(t))C_1(t)=O(\tau^3).
+\]
+Divide by \(\tau^2\) and compare the leading terms. With
+\(A(t)=f_x(t,x(t))\), we obtain
+\begin{equation}\label{eq:leading-global-error-oct-02}
+ \boxed{C_1'(t)=A(t)C_1(t)-d_2(t),\qquad C_1(t_0)=0.}
+\end{equation}
+The minus sign agrees with the conventions above: a positive
+exact-minus-numerical local defect is subtracted in the recurrence
+for the numerical-minus-exact global error.
+
+Let \(W(t,s)\) be the fundamental matrix for the variational
+equation,
+\[
+ \partial_tW(t,s)=A(t)W(t,s),\qquad W(s,s)=I.
+\]
+Variation of constants gives
+\begin{equation}\label{eq:error-integral-oct-02}
+ C_1(t)=-\int_{t_0}^t W(t,s)d_2(s)\,ds.
+\end{equation}
+Thus the leading local defects accumulate after being transported
+by the linearized exact flow. If the initial numerical value instead
+has expansion \(x_0^{\rm num}=x(t_0)+\tau\eta+O(\tau^2)\), the
+additional term is \(W(t,t_0)\eta\).
+
+Higher coefficients satisfy further inhomogeneous variational
+equations. Their forcing includes previously computed corrections,
+not just the next local-error coefficient. For example, for Euler,
+comparison at order \(\tau^3\) gives
+\[
+ C_2'=A C_2+\frac12f_{xx}[C_1,C_1]
+                   -\frac12C_1''-\frac16x''',
+ \qquad C_2(t_0)=0,
+\]
+where all derivatives of \(f\) are evaluated along \(x(t)\).
+
+\begin{example}[Scalar linear equation]
+ For \(x'=\lambda x\),
+ \(d_2(t)=\lambda^2x(t)/2\) and \(W(t,s)=e^{\lambda(t-s)}\).
+ Therefore
+ \[
+  C_1(t)=-\frac{\lambda^2}{2}(t-t_0)x(t).
+ \]
+ This agrees with expanding
+ \(x_n=(1+\tau\lambda)^n x_0\) at fixed
+ \(t_n-t_0=n\tau\).
+\end{example}
+
+\subsection{Constructing a modified differential equation}
+
+Backward error analysis seeks a step-dependent vector field
+\begin{equation}\label{eq:modified-field-oct-02}
+ y'=g_\tau(t,y),\qquad
+ g_\tau=f+\tau f_1+\tau^2f_2+\cdots,
+ \qquad y(t_0)=x_0,
+\end{equation}
+whose exact time-\(\tau\) map matches the numerical map order by
+order. This is a formal construction. A finite truncation generally
+approximates the numerical values at grid points; it does not
+interpolate them exactly for all step sizes.
+
+To determine \(f_1\) for Euler, expand one exact step of
+\eqref{eq:modified-field-oct-02} from \((t,y)\):
+\begin{align*}
+ y(t+\tau)
+  &=y+\tau g_\tau(t,y)
+       +\frac{\tau^2}{2}
+          \bigl(\partial_tg_\tau+D_yg_\tau\,g_\tau\bigr)(t,y)
+       +O(\tau^3)\\
+  &=y+\tau f(t,y)
+       +\tau^2\left[f_1(t,y)
+                    +\frac12(f_t+f_xf)(t,y)\right]
+       +O(\tau^3).
+\end{align*}
+Euler has no \(\tau^2\) term in its one-step map, so
+\begin{equation}\label{eq:euler-modified-oct-02}
+ \boxed{f_1=-\frac12(f_t+f_xf),\qquad
+ y'=f(t,y)-\frac\tau2(f_t+f_xf)(t,y)+O(\tau^2).}
+\end{equation}
+The factor \(1/2\) comes from the second Taylor coefficient.
+For an autonomous equation this reduces to
+\(y'=f(y)-\tau f'(y)f(y)/2+O(\tau^2)\).
+
+The connection with forward error analysis is direct. Expand the
+modified solution as \(y=x+\tau y_1+O(\tau^2)\). Then
+\[
+ y_1'=A(t)y_1+f_1(t,x(t)),\qquad y_1(t_0)=0.
+\]
+Since \(f_1(t,x(t))=-d_2(t)\), this is precisely
+\eqref{eq:leading-global-error-oct-02}; hence \(y_1=C_1\).
+
+If we retain only \(f+\tau f_1\), its exact step and the Euler
+step differ by \(O(\tau^3)\). Under uniform smoothness and
+stability bounds on a fixed finite interval, the resulting solution
+satisfies
+\[
+ x_n-x(t_n)=O(\tau),\qquad x_n-y(t_n)=O(\tau^2).
+\]
+The same numerical values are therefore a more accurate approximation
+to the solution of this nearby equation.
+
+For \(x'=\lambda x\), the formal modified coefficient can even be
+read from the logarithm:
+\[
+ \frac1\tau\log(1+\tau\lambda)
+ =\lambda-\frac\tau2\lambda^2+\frac{\tau^2}{3}\lambda^3-\cdots.
+\]
+Near \(\tau=0\), its exponential over one step is exactly
+\(1+\tau\lambda\), consistent with \eqref{eq:euler-modified-oct-02}.
+
+\subsection{Gradient descent and a modified potential}
+
+Let \(V:\bb R^d\to\bb R\) be smooth and consider the gradient flow
+\[
+ x'=-\nabla V(x).
+\]
+The potential decreases along exact trajectories because
+\[
+ \frac{d}{dt}V(x(t))=-\|\nabla V(x(t))\|_2^2\leq0.
+\]
+Forward Euler is the gradient descent iteration
+\[
+ x_{n+1}=x_n-\tau\nabla V(x_n).
+\]
+Here \(f=-\nabla V\) and \(f'=-\nabla^2V\), so
+\[
+ f_1=-\frac12\nabla^2V\,\nabla V.
+\]
+Using \(\nabla\|\nabla V\|_2^2=2\nabla^2V\,\nabla V\), the
+first modified equation becomes
+\begin{equation}\label{eq:modified-potential-oct-02}
+ \boxed{y'=-\nabla V_\tau(y),\qquad
+ V_\tau=V+\frac\tau4\|\nabla V\|_2^2.}
+\end{equation}
+Thus, to first order in the step size, discretization adds a penalty
+proportional to the squared gradient. This is the implicit
+regularization interpretation mentioned in class. The coefficient is
+\(\tau/4\), as required by \eqref{eq:euler-modified-oct-02}.
+This describes the truncated modified flow; it does not assert that
+Euler decreases either potential for an arbitrary step size.

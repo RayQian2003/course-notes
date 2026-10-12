@@ -1,0 +1,207 @@
+\section{September 30, 2026}
+% Based on pages 1--3 of 6-7-week.pdf.
+
+We continue the discussion of time reversibility from September 28.
+Symmetry constrains the error expansion and makes extrapolation
+especially effective. We also introduce variable doubling and the
+perturbation viewpoint behind modified equations.
+Throughout, \(\Phi\) and \(\Psi\) denote the exact and numerical
+flows, and \(\tau\) denotes a constant step size.
+
+\subsection{Reversible integrators and explicit RK methods}
+
+Recall that a one-step method is symmetric if
+\[
+ \Psi^{t,t+\tau}\circ\Psi^{t+\tau,t}=I,
+\]
+where the first map uses the same method with step \(-\tau\).
+Gauss collocation has this property because its nodes are invariant
+under reflection about the midpoint of the step.
+
+\begin{proposition}
+ A consistent explicit RK method with finitely many stages cannot
+ be symmetric for general ODEs.
+\end{proposition}
+
+\begin{proof}
+ Apply the method to \(x'=x\), with initial value one. Its stability
+ function \(R(z)\) is a polynomial, and consistency gives
+ \(R(0)=R'(0)=1\). A forward step followed by a backward step
+ multiplies the initial value by \(R(-\tau)R(\tau)\).
+ Symmetry would imply
+ \[
+  R(-z)R(z)=1
+ \]
+ for all sufficiently small real \(z\), hence as a polynomial
+ identity. If \(R\) has degree \(m\geq1\) and leading coefficient
+ \(a_m\), the product has degree \(2m\) and leading coefficient
+ \((-1)^m a_m^2\neq0\). It cannot equal the constant one.
+\end{proof}
+
+This obstruction concerns standard explicit RK methods on a general
+vector field. A method exploiting a partition of the variables can
+still be both explicit and reversible.
+
+\subsection{Variable doubling}
+
+For \(x'=f(t,x)\), introduce a second copy of the unknown and consider
+\begin{equation}\label{eq:doubled-system-sep-30}
+ x'=f(t,y),\qquad y'=f(t,x),\qquad x(t_0)=y(t_0)=x_0.
+\end{equation}
+The diagonal \(x=y\) is invariant: the pair consisting of two copies
+of the original solution solves this system, and uniqueness identifies
+it with the solution of \eqref{eq:doubled-system-sep-30}.
+
+The following staggered update is explicit:
+\begin{align}
+ y_{n+1/2}&=y_n+\frac\tau2 f(t_n,x_n),\notag\\
+ x_{n+1}&=x_n+\tau f(t_n+\tau/2,y_{n+1/2}),
+       \label{eq:doubled-step-sep-30}\\
+ y_{n+1}&=y_{n+1/2}+\frac\tau2 f(t_n+\tau,x_{n+1}).\notag
+\end{align}
+Equivalently,
+\begin{align*}
+ x_{n+1}&=x_n+\tau f\left(t_n+\frac\tau2,
+                         y_n+\frac\tau2 f(t_n,x_n)\right),\\
+ y_{n+1}&=y_n+\frac\tau2
+           \bigl(f(t_n,x_n)+f(t_n+\tau,x_{n+1})\bigr).
+\end{align*}
+Here \(y_{n+1/2}\) is an intermediate variable, not an additional
+solution value required from a previous step.
+
+To reverse the step, start from \((x_{n+1},y_{n+1})\) at
+\(t_n+\tau\) and replace \(\tau\) by \(-\tau\). The three
+operations successively recover
+\[
+ y_{n+1}-\frac\tau2 f(t_n+\tau,x_{n+1})=y_{n+1/2},
+ \qquad x_n,\qquad y_n.
+\]
+Thus the map on the pair \((x,y)\) is reversible.
+
+Taylor expansion also shows that it has order two for the doubled
+system. For example, its first component satisfies
+\[
+ x_{n+1}=x_n+\tau f(t_n,y_n)
+ +\frac{\tau^2}{2}
+ \bigl(f_t(t_n,y_n)+f_x(t_n,y_n)f(t_n,x_n)\bigr)
+ +O(\tau^3),
+\]
+which agrees with the exact expansion of \(x'=f(t,y)\).
+The corresponding statement holds for the second component.
+Numerically, \(x_n\) and \(y_n\) need not be equal. Both copies must
+be retained between steps for the reversibility argument to apply;
+resetting one copy to the other defines a different method.
+
+\subsection{Even powers in the global error expansion}
+
+Write \(x_\tau(t_n)=x_n\) for the numerical solution computed with
+constant step \(\tau\) and exact initial data. At a fixed endpoint,
+\(x_\tau(T)=Y_\tau(T)\) in the notation of September 9.
+Comparisons between step sizes use common grid points on a fixed
+finite interval.
+
+\begin{theorem}[Error expansion for symmetric methods]
+ Suppose a smooth, consistent symmetric one-step method has finite
+ order and admits the usual asymptotic error expansion. Its order
+ is even, say \(2r\), and, with sufficient smoothness,
+ \begin{equation}\label{eq:even-error-sep-30}
+  x_\tau(t)=x(t)+C_{2r}(t)\tau^{2r}
+       +C_{2r+2}(t)\tau^{2r+2}+\cdots.
+ \end{equation}
+ The expansion is understood to any finite order for which the
+ required derivatives exist; no convergence of the infinite series
+ is asserted.
+\end{theorem}
+
+One explanation uses the formal modified equation developed next
+lecture. In the autonomous setting, write the numerical map formally
+as the time-\(\tau\) flow of a step-dependent vector field
+\(g_\tau\). Symmetry says that its inverse is the same map with
+step \(-\tau\). Taking the formal logarithm gives
+\[
+ -\tau g_{-\tau}=-\tau g_\tau,
+ \qquad g_{-\tau}=g_\tau.
+\]
+Thus only even powers of \(\tau\) occur in \(g_\tau\), and hence
+in the fixed-time solution expansion. A nonautonomous equation can
+be treated by adjoining \(t'=1\). The statement requires the fixed
+step and initialization assumptions above; arbitrary interpolation
+between grid points or arbitrary step changes do not automatically
+preserve this expansion.
+
+\subsection{Richardson extrapolation in the squared step size}
+
+We specialize \eqref{eq:richardson-sep-09} to a second-order
+symmetric method:
+\begin{align*}
+ x_\tau(t)&=x(t)+C_2(t)\tau^2+C_4(t)\tau^4+O(\tau^6),\\
+ x_{\tau/2}(t)&=x(t)+\frac14C_2(t)\tau^2
+                          +\frac1{16}C_4(t)\tau^4+O(\tau^6).
+\end{align*}
+Eliminating the leading error gives
+\begin{equation}\label{eq:richardson-four-sep-30}
+ \boxed{\frac{4x_{\tau/2}(t)-x_\tau(t)}3
+        =x(t)-\frac14C_4(t)\tau^4+O(\tau^6).}
+\end{equation}
+One extrapolation therefore raises the order from two to four.
+For an expansion beginning at order \(2r\), the corresponding
+combination is
+\[
+ \frac{2^{2r}x_{\tau/2}(t)-x_\tau(t)}{2^{2r}-1}
+       =x(t)+O(\tau^{2r+2}).
+\]
+
+Using three step sizes, fit a quadratic polynomial in \(s=\tau^2\):
+\[
+ P(s)=d_0+d_2s+d_4s^2,
+\]
+with values \(x_\tau(t),x_{\tau/2}(t),x_{\tau/4}(t)\) at
+\(s=\tau^2,\tau^2/4,\tau^2/16\). Componentwise, the system is
+\[
+ \begin{bmatrix}
+  1&\tau^2&\tau^4\\
+  1&\tau^2/4&\tau^4/16\\
+  1&\tau^2/16&\tau^4/256
+ \end{bmatrix}
+ \begin{bmatrix}d_0\\d_2\\d_4\end{bmatrix}
+ =\begin{bmatrix}x_\tau(t)\\x_{\tau/2}(t)\\x_{\tau/4}(t)\end{bmatrix}.
+\]
+Evaluating the interpolant at zero gives
+\begin{equation}\label{eq:richardson-six-sep-30}
+ \boxed{d_0=\frac1{45}x_\tau(t)-\frac{20}{45}x_{\tau/2}(t)
+                     +\frac{64}{45}x_{\tau/4}(t)
+             =x(t)+O(\tau^6).}
+\end{equation}
+The weights sum to one and annihilate the \(\tau^2\) and
+\(\tau^4\) terms. This improves accuracy at the comparison time;
+a linear combination of numerical solutions need not retain the
+geometric properties of the underlying symmetric method.
+
+\subsection{Perturbation expansions}
+
+As a model for coefficient matching, consider weak damping:
+\[
+ q''=-q-2\varepsilon q',\qquad
+ q(t)=q_0(t)+\varepsilon q_1(t)+\varepsilon^2q_2(t)+\cdots.
+\]
+Equating successive powers of \(\varepsilon\) gives
+\[
+ q_0''=-q_0,\qquad
+ q_1''=-q_1-2q_0',\qquad
+ q_m''=-q_m-2q_{m-1}'\quad(m\geq1).
+\]
+For initial data independent of \(\varepsilon\), the higher
+corrections have zero initial position and velocity. For example,
+if \(q(0)=1\) and \(q'(0)=0\), then
+\[
+ q_0(t)=\cos t,\qquad q_1(t)=\sin t-t\cos t.
+\]
+The secular term \(t\cos t\) also reminds us that a fixed-time
+asymptotic expansion need not be uniform for arbitrarily long times.
+
+For a numerical method, the small parameter is the step size.
+Forward error analysis expands its solution around the exact one;
+backward error analysis instead seeks a nearby differential equation
+whose flow agrees with the numerical method to a prescribed order.
+This leads to modified equations and, for gradient flows, an
+interpretation in terms of a modified potential.

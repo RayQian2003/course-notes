@@ -1,0 +1,209 @@
+\section{October 7, 2026}
+% Based on pages 10--13 of 6-7-week.pdf.
+
+Consistency measures how well exact samples satisfy a multistep
+formula. To obtain convergence, we must also control how the
+recurrence propagates perturbations. This leads to zero-stability
+and the root condition. We continue to use a uniform grid,
+\(t_n=t_0+n\tau\), and the polynomials \(\rho\) and \(\sigma\)
+from \eqref{eq:lmm-polynomials-oct-05}.
+
+\subsection{A consistent method that is unstable}
+
+Consider the explicit two-step formula from class,
+\begin{equation}\label{eq:unstable-lmm-oct-07}
+ x_{n+2}+4x_{n+1}-5x_n=\tau(4f_{n+1}+2f_n).
+\end{equation}
+Its characteristic polynomials are
+\[
+ \rho(\zeta)=\zeta^2+4\zeta-5=(\zeta-1)(\zeta+5),
+ \qquad \sigma(\zeta)=4\zeta+2.
+\]
+Since \(\rho(1)=0\) and \(\rho'(1)=6=\sigma(1)\), the method
+is consistent. In fact, the order conditions for \(m=2,3\) hold:
+\begin{align*}
+ 4+2^2&=2(4),\\
+ 4+2^3&=3(4).
+\end{align*}
+At \(m=4\), however, \(4+2^4=20\neq16=4(4)\).
+Thus its order is exactly three, with residual
+\[
+ \mathcal L_\tau[x](t_n)
+       =\frac16\tau^4x^{(4)}(t_n)+O(\tau^5).
+\]
+
+Now apply it to \(x'=0\). The exact solution is constant, but the
+numerical recurrence is
+\[
+ x_{n+2}+4x_{n+1}-5x_n=0.
+\]
+Trying \(x_n=\zeta^n\) gives \(\rho(\zeta)=0\), so every
+solution is of the form
+\begin{equation}\label{eq:unstable-mode-oct-07}
+ x_n=a+b(-5)^n.
+\end{equation}
+The constant mode is correct; the second mode magnifies perturbations
+exponentially.
+
+For a concrete failure of convergence, take the IVP \(x'=0\),
+\(x(0)=0\), and starting values \(x_0=0\), \(x_1=\tau^3\).
+These starting errors tend to zero at third order, but
+\[
+ x_n=\frac{\tau^3}{6}\bigl(1-(-5)^n\bigr).
+\]
+At fixed \(T>0\), with \(n=T/\tau\), its magnitude grows without
+bound along the grids \(\tau=T/N\). Small consistency error alone
+does not ensure convergence.
+
+\subsection{The root condition and zero-stability}
+
+Setting \(f=0\) in an LMM leaves
+\begin{equation}\label{eq:zero-recurrence-oct-07}
+ \rho(E)x_n=0.
+\end{equation}
+A simple nonzero root \(\zeta\) of \(\rho\) produces a mode
+\(\zeta^n\); a root of multiplicity \(m\) produces modes
+\[
+ \zeta^n,\quad n\zeta^n,\quad\ldots,\quad n^{m-1}\zeta^n.
+\]
+Roots strictly inside the unit disk give bounded, decaying modes,
+even when repeated. A zero root corresponds to a finite transient
+in the companion-matrix description. On the unit circle, any
+polynomial factor in \(n\) destroys boundedness.
+
+\begin{definition}[Root condition and zero-stability]
+ An LMM is \emph{zero-stable} if every root of \(\rho\) satisfies
+ \begin{equation}\label{eq:root-condition-oct-07}
+  |\zeta|\leq1,
+  \qquad\text{and every root with }|\zeta|=1\text{ is simple}.
+ \end{equation}
+ This is the \emph{root condition}.
+\end{definition}
+
+Equivalently, there is a bound independent of the number of steps,
+\[
+ \sup_{n\geq0}\|x_n\|
+       \leq K\max_{0\leq j<k}\|x_j\|,
+\]
+for solutions of the homogeneous recurrence
+\eqref{eq:zero-recurrence-oct-07}. This uniformity matters because
+the number of steps to a fixed time tends to infinity as
+\(\tau\to0\). The term ``zero'' refers to the test equation
+\(x'=0\); absolute stability at nonzero \(z=\tau\lambda\) will
+require a different polynomial.
+
+\begin{example}[A repeated unit root]
+ If \(\rho(\zeta)=(\zeta-1)^2\), then
+ \[
+  x_{n+2}-2x_{n+1}+x_n=0,
+  \qquad x_n=a+bn.
+ \]
+ Thus \(|\zeta|\leq1\) by itself is not enough. Starting values
+ \(x_0=0\), \(x_1=\tau\) yield \(x_N=T\) at \(N\tau=T\),
+ despite both starting values tending to zero.
+\end{example}
+
+\begin{example}[The methods from October 5]
+ Leapfrog and Simpson's multistep formula have
+ \(\rho(\zeta)=\zeta^2-1\). Both roots, \(1\) and \(-1\),
+ are simple, so both methods are zero-stable. The \(-1\) mode
+ alternates without decay; zero-stability permits such a bounded
+ parasitic mode.
+\end{example}
+
+\subsection{Convergence and the Dahlquist equivalence theorem}
+
+\begin{definition}[Convergence of an LMM]
+ An LMM is convergent if, for every sufficiently regular IVP and
+ every fixed finite interval \([t_0,T]\), starting values with
+ \[
+  e_{\rm start}(\tau)
+   :=\max_{0\leq j<k}\|x_j-x(t_j)\|\longrightarrow0
+ \]
+ give numerical solutions satisfying
+ \[
+  \max_{0\leq n\leq N}\|x_n-x(t_n)\|\longrightarrow0
+  \quad\text{as }\tau\to0,\qquad t_N\leq T.
+ \]
+\end{definition}
+
+Because the finitely many starting times approach \(t_0\), the
+starting condition is equivalently \(x_j\to x(t_0)\) for
+\(j=0,\ldots,k-1\). Keeping \(x(t_j)\) in the definition makes
+the required accuracy easier to quantify.
+
+\begin{theorem}[Dahlquist]
+ A linear multistep method is convergent if and only if it is
+ consistent and zero-stable, under the usual smoothness and
+ Lipschitz assumptions on the IVP.
+\end{theorem}
+
+More quantitatively, for a zero-stable method of consistency order
+\(p\), sufficiently small \(\tau\) gives an estimate of the form
+\begin{equation}\label{eq:lmm-global-bound-oct-07}
+ \boxed{\max_{0\leq n\leq N}\|x_n-x(t_n)\|
+  \leq C e^{L_*(T-t_0)}
+          \bigl(e_{\rm start}(\tau)+\tau^p\bigr).}
+\end{equation}
+The constants are independent of \(\tau\), but may depend on
+the method, the interval, and bounds on the solution and \(f\).
+In particular, order-\(p\) convergence requires starting errors
+of size \(O(\tau^p)\).
+
+To see the mechanism, put \(e_n=x_n-x(t_n)\). Subtracting the
+exact residual equation from the numerical formula gives
+\begin{equation}\label{eq:lmm-error-recursion-oct-07}
+ \sum_{j=0}^k\alpha_je_{n+j}
+ =\tau\sum_{j=0}^k\beta_j
+       \bigl(f(t_{n+j},x_{n+j})-f(t_{n+j},x(t_{n+j}))\bigr)
+       -\mathcal L_\tau[x](t_n).
+\end{equation}
+The root condition bounds propagation by the homogeneous recurrence.
+The Lipschitz condition controls the first term on the right, and
+a discrete Gronwall argument gives a bound in terms of
+\[
+ e_{\rm start}(\tau)
+       +\sum_{n=0}^{N-k}\|\mathcal L_\tau[x](t_n)\|.
+\]
+Since each residual is \(O(\tau^{p+1})\) and there are
+\(O(\tau^{-1})\) steps, their sum is \(O(\tau^p)\).
+This is the multistep counterpart of the local-to-global argument
+for one-step methods on August 31.
+
+For an implicit formula, the new value solves
+\[
+ x_{n+k}=\text{known terms}
+              +\tau\frac{\beta_k}{\alpha_k}f(t_{n+k},x_{n+k}).
+\]
+For example, a Lipschitz constant \(L\) gives a contraction when
+\[
+ \tau\left|\frac{\beta_k}{\alpha_k}\right|L<1.
+\]
+This supplies a sufficient small-step solvability condition in the
+convergence argument.
+
+\subsection{Adams methods}
+
+The Adams family uses only the difference between the two newest
+solution values on the left:
+\begin{equation}\label{eq:adams-form-oct-07}
+ x_{n+k}-x_{n+k-1}
+       =\tau\sum_{j=0}^k\beta_jf_{n+j}.
+\end{equation}
+Thus
+\begin{equation}\label{eq:adams-rho-oct-07}
+ \rho(\zeta)=\zeta^k-\zeta^{k-1}
+            =\zeta^{k-1}(\zeta-1).
+\end{equation}
+The root at one is simple; all remaining roots are zero. Every
+method with this left-hand side is therefore zero-stable, independent
+of the derivative weights. Consistency additionally requires
+\[
+ \sigma(1)=\rho'(1)=1,
+ \qquad\text{that is,}\qquad \sum_{j=0}^k\beta_j=1.
+\]
+The usual Adams weights are obtained by integrating an interpolant
+of the derivative values. Excluding the new endpoint derivative
+gives Adams--Bashforth; including it gives Adams--Moulton. Their
+construction and their nonzero-\(z\) stability are the topics of
+the next lecture.

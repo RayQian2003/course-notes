@@ -1,0 +1,210 @@
+\section{October 5, 2026}
+% Based on pages 7--9 of 6-7-week.pdf.
+
+We now turn from one-step methods to linear multistep methods.
+Instead of constructing new RK stages on every step, a multistep
+method reuses solution values and derivatives from earlier times.
+Throughout this discussion the grid is uniform:
+\[
+ t_n=t_0+n\tau,\qquad \tau>0,\qquad f_n=f(t_n,x_n).
+\]
+The fixed coefficients below are for a constant step size.
+
+\subsection{From one-step methods to methods with memory}
+
+A one-step method computes \(x_{n+1}\) from \(x_n\) through
+\(x_{n+1}=\Psi^{t_{n+1},t_n}(x_n)\). A \(k\)-step method uses
+the history \(x_n,\ldots,x_{n+k-1}\) to determine \(x_{n+k}\).
+It therefore requires \(k\) starting values,
+\[
+ x_0,x_1,\ldots,x_{k-1}.
+\]
+Only \(x_0\) is supplied by the IVP. The remaining values can be
+computed with a suitable one-step method, such as an RK method.
+Their accuracy will enter the multistep convergence estimate.
+
+\begin{example}[Explicit midpoint, or leapfrog]
+ Integrating the ODE over two steps gives
+ \[
+  x(t_{n+2})-x(t_n)=\int_{t_n}^{t_{n+2}}f(t,x(t))\,dt.
+ \]
+ The midpoint quadrature rule suggests
+ \begin{equation}\label{eq:leapfrog-oct-05}
+  \boxed{x_{n+2}-x_n=2\tau f_{n+1}.}
+ \end{equation}
+ This is an explicit two-step method. It retains both \(x_n\)
+ and \(x_{n+1}\), even though only one derivative appears in the
+ formula. Equivalently,
+ \(x_{n+1}=x_{n-1}+2\tau f_n\).
+\end{example}
+
+\begin{example}[Simpson's multistep formula]
+ Applying Simpson quadrature to the same integral gives
+ \begin{equation}\label{eq:simpson-lmm-oct-05}
+  \boxed{x_{n+2}-x_n
+       =\frac\tau3\bigl(f_n+4f_{n+1}+f_{n+2}\bigr).}
+ \end{equation}
+ It is implicit because \(f_{n+2}=f(t_{n+2},x_{n+2})\)
+ depends on the new value. It is still a two-step method:
+ three time levels occur, but only two starting values are needed.
+\end{example}
+
+The multistep midpoint formula \eqref{eq:leapfrog-oct-05} is
+different from the one-step explicit midpoint RK method and from
+the implicit midpoint Gauss method. Their names refer to related
+quadrature ideas, but their update rules and stability properties
+are different.
+
+\subsection{General form and characteristic polynomials}
+
+\begin{definition}[Linear multistep method]
+ A \(k\)-step LMM has the form
+ \begin{equation}\label{eq:lmm-general-oct-05}
+  \sum_{j=0}^k\alpha_jx_{n+j}
+    =\tau\sum_{j=0}^k\beta_j f_{n+j},
+  \qquad \alpha_k\neq0.
+ \end{equation}
+ The coefficients are independent of \(n\) and \(\tau\).
+ The method is explicit if \(\beta_k=0\), and implicit otherwise.
+ We may normalize \(\alpha_k=1\) by dividing both sides by it.
+\end{definition}
+
+The word ``linear'' refers to the linear combination of values and
+derivatives. An implicit LMM still requires a nonlinear solve when
+\(f\) is nonlinear. We assume that the representation has no
+unnecessary common factor in the two coefficient polynomials.
+
+Define the shift operator on sequences by
+\[
+ Ex_n=x_{n+1},\qquad E^jx_n=x_{n+j},\qquad Ef_n=f_{n+1}.
+\]
+The two characteristic polynomials are
+\begin{equation}\label{eq:lmm-polynomials-oct-05}
+ \rho(\zeta)=\sum_{j=0}^k\alpha_j\zeta^j,
+ \qquad
+ \sigma(\zeta)=\sum_{j=0}^k\beta_j\zeta^j.
+\end{equation}
+Then \eqref{eq:lmm-general-oct-05} can be written compactly as
+\begin{equation}\label{eq:lmm-shift-oct-05}
+ \rho(E)x_n=\tau\sigma(E)f_n.
+\end{equation}
+Here \(\zeta\) is a polynomial variable; later, \(z=\tau\lambda\)
+will denote the scaled eigenvalue in a stability test.
+
+For the two examples,
+\[
+ \begin{array}{c|c|c}
+  \text{method}&\rho(\zeta)&\sigma(\zeta)\\ \hline
+  \text{leapfrog}&\zeta^2-1&2\zeta\\[2pt]
+  \text{Simpson}&\zeta^2-1&\tfrac13(\zeta^2+4\zeta+1)
+ \end{array}.
+\]
+This shift-operator form is also a finite linear filtering relation
+between the solution sequence and its derivative sequence.
+
+\subsection{Consistency error and order}
+
+Insert a smooth exact solution into the formula and define its
+unnormalized residual by
+\begin{equation}\label{eq:lmm-residual-oct-05}
+ \mathcal L_\tau[x](t_n)
+  =\sum_{j=0}^k\alpha_jx(t_n+j\tau)
+       -\tau\sum_{j=0}^k\beta_jx'(t_n+j\tau).
+\end{equation}
+This is \(\rho(E)x(t_n)-\tau\sigma(E)x'(t_n)\), where the shift
+now acts on exact samples. It is the quantity denoted by \(L\) in
+the handwritten notes.
+
+\begin{definition}[Consistency order of an LMM]
+ An LMM has order at least \(p\) if
+ \[
+  \mathcal L_\tau[x](t)=O(\tau^{p+1})
+ \]
+ for every sufficiently smooth test function \(x\). Its order is
+ exactly \(p\) if the next coefficient does not vanish identically.
+\end{definition}
+
+Some conventions divide the residual by \(\tau\), in which case
+an order-\(p\) method has normalized residual \(O(\tau^p)\).
+We keep the unnormalized convention used in class. A residual is
+not itself a global error; propagation through the recurrence must
+also be controlled.
+
+For leapfrog, expand about the midpoint \(t_{n+1}\):
+\begin{align*}
+ x(t_{n+2})&=x+\tau x'+\frac{\tau^2}{2}x''
+                         +\frac{\tau^3}{6}x'''+\cdots,\\
+ x(t_n)&=x-\tau x'+\frac{\tau^2}{2}x''
+                         -\frac{\tau^3}{6}x'''+\cdots.
+\end{align*}
+Subtracting and cancelling \(2\tau x'\) gives
+\begin{equation}\label{eq:leapfrog-error-oct-05}
+ \mathcal L_\tau[x](t_n)
+   =\frac{\tau^3}{3}x'''(t_{n+1})+O(\tau^5).
+\end{equation}
+Thus leapfrog has order two. Similarly, Simpson quadrature gives
+\begin{equation}\label{eq:simpson-error-oct-05}
+ \mathcal L_\tau[x](t_n)
+   =-\frac{\tau^5}{90}x^{(5)}(t_{n+1})+O(\tau^7),
+\end{equation}
+so Simpson's multistep formula has order four.
+
+\subsection{Algebraic order conditions}
+
+Expanding \eqref{eq:lmm-residual-oct-05} about \(t=t_n\) gives
+\[
+ \mathcal L_\tau[x](t)
+   =\gamma_0x(t)+\gamma_1\tau x'(t)+\gamma_2\tau^2x''(t)+\cdots,
+\]
+where the scalar coefficients in this lecture are
+\begin{align*}
+ \gamma_0&=\sum_{j=0}^k\alpha_j,\\
+ \gamma_m&=\frac1{m!}\sum_{j=0}^k\alpha_jj^m
+       -\frac1{(m-1)!}\sum_{j=0}^k\beta_jj^{m-1},
+       \qquad m\geq1.
+\end{align*}
+The notation \(\gamma_m\) distinguishes these scalar residual
+coefficients from the global-error functions \(C_m(t)\).
+
+\begin{lemma}[LMM order conditions]
+ The method has order at least \(p\) if and only if
+ \begin{equation}\label{eq:lmm-order-conditions-oct-05}
+  \boxed{\sum_{j=0}^k\alpha_j=0,\qquad
+  \sum_{j=0}^k\alpha_jj^m
+    =m\sum_{j=0}^k\beta_jj^{m-1},\quad m=1,\ldots,p.}
+ \end{equation}
+ For \(m=1\), the last sum is simply \(\sum_j\beta_j\).
+\end{lemma}
+
+\begin{proof}
+ The conditions are exactly \(\gamma_0=\cdots=\gamma_p=0\), which are
+ sufficient by Taylor's formula. Necessity follows by testing
+ successively on constant, linear, and higher-degree polynomials.
+\end{proof}
+
+The first two conditions have the particularly useful form
+\begin{equation}\label{eq:lmm-consistency-oct-05}
+ \boxed{\rho(1)=0,\qquad \rho'(1)=\sigma(1).}
+\end{equation}
+An LMM satisfying these conditions is called \emph{consistent};
+it has order at least one. Equivalently, the general order conditions
+can be encoded as
+\[
+ \rho(e^z)-z\sigma(e^z)=O(z^{p+1})\qquad(z\to0).
+\]
+This follows by inserting the exponential test function into the
+linear residual operator.
+
+Before normalization there are \(2k+2\) coefficients; an overall
+nonzero scaling leaves the method unchanged, so there are
+\(2k+1\) effective parameters. Comparing this number with the
+\(p+1\) order conditions suggests the formal upper bound \(p\leq2k\)
+discussed in class. To justify the bound, suppose a nontrivial formula
+were exact on all polynomials of degree at most \(2k+1\).
+Hermite interpolation at the \(k+1\) distinct nodes allows arbitrary
+values of both a polynomial and its derivative at those nodes.
+The residual could vanish for all those choices only if every
+\(\alpha_j\) and \(\beta_j\) were zero, contradicting
+\(\alpha_k\neq0\). This formal bound imposes no stability condition.
+The next lecture shows explicitly why even a consistent method of
+high order may fail to converge.
